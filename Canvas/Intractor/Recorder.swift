@@ -128,7 +128,7 @@ class Recorder: ObservableObject {
             return
         }
 
-        let path = "\(work.rawValue)/data.mp4"
+        let path = "Video/\(work.rawValue).mp4"
 
         cancellable = FirebaseStorageManager.shared.uploadVideo(data: data, path: path).sink(receiveCompletion: { completion in
             switch completion {
