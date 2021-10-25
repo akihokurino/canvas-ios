@@ -52,7 +52,7 @@ class Recorder: ObservableObject {
         }
     }
 
-    private func start() {
+    func start() {
         guard recorder.isAvailable else {
             errorProvider = .plain("録画を利用できません")
             return
@@ -61,6 +61,8 @@ class Recorder: ObservableObject {
             errorProvider = .plain("すでに録画中です")
             return
         }
+        
+        self.startTime = nil
 
         do {
             try prepare()
@@ -82,7 +84,7 @@ class Recorder: ObservableObject {
                     self.isRecording = true
                 }
             }
-
+            
             if RPSampleBufferType.video == bufferType {
                 self.appendVideo(buffer: buffer)
             }
@@ -91,7 +93,7 @@ class Recorder: ObservableObject {
         })
     }
 
-    private func stop() {
+    func stop(withUpload: Bool = true) {
         guard recorder.isAvailable else {
             errorProvider = .plain("録画を利用できません")
             return
@@ -110,12 +112,17 @@ class Recorder: ObservableObject {
             self.assetWriter?.finishWriting {
                 DispatchQueue.main.async {
                     self.isRecording = false
+                    self.startTime = nil
+                    
+                    guard withUpload else {
+                        return
+                    }
                     self.upload()
                 }
             }
         }
     }
-
+    
     private func upload() {
         guard let url = cacheFileURL else {
             return
@@ -130,6 +137,7 @@ class Recorder: ObservableObject {
 
         let path = "Video/\(work.rawValue).mp4"
 
+        cancellable?.cancel()
         cancellable = FirebaseStorageManager.shared.uploadVideo(data: data, path: path).sink(receiveCompletion: { completion in
             switch completion {
             case .finished:
@@ -138,7 +146,7 @@ class Recorder: ObservableObject {
                 self.errorProvider = error
             }
         }, receiveValue: { _ in
-
+            print("Complete Upload Vodeo")
         })
     }
 
@@ -184,7 +192,7 @@ class Recorder: ObservableObject {
 
         let currentTime: CMTime = CMSampleBufferGetPresentationTimeStamp(buffer)
         let diffTime: CMTime = CMTimeSubtract(currentTime, firstTime)
-
+        
         if writerInputPixelBufferAdaptor?.assetWriterInput.isReadyForMoreMediaData ?? false {
             writerInputPixelBufferAdaptor?.append(pixelBuffer, withPresentationTime: diffTime)
         }

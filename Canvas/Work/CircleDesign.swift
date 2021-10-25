@@ -81,6 +81,14 @@ struct CircleDesign: View {
             .onDisappear {
                 timer1?.invalidate()
                 timer2?.invalidate()
+                if recorder.isRecording {
+                    recorder.stop(withUpload: false)
+                }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
+                if recorder.isRecording {
+                    recorder.stop(withUpload: false)
+                }
             }
             .drawingGroup()
         }

@@ -70,6 +70,14 @@ struct LineArt2: View {
             }
             .onDisappear {
                 timer?.invalidate()
+                if recorder.isRecording {
+                    recorder.stop(withUpload: false)
+                }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
+                if recorder.isRecording {
+                    recorder.stop(withUpload: false)
+                }
             }
             .drawingGroup()
         }

@@ -7,6 +7,7 @@ class Authenticator: ObservableObject {
     @Published var errorProvider: AppError?
 
     func login() {
+        cancellable?.cancel()
         cancellable = FirebaseAuthManager.shared.signInAnonymously().sink(receiveCompletion: { completion in
             switch completion {
                 case .finished:
