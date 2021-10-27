@@ -1,0 +1,32 @@
+#
+type Mutation {
+  #
+  registerFCMToken(input: RegisterFCMToken!): Boolean!
+}
+
+#
+type Query {
+  #
+  thumbnails(page: Int!, limit: Int!): [Thumbnail!]!
+}
+
+#
+input RegisterFCMToken {
+  #
+  token: String!
+
+  #
+  device: String!
+}
+
+#
+type Thumbnail {
+  #
+  id: ID!
+
+  #
+  workId: ID!
+
+  #
+  imagePath: String!
+}

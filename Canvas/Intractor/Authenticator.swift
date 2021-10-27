@@ -8,15 +8,17 @@ class Authenticator: ObservableObject {
 
     func login() {
         cancellable?.cancel()
-        cancellable = FirebaseAuthManager.shared.signInAnonymously().sink(receiveCompletion: { completion in
-            switch completion {
-                case .finished:
-                    break
-                case .failure(let error):
-                    self.errorProvider = error
-            }
-        }, receiveValue: { _ in
-
-        })
+        cancellable = FirebaseAuthManager.shared.signInAnonymously()
+            .flatMap { _ in FirebaseMessageManager.shared.token() }
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                    case .finished:
+                        break
+                    case .failure(let error):
+                        self.errorProvider = error
+                }
+            }, receiveValue: { token in
+                print(token)
+            })
     }
 }

@@ -1,0 +1,3 @@
+mutation RegisterFMCToken($token: String!, $device: String!) {
+  registerFCMToken(input: { token: $token, device: $device })
+}
