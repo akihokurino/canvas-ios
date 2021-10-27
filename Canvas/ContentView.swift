@@ -5,7 +5,7 @@ struct ContentView: View {
         GridItem(.flexible()),
         GridItem(.flexible()),
     ]
-    
+
     @ObservedObject var authenticator = Authenticator()
 
     var body: some View {
