@@ -6,6 +6,10 @@ class FirebaseAuthManager {
     static let shared = FirebaseAuthManager()
 
     private init() {}
+    
+    func isLogin() -> Bool {
+        return Auth.auth().currentUser != nil
+    }
 
     func signInAnonymously() -> Future<String, AppError> {
         return Future<String, AppError> { promise in

@@ -44,6 +44,7 @@
 		029E6A87271EA64F00F6A8EF /* ColorRain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029E6A86271EA64F00F6A8EF /* ColorRain.swift */; };
 		02A7A5202710862900F48016 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A7A51F2710862900F48016 /* Extensions.swift */; };
 		02B25ED92711361F0067A73D /* BoidsDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B25ED82711361F0067A73D /* BoidsDesign.swift */; };
+		02BFA0F3272A7969002997F8 /* GraphQLClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02BFA0F2272A7969002997F8 /* GraphQLClient.swift */; };
 		02C696962718467A00C65CDC /* SplashReturn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02C696952718467A00C65CDC /* SplashReturn.swift */; };
 		02D2A1122715CE5B00CF5AD1 /* Splash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02D2A1112715CE5B00CF5AD1 /* Splash.swift */; };
 		02E31FAB270F475100B94A81 /* LineArt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02E31FAA270F475100B94A81 /* LineArt.swift */; };
@@ -84,6 +85,7 @@
 		029E6A86271EA64F00F6A8EF /* ColorRain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorRain.swift; sourceTree = "<group>"; };
 		02A7A51F2710862900F48016 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		02B25ED82711361F0067A73D /* BoidsDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoidsDesign.swift; sourceTree = "<group>"; };
+		02BFA0F2272A7969002997F8 /* GraphQLClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphQLClient.swift; sourceTree = "<group>"; };
 		02C696952718467A00C65CDC /* SplashReturn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashReturn.swift; sourceTree = "<group>"; };
 		02D2A1112715CE5B00CF5AD1 /* Splash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Splash.swift; sourceTree = "<group>"; };
 		02D78D9227295F220026A66A /* Canvas.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Canvas.entitlements; sourceTree = "<group>"; };
@@ -204,6 +206,7 @@
 			isa = PBXGroup;
 			children = (
 				026C5E652729B5DB00995BCB /* GraphQL */,
+				02BFA0F2272A7969002997F8 /* GraphQLClient.swift */,
 				029B30062722E25F008BC3F3 /* FirebaseStorage.swift */,
 				029B30082722E959008BC3F3 /* FirebaseAuth.swift */,
 				028D3AA32729B1DA000EC82F /* FirebaseMessage.swift */,
@@ -334,6 +337,7 @@
 				02543C7D271D3C29009AE283 /* MapGenerator.swift in Sources */,
 				028DC777271F0B9D00B7AF1B /* Work.swift in Sources */,
 				021B2882270CB3790093B0C9 /* Functions.swift in Sources */,
+				02BFA0F3272A7969002997F8 /* GraphQLClient.swift in Sources */,
 				02D2A1122715CE5B00CF5AD1 /* Splash.swift in Sources */,
 				02392F1D271C35B200D8931F /* Lorenz3D.swift in Sources */,
 				029B30072722E25F008BC3F3 /* FirebaseStorage.swift in Sources */,

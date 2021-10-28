@@ -21,7 +21,7 @@ class Recorder: ObservableObject {
     private var videoAssetWriterInput: AVAssetWriterInput?
     private var writerInputPixelBufferAdaptor: AVAssetWriterInputPixelBufferAdaptor?
     private var startTime: CMTime?
-    private var cancellable: AnyCancellable?
+    private var _uploadVideo: AnyCancellable?
 
     private var cacheDirectoryURL: URL? = {
         guard let path = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first else {
@@ -137,8 +137,8 @@ class Recorder: ObservableObject {
 
         let path = "Video/\(work.rawValue).mp4"
 
-        cancellable?.cancel()
-        cancellable = FirebaseStorageManager.shared.uploadVideo(data: data, path: path).sink(receiveCompletion: { completion in
+        _uploadVideo?.cancel()
+        _uploadVideo = FirebaseStorageManager.shared.uploadVideo(data: data, path: path).sink(receiveCompletion: { completion in
             switch completion {
             case .finished:
                 break

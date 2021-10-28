@@ -1,6 +1,7 @@
 import Firebase
 import SwiftUI
 import UserNotifications
+import Combine
 
 @main
 struct CanvasApp: App {
@@ -14,12 +15,14 @@ struct CanvasApp: App {
 }
 
 class AppDelegate: NSObject, UIApplicationDelegate {
+    @ObservedObject var authenticator = Authenticator()
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         FirebaseApp.configure()
 
         Messaging.messaging().delegate = self
         UNUserNotificationCenter.current().delegate = self
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { granted, error in
             guard error == nil else {
                 return
             }
@@ -48,7 +51,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                                 willPresent notification: UNNotification,
                                 withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void)
     {
-        completionHandler([[.banner, .sound]])
+        completionHandler([.banner, .sound])
     }
 
     func userNotificationCenter(_ center: UNUserNotificationCenter,
@@ -61,6 +64,9 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 
 extension AppDelegate: MessagingDelegate {
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
-        print("Firebase registration token: \(String(describing: fcmToken))")
+        guard let token = fcmToken else {
+            return
+        }
+        authenticator.syncFCMToken(token: token)
     }
 }
