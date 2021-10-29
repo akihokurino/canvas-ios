@@ -19,5 +19,5 @@ func canvasWidth() -> CGFloat {
 }
 
 func canvasHeight() -> CGFloat {
-    return UIScreen.main.bounds.height - 80
+    return UIScreen.main.bounds.height - 80 - 100
 }

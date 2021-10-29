@@ -70,27 +70,53 @@ struct GraphQLClient {
 struct GraphQLCaller {
     let cli: ApolloClient
 
+    func thumbnails(page: Int) -> Future<[GraphQL.ThumbnailFragment], AppError> {
+        return Future<[GraphQL.ThumbnailFragment], AppError> { promise in
+            cli.fetch(query: GraphQL.ListThumbnailQuery(page: page)) { result in
+                switch result {
+                case .success(let graphQLResult):
+                    if let errors = graphQLResult.errors {
+                        if !errors.filter({ $0.message != nil }).isEmpty {
+                            let messages = errors.filter { $0.message != nil }.map { $0.message! }
+                            promise(.failure(.plain(messages.joined(separator: "\n"))))
+                            return
+                        }
+                    }
+
+                    guard let data = graphQLResult.data else {
+                        promise(.failure(AppError.defaultError()))
+                        return
+                    }
+
+                    promise(.success(data.thumbnails.map { $0.fragments.thumbnailFragment }))
+                case .failure(let error):
+                    promise(.failure(.wrap(error)))
+                }
+            }
+        }
+    }
+
     func registerFCMToken(token: String) -> Future<Void, AppError> {
         let udid = UIDevice.current.identifierForVendor!.uuidString
         return Future<Void, AppError> { promise in
             cli.perform(mutation: GraphQL.RegisterFmcTokenMutation(token: token, device: udid)) { result in
                 switch result {
-                    case .success(let graphQLResult):
-                        if let errors = graphQLResult.errors {
-                            if !errors.filter({ $0.message != nil }).isEmpty {
-                                let messages = errors.filter { $0.message != nil }.map { $0.message! }
-                                promise(.failure(.plain(messages.joined(separator: "\n"))))
-                                return
-                            }
-                        }
-
-                        guard let _ = graphQLResult.data else {
-                            promise(.failure(AppError.defaultError()))
+                case .success(let graphQLResult):
+                    if let errors = graphQLResult.errors {
+                        if !errors.filter({ $0.message != nil }).isEmpty {
+                            let messages = errors.filter { $0.message != nil }.map { $0.message! }
+                            promise(.failure(.plain(messages.joined(separator: "\n"))))
                             return
                         }
+                    }
 
-                        promise(.success(()))
-                    case .failure(let error):
+                    guard let _ = graphQLResult.data else {
+                        promise(.failure(AppError.defaultError()))
+                        return
+                    }
+
+                    promise(.success(()))
+                case .failure(let error):
                     promise(.failure(.wrap(error)))
                 }
             }

@@ -7,6 +7,12 @@ type Mutation {
 #
 type Query {
   #
+  works(page: Int!, limit: Int!): [Work!]!
+
+  #
+  work(id: ID!): Work!
+
+  #
   thumbnails(page: Int!, limit: Int!): [Thumbnail!]!
 }
 
@@ -28,5 +34,20 @@ type Thumbnail {
   workId: ID!
 
   #
-  imagePath: String!
+  imageUrl: String!
+
+  #
+  work: Work!
+}
+
+#
+type Work {
+  #
+  id: ID!
+
+  #
+  videoUrl: String!
+
+  #
+  thumbnails: [Thumbnail!]!
 }

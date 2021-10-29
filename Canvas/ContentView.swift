@@ -1,25 +1,31 @@
 import SwiftUI
 
 struct ContentView: View {
-    private let gridItemLayout = [
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-    ]
-
     @ObservedObject var authenticator = Authenticator()
 
     var body: some View {
-        NavigationView {
-            ScrollView {
-                LazyVGrid(columns: gridItemLayout, alignment: HorizontalAlignment.leading, spacing: 2) {
-                    ForEach(Work.allCases) { work in
-                        NavigationLink(destination: work.canvas) {
-                            work.thumbnail
-                        }
-                    }
+        Group {
+            TabView {
+                NavigationView {
+                    WorkListView()
                 }
+                .tabItem {
+                    VStack {
+                        Image(systemName: "scribble.variable")
+                        Text("表現")
+                    }
+                }.tag(1)
+
+                NavigationView {
+                    ThumbnailListView()
+                }
+                .tabItem {
+                    VStack {
+                        Image(systemName: "square.grid.2x2")
+                        Text("画像")
+                    }
+                }.tag(2)
             }
-            .navigationBarTitle("", displayMode: .inline)
         }
         .onAppear {
             authenticator.login()

@@ -1,3 +1,19 @@
+query ListThumbnail($page: Int!) {
+    thumbnails(page: $page, limit: 20) {
+        ...ThumbnailFragment
+    }
+}
+
+fragment ThumbnailFragment on Thumbnail {
+    id
+    workId
+    imageUrl
+    work {
+        id
+        videoUrl
+    }
+}
+
 mutation RegisterFMCToken($token: String!, $device: String!) {
-  registerFCMToken(input: { token: $token, device: $device })
+    registerFCMToken(input: { token: $token, device: $device })
 }

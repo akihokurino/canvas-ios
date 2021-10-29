@@ -42,6 +42,9 @@
 		029B30072722E25F008BC3F3 /* FirebaseStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029B30062722E25F008BC3F3 /* FirebaseStorage.swift */; };
 		029B30092722E959008BC3F3 /* FirebaseAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029B30082722E959008BC3F3 /* FirebaseAuth.swift */; };
 		029E6A87271EA64F00F6A8EF /* ColorRain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029E6A86271EA64F00F6A8EF /* ColorRain.swift */; };
+		02A19D42272C4F9F00DBFA24 /* ThumbnailFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A19D41272C4F9F00DBFA24 /* ThumbnailFetcher.swift */; };
+		02A19D45272C517D00DBFA24 /* WorkListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A19D44272C517D00DBFA24 /* WorkListView.swift */; };
+		02A19D47272C518C00DBFA24 /* ThumbnailListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A19D46272C518C00DBFA24 /* ThumbnailListView.swift */; };
 		02A7A5202710862900F48016 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A7A51F2710862900F48016 /* Extensions.swift */; };
 		02B25ED92711361F0067A73D /* BoidsDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B25ED82711361F0067A73D /* BoidsDesign.swift */; };
 		02BFA0F3272A7969002997F8 /* GraphQLClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02BFA0F2272A7969002997F8 /* GraphQLClient.swift */; };
@@ -83,6 +86,9 @@
 		029B30062722E25F008BC3F3 /* FirebaseStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseStorage.swift; sourceTree = "<group>"; };
 		029B30082722E959008BC3F3 /* FirebaseAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAuth.swift; sourceTree = "<group>"; };
 		029E6A86271EA64F00F6A8EF /* ColorRain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorRain.swift; sourceTree = "<group>"; };
+		02A19D41272C4F9F00DBFA24 /* ThumbnailFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailFetcher.swift; sourceTree = "<group>"; };
+		02A19D44272C517D00DBFA24 /* WorkListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkListView.swift; sourceTree = "<group>"; };
+		02A19D46272C518C00DBFA24 /* ThumbnailListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailListView.swift; sourceTree = "<group>"; };
 		02A7A51F2710862900F48016 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		02B25ED82711361F0067A73D /* BoidsDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoidsDesign.swift; sourceTree = "<group>"; };
 		02BFA0F2272A7969002997F8 /* GraphQLClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphQLClient.swift; sourceTree = "<group>"; };
@@ -135,6 +141,7 @@
 				029B30042722E1CD008BC3F3 /* Infra */,
 				029B300A2722F11F008BC3F3 /* Intractor */,
 				021B287C270CB2590093B0C9 /* Work */,
+				02A19D43272C516500DBFA24 /* Page */,
 				021B286E270CB08C0093B0C9 /* CanvasApp.swift */,
 				021B2870270CB08C0093B0C9 /* ContentView.swift */,
 				028DC776271F0B9D00B7AF1B /* Work.swift */,
@@ -219,9 +226,19 @@
 			children = (
 				0299D8142720684200483DE1 /* Recorder.swift */,
 				02449DA32722F926000A011A /* Authenticator.swift */,
+				02A19D41272C4F9F00DBFA24 /* ThumbnailFetcher.swift */,
 				02449DA727231D93000A011A /* Error.swift */,
 			);
 			path = Intractor;
+			sourceTree = "<group>";
+		};
+		02A19D43272C516500DBFA24 /* Page */ = {
+			isa = PBXGroup;
+			children = (
+				02A19D44272C517D00DBFA24 /* WorkListView.swift */,
+				02A19D46272C518C00DBFA24 /* ThumbnailListView.swift */,
+			);
+			path = Page;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -319,10 +336,12 @@
 				02F6CC422714775E002C22B7 /* ParticleRotate3D.swift in Sources */,
 				028DC773271EC45200B7AF1B /* Bound.swift in Sources */,
 				02B25ED92711361F0067A73D /* BoidsDesign.swift in Sources */,
+				02A19D45272C517D00DBFA24 /* WorkListView.swift in Sources */,
 				022691B6271DABEA00C0D209 /* LineArt2.swift in Sources */,
 				02A7A5202710862900F48016 /* Extensions.swift in Sources */,
 				028D3AA42729B1DA000EC82F /* FirebaseMessage.swift in Sources */,
 				02392F21271C551200D8931F /* SpiderDesign.swift in Sources */,
+				02A19D42272C4F9F00DBFA24 /* ThumbnailFetcher.swift in Sources */,
 				021B286F270CB08C0093B0C9 /* CanvasApp.swift in Sources */,
 				021B287E270CB27E0093B0C9 /* Abstract.swift in Sources */,
 				02E31FAB270F475100B94A81 /* LineArt.swift in Sources */,
@@ -333,6 +352,7 @@
 				02543C7F271D665E009AE283 /* CircleDesign.swift in Sources */,
 				02449DA827231D93000A011A /* Error.swift in Sources */,
 				026C5E6D2729BA8C00995BCB /* API.swift in Sources */,
+				02A19D47272C518C00DBFA24 /* ThumbnailListView.swift in Sources */,
 				02F2EF0D27143FF800415B9A /* StreamDesign.swift in Sources */,
 				02543C7D271D3C29009AE283 /* MapGenerator.swift in Sources */,
 				028DC777271F0B9D00B7AF1B /* Work.swift in Sources */,
@@ -483,7 +503,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -518,7 +538,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
