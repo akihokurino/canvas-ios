@@ -36,19 +36,7 @@ struct ThumbnailRow: View {
     private let size = CGSize(width: ThumbnailListView.thumbnailSize, height: ThumbnailListView.thumbnailSize * 2)
 
     var body: some View {
-        AsyncImage(url: URL(string: data.imageUrl)) { phase in
-            switch phase {
-            case .empty:
-                ProgressView()
-            case .success(let image):
-                image.resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: size.width, height: size.height)
-            case .failure:
-                EmptyView()
-            @unknown default:
-                EmptyView()
-            }
-        }
+        RemoteImageView(url: data.imageUrl)
+            .frame(width: size.width, height: size.height)
     }
 }
