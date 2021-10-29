@@ -5,6 +5,8 @@ import Foundation
 class FirebaseStorageManager {
     static let shared = FirebaseStorageManager()
     
+    private let videoBucketName = "gs://canvas-329810-video"
+    
     private init() {}
     
     func uploadVideo(data: Data, path: String) -> Future<Int64, AppError> {
@@ -12,7 +14,7 @@ class FirebaseStorageManager {
             let metadata = StorageMetadata()
             metadata.contentType = "video"
             
-            let ref = Storage.storage().reference().child(path)
+            let ref = Storage.storage(url: self.videoBucketName).reference().child(path)
             
             ref.putData(data, metadata: metadata) { metadata, _ in
                 guard let metadata = metadata else {

@@ -135,7 +135,7 @@ class Recorder: ObservableObject {
             return
         }
 
-        let path = "Video/\(work.rawValue).mp4"
+        let path = "\(work.rawValue).mp4"
 
         _uploadVideo?.cancel()
         _uploadVideo = FirebaseStorageManager.shared.uploadVideo(data: data, path: path).sink(receiveCompletion: { completion in
@@ -146,7 +146,7 @@ class Recorder: ObservableObject {
                 self.errorProvider = error
             }
         }, receiveValue: { _ in
-            print("Complete Upload Vodeo")
+            print("Complete Upload Video")
         })
     }
 
