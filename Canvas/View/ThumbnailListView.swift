@@ -18,24 +18,57 @@ struct ThumbnailListView: View {
         ScrollView {
             RefreshControl(isRefreshing: $isRefreshing, coordinateSpaceName: RefreshControlKey, onRefresh: {
                 isRefreshing = true
-                thumbnailFetcher.initThumbnails() {
+                thumbnailFetcher.initThumbnails {
                     self.isRefreshing = false
                 }
             })
 
             LazyVGrid(columns: gridItemLayout, alignment: HorizontalAlignment.leading, spacing: 3) {
-                ForEach(thumbnailFetcher.thumbnailProvider) { item in
+                ForEach(thumbnailFetcher.thumbnails) { item in
                     Button(action: {}) {
                         ThumbnailRow(data: item)
                     }
                 }
             }
+
+            bottom
         }
         .coordinateSpace(name: RefreshControlKey)
         .navigationBarTitle("", displayMode: .inline)
         .onAppear {
-            thumbnailFetcher.initThumbnails() {
+            thumbnailFetcher.initThumbnails {
                 self.isRefreshing = false
+            }
+        }
+    }
+
+    private var bottom: some View {
+        Group {
+            if thumbnailFetcher.hasNext && !thumbnailFetcher.isFetching && thumbnailFetcher.thumbnails.count > 0 {
+                Button(action: {
+                    thumbnailFetcher.nextThumbnails {}
+                }) {
+                    HStack {
+                        Spacer()
+                        Text("次のページを表示する")
+                        Spacer()
+                    }
+                }
+                .frame(height: 60)
+            }
+
+            if thumbnailFetcher.hasNext && thumbnailFetcher.isFetching && thumbnailFetcher.thumbnails.count > 0 {
+                HStack {
+                    Spacer()
+                    ProgressView()
+                    Spacer()
+                }
+                .frame(height: 60)
+            }
+
+            if !thumbnailFetcher.hasNext {
+                HStack {}
+                    .frame(height: 60)
             }
         }
     }

@@ -2,27 +2,43 @@ import Combine
 import SwiftUI
 
 class Authenticator: ObservableObject {
-    private var _login: AnyCancellable?
-    private var _syncFCMToken: AnyCancellable?
+    private var cancellable: AnyCancellable?
 
-    @Published var errorProvider: AppError?
+    @Published var errors: AppError?
 
     func login() {
-        _login?.cancel()
-        _login = FirebaseAuthManager.shared.signInAnonymously()
-            .flatMap { _ in FirebaseMessageManager.shared.token() }
-            .flatMap { token in GraphQLClient.shared.caller().map { ($0, token) } }
-            .flatMap { tp in tp.0.registerFCMToken(token: tp.1) }
-            .sink(receiveCompletion: { completion in
-                switch completion {
-                    case .finished:
-                        break
-                    case .failure(let error):
-                        self.errorProvider = error
-                }
-            }, receiveValue: { _ in
+        cancellable?.cancel()
 
-            })
+        if FirebaseAuthManager.shared.isLogin() {
+            cancellable = FirebaseMessageManager.shared.token()
+                .flatMap { token in GraphQLClient.shared.caller().map { ($0, token) } }
+                .flatMap { tp in tp.0.registerFCMToken(token: tp.1) }
+                .sink(receiveCompletion: { completion in
+                    switch completion {
+                        case .finished:
+                            break
+                        case .failure(let error):
+                            self.errors = error
+                    }
+                }, receiveValue: { _ in
+
+                })
+        } else {
+            cancellable = FirebaseAuthManager.shared.signInAnonymously()
+                .flatMap { _ in FirebaseMessageManager.shared.token() }
+                .flatMap { token in GraphQLClient.shared.caller().map { ($0, token) } }
+                .flatMap { tp in tp.0.registerFCMToken(token: tp.1) }
+                .sink(receiveCompletion: { completion in
+                    switch completion {
+                        case .finished:
+                            break
+                        case .failure(let error):
+                            self.errors = error
+                    }
+                }, receiveValue: { _ in
+
+                })
+        }
     }
 
     func syncFCMToken(token: String) {
@@ -30,15 +46,16 @@ class Authenticator: ObservableObject {
             return
         }
 
-        _syncFCMToken?.cancel()
-        _syncFCMToken = GraphQLClient.shared.caller()
+        cancellable?.cancel()
+
+        cancellable = GraphQLClient.shared.caller()
             .flatMap { caller in caller.registerFCMToken(token: token) }
             .sink(receiveCompletion: { completion in
                 switch completion {
                     case .finished:
                         break
                     case .failure(let error):
-                        self.errorProvider = error
+                        self.errors = error
                 }
             }, receiveValue: { _ in
 
