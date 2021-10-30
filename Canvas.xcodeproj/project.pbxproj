@@ -55,6 +55,8 @@
 		02E31FAB270F475100B94A81 /* LineArt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02E31FAA270F475100B94A81 /* LineArt.swift */; };
 		02F2EF0D27143FF800415B9A /* StreamDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F2EF0C27143FF800415B9A /* StreamDesign.swift */; };
 		02F6CC422714775E002C22B7 /* ParticleRotate3D.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F6CC412714775E002C22B7 /* ParticleRotate3D.swift */; };
+		02F944B7272DA321002A9B2B /* ArchiveListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F944B6272DA321002A9B2B /* ArchiveListView.swift */; };
+		02F944B9272DA539002A9B2B /* CropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F944B8272DA539002A9B2B /* CropView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -104,6 +106,8 @@
 		02E31FAA270F475100B94A81 /* LineArt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineArt.swift; sourceTree = "<group>"; };
 		02F2EF0C27143FF800415B9A /* StreamDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamDesign.swift; sourceTree = "<group>"; };
 		02F6CC412714775E002C22B7 /* ParticleRotate3D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleRotate3D.swift; sourceTree = "<group>"; };
+		02F944B6272DA321002A9B2B /* ArchiveListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveListView.swift; sourceTree = "<group>"; };
+		02F944B8272DA539002A9B2B /* CropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,6 +147,7 @@
 			isa = PBXGroup;
 			children = (
 				029B30042722E1CD008BC3F3 /* Infra */,
+				022691B4271DAB9F00C0D209 /* Helper */,
 				029B300A2722F11F008BC3F3 /* Intractor */,
 				021B287C270CB2590093B0C9 /* Work */,
 				02A19D43272C516500DBFA24 /* View */,
@@ -168,7 +173,6 @@
 		021B287C270CB2590093B0C9 /* Work */ = {
 			isa = PBXGroup;
 			children = (
-				022691B4271DAB9F00C0D209 /* Helper */,
 				028DC776271F0B9D00B7AF1B /* Work.swift */,
 				021B287D270CB27E0093B0C9 /* Abstract.swift */,
 				02E31FAA270F475100B94A81 /* LineArt.swift */,
@@ -241,8 +245,10 @@
 				021B2870270CB08C0093B0C9 /* RootView.swift */,
 				02A19D44272C517D00DBFA24 /* WorkListView.swift */,
 				02A19D46272C518C00DBFA24 /* ThumbnailListView.swift */,
+				02F944B6272DA321002A9B2B /* ArchiveListView.swift */,
 				023AC5FD272C69A2005C858D /* RemoteImageView.swift */,
 				02D1DAED272D6C7100DDA138 /* RefreshControl.swift */,
+				02F944B8272DA539002A9B2B /* CropView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -343,6 +349,7 @@
 				028DC773271EC45200B7AF1B /* Bound.swift in Sources */,
 				02B25ED92711361F0067A73D /* BoidsDesign.swift in Sources */,
 				023AC5FE272C69A2005C858D /* RemoteImageView.swift in Sources */,
+				02F944B9272DA539002A9B2B /* CropView.swift in Sources */,
 				02A19D45272C517D00DBFA24 /* WorkListView.swift in Sources */,
 				022691B6271DABEA00C0D209 /* LineArt2.swift in Sources */,
 				02A7A5202710862900F48016 /* Extensions.swift in Sources */,
@@ -367,6 +374,7 @@
 				021B2882270CB3790093B0C9 /* Functions.swift in Sources */,
 				02BFA0F3272A7969002997F8 /* GraphQLClient.swift in Sources */,
 				02D2A1122715CE5B00CF5AD1 /* Splash.swift in Sources */,
+				02F944B7272DA321002A9B2B /* ArchiveListView.swift in Sources */,
 				02392F1D271C35B200D8931F /* Lorenz3D.swift in Sources */,
 				029B30072722E25F008BC3F3 /* FirebaseStorage.swift in Sources */,
 			);

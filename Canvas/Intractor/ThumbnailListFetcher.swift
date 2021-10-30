@@ -10,8 +10,12 @@ class ThumbnailListFetcher: ObservableObject {
     @Published var hasNext: Bool = false
     @Published var isFetching: Bool = false
 
-    func initialize(callback: @escaping () -> ()) {
+    func initialize(isRefresh: Bool = false, callback: @escaping () -> ()) {
         guard FirebaseAuthManager.shared.isLogin() else {
+            return
+        }
+        
+        if !isRefresh && !thumbnails.isEmpty {
             return
         }
 

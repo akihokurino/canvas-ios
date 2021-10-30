@@ -15,6 +15,16 @@ struct RootView: View {
                         Text("作品")
                     }
                 }.tag(1)
+                
+                NavigationView {
+                    ArchiveListView()
+                }
+                .tabItem {
+                    VStack {
+                        Image(systemName: "video")
+                        Text("アーカイブ")
+                    }
+                }.tag(2)
 
                 NavigationView {
                     ThumbnailListView()
@@ -24,7 +34,7 @@ struct RootView: View {
                         Image(systemName: "square.grid.2x2")
                         Text("サムネ")
                     }
-                }.tag(2)
+                }.tag(3)
             }
         }
         .onAppear {
