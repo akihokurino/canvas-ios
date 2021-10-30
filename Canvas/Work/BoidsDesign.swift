@@ -17,6 +17,21 @@ struct BoidsDesign: View {
     @State private var timer: Timer? = nil
     @State private var frameCount: Int = 0
     
+    private var layer1: some View {
+        ForEach(objects) { object in
+            Path { path in
+                drawEachDot(&path, object)
+            }
+            .fillAndStroke(
+                object.color,
+                strokeContent: BoidsDesign.OBJECT_BORDER_COLOR,
+                strokeStyle: StrokeStyle(lineWidth: BoidsDesign.OBJECT_BORDER_WIDTH)
+            )
+            .frame(width: canvasWidth(), height: canvasHeight())
+            .clipped()
+        }
+    }
+    
     var body: some View {
         GeometryReader { _ in
             ZStack {
@@ -25,18 +40,7 @@ struct BoidsDesign: View {
                         .frame(width: canvasWidth(), height: canvasHeight())
                 }
                                 
-                ForEach(objects) { object in
-                    Path { path in
-                        drawEachDot(&path, object)
-                    }
-                    .fillAndStroke(
-                        object.color,
-                        strokeContent: BoidsDesign.OBJECT_BORDER_COLOR,
-                        strokeStyle: StrokeStyle(lineWidth: BoidsDesign.OBJECT_BORDER_WIDTH)
-                    )
-                    .frame(width: canvasWidth(), height: canvasHeight())
-                    .clipped()
-                }
+                layer1
             }
             .background(Color.white)
             .background(RectangleGetter(rect: $canvasRect))
@@ -81,7 +85,7 @@ struct BoidsDesign: View {
                     frameCount += 1
                     
                     if frameCount > BoidsDesign.FRAME_CAP {
-                        archive = UIApplication.shared.windows[0].rootViewController!.view!.getImage(rect: self.canvasRect)
+                        archive = screenshot(rect: self.canvasRect)
                         for i in 0 ..< objects.count {
                             objects[i].clear()
                         }

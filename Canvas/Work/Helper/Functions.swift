@@ -21,3 +21,8 @@ func canvasWidth() -> CGFloat {
 func canvasHeight() -> CGFloat {
     return UIScreen.main.bounds.height - 80 - 100
 }
+
+func screenshot(rect: CGRect) -> UIImage {
+    let scene = UIApplication.shared.connectedScenes.first as! UIWindowScene
+    return scene.keyWindow!.rootViewController!.view!.getImage(rect: rect)
+}

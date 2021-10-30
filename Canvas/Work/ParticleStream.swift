@@ -15,37 +15,49 @@ struct ParticleStream: View {
     @State private var timer: Timer? = nil
     @State private var hue: Double = 1
     
+    private var layer1: some View {
+        ForEach(objects) { object in
+            if object.points.count == ParticleStream.OBJECT_POINT_CAP {
+                Path { path in
+                    path.addArc(center: object.points[0], radius: ParticleStream.OBJECT_RADIUS, startAngle: .degrees(0), endAngle: .degrees(360), clockwise: false)
+                }
+                .fill(object.color.opacity(0.2))
+                .frame(width: canvasWidth(), height: canvasHeight())
+                .clipped()
+            }
+        }
+    }
+    
+    private var layer2: some View {
+        ForEach(objects) { object in
+            if object.points.count == ParticleStream.OBJECT_POINT_CAP {
+                Path { path in
+                    path.addArc(center: object.points[1], radius: ParticleStream.OBJECT_RADIUS, startAngle: .degrees(0), endAngle: .degrees(360), clockwise: false)
+                }
+                .fill(object.color.opacity(0.4))
+                .frame(width: canvasWidth(), height: canvasHeight())
+                .clipped()
+            }
+        }
+    }
+    
+    private var layer3: some View {
+        ForEach(objects) { object in
+            Path { path in
+                path.addArc(center: object.points.last!, radius: ParticleStream.OBJECT_RADIUS, startAngle: .degrees(0), endAngle: .degrees(360), clockwise: false)
+            }
+            .fill(object.color)
+            .frame(width: canvasWidth(), height: canvasHeight())
+            .clipped()
+        }
+    }
+    
     var body: some View {
         GeometryReader { _ in
             ZStack {
-                ForEach(objects) { object in
-                    if object.points.count == ParticleStream.OBJECT_POINT_CAP {
-                        Path { path in
-                            path.addArc(center: object.points[0], radius: ParticleStream.OBJECT_RADIUS, startAngle: .degrees(0), endAngle: .degrees(360), clockwise: false)
-                        }
-                        .fill(object.color.opacity(0.2))
-                        .frame(width: canvasWidth(), height: canvasHeight())
-                        .clipped()
-                    }
-                }
-                ForEach(objects) { object in
-                    if object.points.count == ParticleStream.OBJECT_POINT_CAP {
-                        Path { path in
-                            path.addArc(center: object.points[1], radius: ParticleStream.OBJECT_RADIUS, startAngle: .degrees(0), endAngle: .degrees(360), clockwise: false)
-                        }
-                        .fill(object.color.opacity(0.4))
-                        .frame(width: canvasWidth(), height: canvasHeight())
-                        .clipped()
-                    }
-                }
-                ForEach(objects) { object in
-                    Path { path in
-                        path.addArc(center: object.points.last!, radius: ParticleStream.OBJECT_RADIUS, startAngle: .degrees(0), endAngle: .degrees(360), clockwise: false)
-                    }
-                    .fill(object.color)
-                    .frame(width: canvasWidth(), height: canvasHeight())
-                    .clipped()
-                }
+                layer1
+                layer2
+                layer3
             }
             .contentShape(Rectangle())
             .gesture(

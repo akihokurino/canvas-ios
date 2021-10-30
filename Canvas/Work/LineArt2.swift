@@ -12,17 +12,21 @@ struct LineArt2: View {
     @State private var globalCount: Int = 0
     @State private var hue: Double = 1
     
+    private var layer1: some View {
+        ForEach(objects) { object in
+            Path { path in
+                path.addLines(object.points)
+            }
+            .stroke(object.color, lineWidth: LineArt2.OBJECT_WIDTH)
+            .frame(width: canvasWidth(), height: canvasHeight())
+            .clipped()
+        }
+    }
+    
     var body: some View {
         GeometryReader { _ in
             ZStack {
-                ForEach(objects) { object in
-                    Path { path in
-                        path.addLines(object.points)
-                    }
-                    .stroke(object.color, lineWidth: LineArt2.OBJECT_WIDTH)
-                    .frame(width: canvasWidth(), height: canvasHeight())
-                    .clipped()
-                }
+                layer1
             }
             .background(Color.black)
             .navigationBarTitle("", displayMode: .inline)

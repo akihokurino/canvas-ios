@@ -16,41 +16,51 @@ struct Lightning: View {
     @State private var timer: Timer? = nil
     @State private var hue: Double = 180
     
+    private var layer1: some View {
+        ForEach(objects) { object in
+            if object.points.count == Lightning.OBJECT_POINT_CAP {
+                Path { path in
+                    path.addLines(Array(object.points[0 ... 3]))
+                }
+                .stroke(object.color.opacity(0.2), lineWidth: Lightning.OBJECT_WIDTH)
+                .frame(width: canvasWidth(), height: canvasHeight())
+                .clipped()
+            }
+        }
+    }
+    
+    private var layer2: some View {
+        ForEach(objects) { object in
+            if object.points.count == Lightning.OBJECT_POINT_CAP {
+                Path { path in
+                    path.addLines(Array(object.points[3 ... 6]))
+                }
+                .stroke(object.color.opacity(0.4), lineWidth: Lightning.OBJECT_WIDTH)
+                .frame(width: canvasWidth(), height: canvasHeight())
+                .clipped()
+            }
+        }
+    }
+    
+    private var layer3: some View {
+        ForEach(objects) { object in
+            if object.points.count >= 4 {
+                Path { path in
+                    path.addLines(Array(object.points[object.points.count - 4 ..< object.points.count]))
+                }
+                .stroke(object.color, lineWidth: Lightning.OBJECT_WIDTH)
+                .frame(width: canvasWidth(), height: canvasHeight())
+                .clipped()
+            }
+        }
+    }
+    
     var body: some View {
         GeometryReader { _ in
             ZStack {
-                ForEach(objects) { object in
-                    if object.points.count == Lightning.OBJECT_POINT_CAP {
-                        Path { path in
-                            path.addLines(Array(object.points[0 ... 3]))
-                        }
-                        .stroke(object.color.opacity(0.2), lineWidth: Lightning.OBJECT_WIDTH)
-                        .frame(width: canvasWidth(), height: canvasHeight())
-                        .clipped()
-                    }
-                }
-                
-                ForEach(objects) { object in
-                    if object.points.count == Lightning.OBJECT_POINT_CAP {
-                        Path { path in
-                            path.addLines(Array(object.points[3 ... 6]))
-                        }
-                        .stroke(object.color.opacity(0.4), lineWidth: Lightning.OBJECT_WIDTH)
-                        .frame(width: canvasWidth(), height: canvasHeight())
-                        .clipped()
-                    }
-                }
-                
-                ForEach(objects) { object in
-                    if object.points.count >= 4 {
-                        Path { path in
-                            path.addLines(Array(object.points[object.points.count - 4 ..< object.points.count]))
-                        }
-                        .stroke(object.color, lineWidth: Lightning.OBJECT_WIDTH)
-                        .frame(width: canvasWidth(), height: canvasHeight())
-                        .clipped()
-                    }
-                }
+                layer1
+                layer2
+                layer3
             }
             .contentShape(Rectangle())
             .onTapGesture {

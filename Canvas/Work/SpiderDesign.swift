@@ -12,6 +12,17 @@ struct SpiderDesign: View {
     @State private var canvasRect: CGRect = .zero
     @State private var archive: UIImage? = nil
     @State private var timer: Timer? = nil
+    
+    private var layer1: some View {
+        ForEach(objects) { object in
+            Path { path in
+                path.addLines(object.points)
+            }
+            .stroke(object.color, lineWidth: SpiderDesign.OBJECT_WIDTH)
+            .frame(width: canvasWidth(), height: canvasHeight())
+            .clipped()
+        }
+    }
         
     var body: some View {
         GeometryReader { _ in
@@ -21,20 +32,13 @@ struct SpiderDesign: View {
                         .frame(width: canvasWidth(), height: canvasHeight())
                 }
                                     
-                ForEach(objects) { object in
-                    Path { path in
-                        path.addLines(object.points)
-                    }
-                    .stroke(object.color, lineWidth: SpiderDesign.OBJECT_WIDTH)
-                    .frame(width: canvasWidth(), height: canvasHeight())
-                    .clipped()
-                }
+                layer1
             }
             .contentShape(Rectangle())
             .gesture(
                 DragGesture(minimumDistance: 0, coordinateSpace: .local)
                     .onEnded { value in
-                        archive = UIApplication.shared.windows[0].rootViewController!.view!.getImage(rect: self.canvasRect)
+                        archive = screenshot(rect: self.canvasRect)
                         objects.removeAll()
                         let hue = Double.random(in: 1 ... 360) / 360.0
                         for _ in 0 ..< SpiderDesign.OBJECT_NUM {

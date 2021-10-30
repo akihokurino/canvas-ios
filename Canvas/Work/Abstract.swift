@@ -14,17 +14,21 @@ struct Abstract: View {
     @State private var objects: [Object] = []
     @State private var timer: Timer? = nil
 
+    private var layer1: some View {
+        ForEach(objects) { object in
+            Path { path in
+                path.addLines(object.points)
+            }
+            .stroke(Abstract.OBJECT_COLOR, lineWidth: Abstract.OBJECT_WIDTH)
+            .frame(width: canvasWidth(), height: canvasHeight())
+            .clipped()
+        }
+    }
+
     var body: some View {
         GeometryReader { _ in
             ZStack {
-                ForEach(objects) { object in
-                    Path { path in
-                        path.addLines(object.points)
-                    }
-                    .stroke(Abstract.OBJECT_COLOR, lineWidth: Abstract.OBJECT_WIDTH)
-                    .frame(width: canvasWidth(), height: canvasHeight())
-                    .clipped()
-                }
+                layer1
             }
             .background(Color.white)
             .navigationBarTitle("", displayMode: .inline)

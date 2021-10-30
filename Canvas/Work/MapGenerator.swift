@@ -10,6 +10,20 @@ struct MapGenerator: View {
         
     @State private var objects: [Object] = []
     @State private var timer: Timer? = nil
+    
+    private var layer1: some View {
+        ZStack {
+            ForEach(objects) { object in
+                Path { path in
+                    path.addLines(object.points)
+                }
+                .stroke(object.color, lineWidth: MapGenerator.OBJECT_WIDTH)
+                .frame(width: MapGenerator.CANVAS_SIZE.width, height: MapGenerator.CANVAS_SIZE.height)
+                .clipped()
+            }
+        }
+        .background(Color.black)
+    }
         
     var body: some View {
         GeometryReader { _ in
@@ -17,17 +31,7 @@ struct MapGenerator: View {
                 Spacer()
                 HStack {
                     Spacer()
-                    ZStack {
-                        ForEach(objects) { object in
-                            Path { path in
-                                path.addLines(object.points)
-                            }
-                            .stroke(object.color, lineWidth: MapGenerator.OBJECT_WIDTH)
-                            .frame(width: MapGenerator.CANVAS_SIZE.width, height: MapGenerator.CANVAS_SIZE.height)
-                            .clipped()
-                        }
-                    }
-                    .background(Color.black)
+                    layer1
                     Spacer()
                 }
                 Spacer()

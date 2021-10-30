@@ -17,6 +17,28 @@ struct ColorRain: View {
     @State private var timer1: Timer? = nil
     @State private var timer2: Timer? = nil
     
+    private var layer1: some View {
+        ForEach(objects1) { object in
+            Path { path in
+                path.addLines(object.points)
+            }
+            .stroke(object.color, lineWidth: ColorRain.OBJECT_WIDTH)
+            .frame(width: canvasWidth(), height: canvasHeight())
+            .clipped()
+        }
+    }
+    
+    private var layer2: some View {
+        ForEach(objects2) { object in
+            Path { path in
+                path.addLines(object.points)
+            }
+            .stroke(object.color, lineWidth: ColorRain.OBJECT_WIDTH)
+            .frame(width: canvasWidth(), height: canvasHeight())
+            .clipped()
+        }
+    }
+    
     var body: some View {
         GeometryReader { _ in
             ZStack {
@@ -25,23 +47,8 @@ struct ColorRain: View {
                         .frame(width: canvasWidth(), height: canvasHeight())
                 }
                                     
-                ForEach(objects1) { object in
-                    Path { path in
-                        path.addLines(object.points)
-                    }
-                    .stroke(object.color, lineWidth: ColorRain.OBJECT_WIDTH)
-                    .frame(width: canvasWidth(), height: canvasHeight())
-                    .clipped()
-                }
-                
-                ForEach(objects2) { object in
-                    Path { path in
-                        path.addLines(object.points)
-                    }
-                    .stroke(object.color, lineWidth: ColorRain.OBJECT_WIDTH)
-                    .frame(width: canvasWidth(), height: canvasHeight())
-                    .clipped()
-                }
+                layer1
+                layer2
             }
             .background(Color.black)
             .background(RectangleGetter(rect: $canvasRect))
@@ -81,7 +88,7 @@ struct ColorRain: View {
                     }
                                     
                     if objects1.count > ColorRain.OBJECTS_1_CAP {
-                        archive = UIApplication.shared.windows[0].rootViewController!.view!.getImage(rect: self.canvasRect)
+                        archive = screenshot(rect: self.canvasRect)
                         objects1.removeAll(where: { $0.isDead })
                     }
                 }
@@ -99,7 +106,7 @@ struct ColorRain: View {
                     }
                                                         
                     if objects2.count > ColorRain.OBJECTS_2_CAP {
-                        archive = UIApplication.shared.windows[0].rootViewController!.view!.getImage(rect: self.canvasRect)
+                        archive = screenshot(rect: self.canvasRect)
                         objects2.removeAll(where: { $0.isDead })
                     }
                 }

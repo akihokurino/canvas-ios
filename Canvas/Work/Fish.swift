@@ -11,46 +11,61 @@ struct Fish: View {
     @State private var foods: [Food] = []
     @State private var timer: Timer? = nil
     
+    private var layer1: some View {
+        ForEach(objects) { object in
+            if object.points.count == Fish.OBJECT_POINT_CAP {
+                Path { path in
+                    path.addArc(center: object.points[0], radius: object.radius, startAngle: .degrees(0), endAngle: .degrees(360), clockwise: false)
+                }
+                .fill(object.color.opacity(0.2))
+                .frame(width: canvasWidth(), height: canvasHeight())
+                .clipped()
+            }
+        }
+    }
+    
+    private var layer2: some View {
+        ForEach(objects) { object in
+            if object.points.count == Fish.OBJECT_POINT_CAP {
+                Path { path in
+                    path.addArc(center: object.points[1], radius: object.radius, startAngle: .degrees(0), endAngle: .degrees(360), clockwise: false)
+                }
+                .fill(object.color.opacity(0.4))
+                .frame(width: canvasWidth(), height: canvasHeight())
+                .clipped()
+            }
+        }
+    }
+    
+    private var layer3: some View {
+        ForEach(objects) { object in
+            Path { path in
+                path.addArc(center: object.points.last!, radius: object.radius, startAngle: .degrees(0), endAngle: .degrees(360), clockwise: false)
+            }
+            .fill(object.color)
+            .frame(width: canvasWidth(), height: canvasHeight())
+            .clipped()
+        }
+    }
+    
+    private var layer4: some View {
+        ForEach(foods) { food in
+            Path { path in
+                path.addArc(center: food.point, radius: food.radius, startAngle: .degrees(0), endAngle: .degrees(360), clockwise: false)
+            }
+            .fill(food.color)
+            .frame(width: canvasWidth(), height: canvasHeight())
+            .clipped()
+        }
+    }
+    
     var body: some View {
         GeometryReader { _ in
             ZStack {
-                ForEach(objects) { object in
-                    if object.points.count == Fish.OBJECT_POINT_CAP {
-                        Path { path in
-                            path.addArc(center: object.points[0], radius: object.radius, startAngle: .degrees(0), endAngle: .degrees(360), clockwise: false)
-                        }
-                        .fill(object.color.opacity(0.2))
-                        .frame(width: canvasWidth(), height: canvasHeight())
-                        .clipped()
-                    }
-                }
-                ForEach(objects) { object in
-                    if object.points.count == Fish.OBJECT_POINT_CAP {
-                        Path { path in
-                            path.addArc(center: object.points[1], radius: object.radius, startAngle: .degrees(0), endAngle: .degrees(360), clockwise: false)
-                        }
-                        .fill(object.color.opacity(0.4))
-                        .frame(width: canvasWidth(), height: canvasHeight())
-                        .clipped()
-                    }
-                }
-                ForEach(objects) { object in
-                    Path { path in
-                        path.addArc(center: object.points.last!, radius: object.radius, startAngle: .degrees(0), endAngle: .degrees(360), clockwise: false)
-                    }
-                    .fill(object.color)
-                    .frame(width: canvasWidth(), height: canvasHeight())
-                    .clipped()
-                }
-                
-                ForEach(foods) { food in
-                    Path { path in
-                        path.addArc(center: food.point, radius: food.radius, startAngle: .degrees(0), endAngle: .degrees(360), clockwise: false)
-                    }
-                    .fill(food.color)
-                    .frame(width: canvasWidth(), height: canvasHeight())
-                    .clipped()
-                }
+                layer1
+                layer2
+                layer3
+                layer4
             }
             .frame(width: canvasWidth(), height: canvasHeight())
             .contentShape(Rectangle())

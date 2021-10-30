@@ -21,6 +21,28 @@ struct LineArt: View {
     @State private var timer2: Timer? = nil
     @State private var timer3: Timer? = nil
     
+    private var layer1: some View {
+        ForEach(objects1) { object in
+            Path { path in
+                path.addLines(object.points)
+            }
+            .stroke(object.color, lineWidth: object.width)
+            .frame(width: canvasWidth(), height: canvasHeight())
+            .clipped()
+        }
+    }
+    
+    private var layer2: some View {
+        ForEach(objects2) { object in
+            Path { path in
+                path.addLines(object.points)
+            }
+            .stroke(object.color, lineWidth: object.width)
+            .frame(width: canvasWidth(), height: canvasHeight())
+            .clipped()
+        }
+    }
+    
     var body: some View {
         GeometryReader { _ in
             ZStack {
@@ -28,24 +50,9 @@ struct LineArt: View {
                     Image(uiImage: archive!)
                         .frame(width: canvasWidth(), height: canvasHeight())
                 }
-                                
-                ForEach(objects1) { object in
-                    Path { path in
-                        path.addLines(object.points)
-                    }
-                    .stroke(object.color, lineWidth: object.width)
-                    .frame(width: canvasWidth(), height: canvasHeight())
-                    .clipped()
-                }
-                                
-                ForEach(objects2) { object in
-                    Path { path in
-                        path.addLines(object.points)
-                    }
-                    .stroke(object.color, lineWidth: object.width)
-                    .frame(width: canvasWidth(), height: canvasHeight())
-                    .clipped()
-                }
+                
+                layer1
+                layer2
             }
             .contentShape(Rectangle())
             .gesture(
@@ -96,7 +103,7 @@ struct LineArt: View {
                     }
                                     
                     if objects1.count > LineArt.OBJECTS_1_CAP {
-                        archive = UIApplication.shared.windows[0].rootViewController!.view!.getImage(rect: self.canvasRect)
+                        archive = screenshot(rect: self.canvasRect)
                         objects1.removeAll(where: { $0.isDead })
                     }
                 }
@@ -114,7 +121,7 @@ struct LineArt: View {
                     }
                                                         
                     if objects2.count > LineArt.OBJECTS_2_CAP {
-                        archive = UIApplication.shared.windows[0].rootViewController!.view!.getImage(rect: self.canvasRect)
+                        archive = screenshot(rect: self.canvasRect)
                         objects2.removeAll(where: { $0.isDead })
                     }
                 }

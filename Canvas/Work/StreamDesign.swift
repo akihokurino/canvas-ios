@@ -18,6 +18,17 @@ struct StreamDesign: View {
     @State private var timer: Timer? = nil
     @State private var frameCount: Int = 0
     @State private var isDraging: Bool = false
+    
+    private var layer1: some View {
+        ForEach(objects) { object in
+            Path { path in
+                path.addLines(object.points)
+            }
+            .stroke(object.color, lineWidth: StreamDesign.OBJECT_WIDTH)
+            .frame(width: canvasWidth(), height: canvasHeight())
+            .clipped()
+        }
+    }
         
     var body: some View {
         GeometryReader { _ in
@@ -27,14 +38,7 @@ struct StreamDesign: View {
                         .frame(width: canvasWidth(), height: canvasHeight())
                 }
                                     
-                ForEach(objects) { object in
-                    Path { path in
-                        path.addLines(object.points)
-                    }
-                    .stroke(object.color, lineWidth: StreamDesign.OBJECT_WIDTH)
-                    .frame(width: canvasWidth(), height: canvasHeight())
-                    .clipped()
-                }
+                layer1
             }
             .contentShape(Rectangle())
             .gesture(
@@ -92,7 +96,7 @@ struct StreamDesign: View {
                     frameCount += 1
                         
                     if frameCount > StreamDesign.FRAME_CAP {
-                        archive = UIApplication.shared.windows[0].rootViewController!.view!.getImage(rect: self.canvasRect)
+                        archive = screenshot(rect: self.canvasRect)
                         for i in 0 ..< objects.count {
                             objects[i].clear()
                         }

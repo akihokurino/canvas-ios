@@ -12,42 +12,52 @@ struct ParticleRotate3D: View {
     @State private var dragPoint = CGPoint(x: 0, y: 0)
     @State private var objects: [Object] = []
     @State private var timer: Timer? = nil
+    
+    private var layer1: some View {
+        ForEach(objects) { object in
+            if object.points.count == ParticleRotate3D.OBJECT_POINT_CAP {
+                Path { path in
+                    path.addLines(Array(object.points2D[0 ... 3]))
+                }
+                .stroke(object.color.opacity(0.2), lineWidth: ParticleRotate3D.OBJECT_WIDTH)
+                .frame(width: canvasWidth(), height: canvasHeight())
+                .clipped()
+            }
+        }
+    }
+    
+    private var layer2: some View {
+        ForEach(objects) { object in
+            if object.points.count == ParticleRotate3D.OBJECT_POINT_CAP {
+                Path { path in
+                    path.addLines(Array(object.points2D[3 ... 6]))
+                }
+                .stroke(object.color.opacity(0.4), lineWidth: ParticleRotate3D.OBJECT_WIDTH)
+                .frame(width: canvasWidth(), height: canvasHeight())
+                .clipped()
+            }
+        }
+    }
+    
+    private var layer3: some View {
+        ForEach(objects) { object in
+            if object.points.count >= 4 {
+                Path { path in
+                    path.addLines(Array(object.points2D[object.points.count - 4 ..< object.points.count]))
+                }
+                .stroke(object.color, lineWidth: ParticleRotate3D.OBJECT_WIDTH)
+                .frame(width: canvasWidth(), height: canvasHeight())
+                .clipped()
+            }
+        }
+    }
         
     var body: some View {
         GeometryReader { _ in
             ZStack {
-                ForEach(objects) { object in
-                    if object.points.count == ParticleRotate3D.OBJECT_POINT_CAP {
-                        Path { path in
-                            path.addLines(Array(object.points2D[0 ... 3]))
-                        }
-                        .stroke(object.color.opacity(0.2), lineWidth: ParticleRotate3D.OBJECT_WIDTH)
-                        .frame(width: canvasWidth(), height: canvasHeight())
-                        .clipped()
-                    }
-                }
-                
-                ForEach(objects) { object in
-                    if object.points.count == ParticleRotate3D.OBJECT_POINT_CAP {
-                        Path { path in
-                            path.addLines(Array(object.points2D[3 ... 6]))
-                        }
-                        .stroke(object.color.opacity(0.4), lineWidth: ParticleRotate3D.OBJECT_WIDTH)
-                        .frame(width: canvasWidth(), height: canvasHeight())
-                        .clipped()
-                    }
-                }
-                
-                ForEach(objects) { object in
-                    if object.points.count >= 4 {
-                        Path { path in
-                            path.addLines(Array(object.points2D[object.points.count - 4 ..< object.points.count]))
-                        }
-                        .stroke(object.color, lineWidth: ParticleRotate3D.OBJECT_WIDTH)
-                        .frame(width: canvasWidth(), height: canvasHeight())
-                        .clipped()
-                    }
-                }
+                layer1
+                layer2
+                layer3
             }
             .contentShape(Rectangle())
             .gesture(

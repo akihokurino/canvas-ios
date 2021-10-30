@@ -17,17 +17,21 @@ struct CircleDesign: View {
     @State private var timer1: Timer? = nil
     @State private var timer2: Timer? = nil
     
+    private var layer1: some View {
+        ForEach(objects) { object in
+            Path { path in
+                path.addArc(center: object.point, radius: CircleDesign.OBJECT_RADIUS, startAngle: .degrees(0), endAngle: .degrees(360), clockwise: false)
+            }
+            .stroke(CircleDesign.OBJECT_COLOR.opacity(object.alpha), lineWidth: CircleDesign.OBJECT_WIDTH)
+            .frame(width: canvasWidth(), height: canvasHeight())
+            .clipped()
+        }
+    }
+    
     var body: some View {
         GeometryReader { _ in
             ZStack {
-                ForEach(objects) { object in
-                    Path { path in
-                        path.addArc(center: object.point, radius: CircleDesign.OBJECT_RADIUS, startAngle: .degrees(0), endAngle: .degrees(360), clockwise: false)
-                    }
-                    .stroke(CircleDesign.OBJECT_COLOR.opacity(object.alpha), lineWidth: CircleDesign.OBJECT_WIDTH)
-                    .frame(width: canvasWidth(), height: canvasHeight())
-                    .clipped()
-                }
+                layer1
             }
             .contentShape(Rectangle())
             .gesture(

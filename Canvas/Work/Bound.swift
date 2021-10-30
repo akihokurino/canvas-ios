@@ -16,6 +16,43 @@ struct Bound: View {
     @State private var canvasRect: CGRect = .zero
     @State private var archive: UIImage? = nil
     
+    private var layer1: some View {
+        ForEach(objects) { object in
+            if object.points.count == Bound.OBJECT_POINT_CAP {
+                Path { path in
+                    path.addArc(center: object.points[0], radius: object.radius, startAngle: .degrees(0), endAngle: .degrees(360), clockwise: false)
+                }
+                .fill(object.color.opacity(0.2))
+                .frame(width: canvasWidth(), height: canvasHeight())
+                .clipped()
+            }
+        }
+    }
+    
+    private var layer2: some View {
+        ForEach(objects) { object in
+            if object.points.count == Bound.OBJECT_POINT_CAP {
+                Path { path in
+                    path.addArc(center: object.points[1], radius: object.radius, startAngle: .degrees(0), endAngle: .degrees(360), clockwise: false)
+                }
+                .fill(object.color.opacity(0.4))
+                .frame(width: canvasWidth(), height: canvasHeight())
+                .clipped()
+            }
+        }
+    }
+    
+    private var layer3: some View {
+        ForEach(objects) { object in
+            Path { path in
+                path.addArc(center: object.points.last!, radius: object.radius, startAngle: .degrees(0), endAngle: .degrees(360), clockwise: false)
+            }
+            .fill(object.color)
+            .frame(width: canvasWidth(), height: canvasHeight())
+            .clipped()
+        }
+    }
+    
     var body: some View {
         GeometryReader { _ in
             ZStack {
@@ -24,34 +61,9 @@ struct Bound: View {
                         .frame(width: canvasWidth(), height: canvasHeight())
                 }
                 
-                ForEach(objects) { object in
-                    if object.points.count == Bound.OBJECT_POINT_CAP {
-                        Path { path in
-                            path.addArc(center: object.points[0], radius: object.radius, startAngle: .degrees(0), endAngle: .degrees(360), clockwise: false)
-                        }
-                        .fill(object.color.opacity(0.2))
-                        .frame(width: canvasWidth(), height: canvasHeight())
-                        .clipped()
-                    }
-                }
-                ForEach(objects) { object in
-                    if object.points.count == Bound.OBJECT_POINT_CAP {
-                        Path { path in
-                            path.addArc(center: object.points[1], radius: object.radius, startAngle: .degrees(0), endAngle: .degrees(360), clockwise: false)
-                        }
-                        .fill(object.color.opacity(0.4))
-                        .frame(width: canvasWidth(), height: canvasHeight())
-                        .clipped()
-                    }
-                }
-                ForEach(objects) { object in
-                    Path { path in
-                        path.addArc(center: object.points.last!, radius: object.radius, startAngle: .degrees(0), endAngle: .degrees(360), clockwise: false)
-                    }
-                    .fill(object.color)
-                    .frame(width: canvasWidth(), height: canvasHeight())
-                    .clipped()
-                }
+                layer1
+                layer2
+                layer3
             }
             .frame(width: canvasWidth(), height: canvasHeight())
             .contentShape(Rectangle())
@@ -90,7 +102,7 @@ struct Bound: View {
                     }
                     
                     if objects.filter({ !$0.isDead }).count == 0 {
-                        archive = UIApplication.shared.windows[0].rootViewController!.view!.getImage(rect: self.canvasRect)
+                        archive = screenshot(rect: self.canvasRect)
                         objects.removeAll()
                     }
                 }

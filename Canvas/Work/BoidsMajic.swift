@@ -15,17 +15,21 @@ struct BoidsMajic: View {
     @State private var objects: [Object] = []
     @State private var timer: Timer? = nil
     
+    private var layer1: some View {
+        ForEach(objects) { object in
+            Path { path in
+                drawEachDot(&path, object)
+            }
+            .stroke(BoidsMajic.OBJECT_COLOR, lineWidth: BoidsMajic.OBJECT_WIDTH)
+            .frame(width: canvasWidth(), height: canvasHeight())
+            .clipped()
+        }
+    }
+    
     var body: some View {
         GeometryReader { _ in
             ZStack {
-                ForEach(objects) { object in
-                    Path { path in
-                        drawEachDot(&path, object)
-                    }
-                    .stroke(BoidsMajic.OBJECT_COLOR, lineWidth: BoidsMajic.OBJECT_WIDTH)
-                    .frame(width: canvasWidth(), height: canvasHeight())
-                    .clipped()
-                }
+                layer1
             }
             .background(Color.white)
             .navigationBarTitle("", displayMode: .inline)
