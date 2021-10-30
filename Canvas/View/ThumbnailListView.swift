@@ -5,6 +5,7 @@ extension GraphQL.ThumbnailFragment: Identifiable {}
 
 struct ThumbnailListView: View {
     @ObservedObject var thumbnailFetcher = ThumbnailFetcher()
+    @State var isRefreshing = false
 
     static let thumbnailSize = UIScreen.main.bounds.size.width / 3
     private let gridItemLayout = [
@@ -15,6 +16,13 @@ struct ThumbnailListView: View {
 
     var body: some View {
         ScrollView {
+            RefreshControl(isRefreshing: $isRefreshing, coordinateSpaceName: RefreshControlKey, onRefresh: {
+                isRefreshing = true
+                thumbnailFetcher.initThumbnails() {
+                    self.isRefreshing = false
+                }
+            })
+
             LazyVGrid(columns: gridItemLayout, alignment: HorizontalAlignment.leading, spacing: 3) {
                 ForEach(thumbnailFetcher.thumbnailProvider) { item in
                     Button(action: {}) {
@@ -23,9 +31,12 @@ struct ThumbnailListView: View {
                 }
             }
         }
+        .coordinateSpace(name: RefreshControlKey)
         .navigationBarTitle("", displayMode: .inline)
         .onAppear {
-            thumbnailFetcher.initThumbnails()
+            thumbnailFetcher.initThumbnails() {
+                self.isRefreshing = false
+            }
         }
     }
 }

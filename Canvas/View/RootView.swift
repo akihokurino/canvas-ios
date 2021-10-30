@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct ContentView: View {
+struct RootView: View {
     @ObservedObject var authenticator = Authenticator()
 
     var body: some View {

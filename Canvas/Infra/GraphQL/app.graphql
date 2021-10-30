@@ -1,5 +1,5 @@
-query ListThumbnail($page: Int!) {
-    thumbnails(page: $page, limit: 20) {
+query ListThumbnail($page: Int!, $limit: Int!) {
+    thumbnails(page: $page, limit: $limit) {
         ...ThumbnailFragment
     }
 }

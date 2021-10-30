@@ -72,7 +72,7 @@ struct GraphQLCaller {
 
     func thumbnails(page: Int) -> Future<[GraphQL.ThumbnailFragment], AppError> {
         return Future<[GraphQL.ThumbnailFragment], AppError> { promise in
-            cli.fetch(query: GraphQL.ListThumbnailQuery(page: page)) { result in
+            cli.fetch(query: GraphQL.ListThumbnailQuery(page: page, limit: 21)) { result in
                 switch result {
                 case .success(let graphQLResult):
                     if let errors = graphQLResult.errors {

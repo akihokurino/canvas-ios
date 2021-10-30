@@ -10,8 +10,8 @@ public enum GraphQL {
     /// The raw GraphQL definition of this operation.
     public let operationDefinition: String =
       """
-      query ListThumbnail($page: Int!) {
-        thumbnails(page: $page, limit: 20) {
+      query ListThumbnail($page: Int!, $limit: Int!) {
+        thumbnails(page: $page, limit: $limit) {
           __typename
           ...ThumbnailFragment
         }
@@ -27,13 +27,15 @@ public enum GraphQL {
     }
 
     public var page: Int
+    public var limit: Int
 
-    public init(page: Int) {
+    public init(page: Int, limit: Int) {
       self.page = page
+      self.limit = limit
     }
 
     public var variables: GraphQLMap? {
-      return ["page": page]
+      return ["page": page, "limit": limit]
     }
 
     public struct Data: GraphQLSelectionSet {
@@ -41,7 +43,7 @@ public enum GraphQL {
 
       public static var selections: [GraphQLSelection] {
         return [
-          GraphQLField("thumbnails", arguments: ["page": GraphQLVariable("page"), "limit": 20], type: .nonNull(.list(.nonNull(.object(Thumbnail.selections))))),
+          GraphQLField("thumbnails", arguments: ["page": GraphQLVariable("page"), "limit": GraphQLVariable("limit")], type: .nonNull(.list(.nonNull(.object(Thumbnail.selections))))),
         ]
       }
 

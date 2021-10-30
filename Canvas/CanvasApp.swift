@@ -9,7 +9,7 @@ struct CanvasApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootView()
         }
     }
 }
@@ -33,6 +33,8 @@ class AppDelegate: NSObject, UIApplicationDelegate {
                 }
             }
         }
+        
+        UINavigationBar.appearance().backgroundColor = .black
 
         return true
     }

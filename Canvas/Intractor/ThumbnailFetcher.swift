@@ -4,15 +4,15 @@ import SwiftUI
 class ThumbnailFetcher: ObservableObject {
     private var _thumbnails: AnyCancellable?
     private var _page: Int = 1
-    
+
     @Published var thumbnailProvider: [GraphQL.ThumbnailFragment] = []
     @Published var errorProvider: AppError?
 
-    func initThumbnails() {
+    func initThumbnails(callback: @escaping () -> ()) {
         guard FirebaseAuthManager.shared.isLogin() else {
             return
         }
-        
+
         _page = 1
 
         _thumbnails?.cancel()
@@ -21,8 +21,9 @@ class ThumbnailFetcher: ObservableObject {
             .sink(receiveCompletion: { completion in
                 switch completion {
                     case .finished:
-                        break
+                        callback()
                     case .failure(let error):
+                        callback()
                         self.errorProvider = error
                 }
             }, receiveValue: { val in
