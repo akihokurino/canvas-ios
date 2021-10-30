@@ -4,7 +4,7 @@ import SwiftUI
 extension GraphQL.ThumbnailFragment: Identifiable {}
 
 struct ThumbnailListView: View {
-    @ObservedObject var thumbnailFetcher = ThumbnailFetcher()
+    @ObservedObject var thumbnailListFetcher = ThumbnailListFetcher()
     @State var isRefreshing = false
 
     static let thumbnailSize = UIScreen.main.bounds.size.width / 3
@@ -18,13 +18,13 @@ struct ThumbnailListView: View {
         ScrollView {
             RefreshControl(isRefreshing: $isRefreshing, coordinateSpaceName: RefreshControlKey, onRefresh: {
                 isRefreshing = true
-                thumbnailFetcher.initThumbnails {
+                thumbnailListFetcher.initialize {
                     self.isRefreshing = false
                 }
             })
 
             LazyVGrid(columns: gridItemLayout, alignment: HorizontalAlignment.leading, spacing: 3) {
-                ForEach(thumbnailFetcher.thumbnails) { item in
+                ForEach(thumbnailListFetcher.thumbnails) { item in
                     Button(action: {}) {
                         ThumbnailRow(data: item)
                     }
@@ -36,7 +36,7 @@ struct ThumbnailListView: View {
         .coordinateSpace(name: RefreshControlKey)
         .navigationBarTitle("", displayMode: .inline)
         .onAppear {
-            thumbnailFetcher.initThumbnails {
+            thumbnailListFetcher.initialize {
                 self.isRefreshing = false
             }
         }
@@ -44,9 +44,9 @@ struct ThumbnailListView: View {
 
     private var bottom: some View {
         Group {
-            if thumbnailFetcher.hasNext && !thumbnailFetcher.isFetching && thumbnailFetcher.thumbnails.count > 0 {
+            if thumbnailListFetcher.hasNext && !thumbnailListFetcher.isFetching {
                 Button(action: {
-                    thumbnailFetcher.nextThumbnails {}
+                    thumbnailListFetcher.next {}
                 }) {
                     HStack {
                         Spacer()
@@ -57,18 +57,13 @@ struct ThumbnailListView: View {
                 .frame(height: 60)
             }
 
-            if thumbnailFetcher.hasNext && thumbnailFetcher.isFetching && thumbnailFetcher.thumbnails.count > 0 {
+            if thumbnailListFetcher.hasNext && thumbnailListFetcher.isFetching {
                 HStack {
                     Spacer()
                     ProgressView()
                     Spacer()
                 }
                 .frame(height: 60)
-            }
-
-            if !thumbnailFetcher.hasNext {
-                HStack {}
-                    .frame(height: 60)
             }
         }
     }

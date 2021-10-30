@@ -70,8 +70,8 @@ struct GraphQLClient {
 struct GraphQLCaller {
     let cli: ApolloClient
 
-    func thumbnails(page: Int) -> Future<[GraphQL.ThumbnailFragment], AppError> {
-        return Future<[GraphQL.ThumbnailFragment], AppError> { promise in
+    func thumbnails(page: Int) -> Future<([GraphQL.ThumbnailFragment], Bool), AppError> {
+        return Future<([GraphQL.ThumbnailFragment], Bool), AppError> { promise in
             cli.fetch(query: GraphQL.ListThumbnailQuery(page: page, limit: 21)) { result in
                 switch result {
                 case .success(let graphQLResult):
@@ -87,8 +87,11 @@ struct GraphQLCaller {
                         promise(.failure(AppError.defaultError()))
                         return
                     }
+                    
+                    let items = data.thumbnails.edges.map { $0.node.fragments.thumbnailFragment }
+                    let hasNext = data.thumbnails.pageInfo.hasNextPage
 
-                    promise(.success(data.thumbnails.map { $0.fragments.thumbnailFragment }))
+                    promise(.success((items, hasNext)))
                 case .failure(let error):
                     promise(.failure(.wrap(error)))
                 }

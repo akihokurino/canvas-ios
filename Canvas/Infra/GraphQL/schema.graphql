@@ -5,15 +5,24 @@ type Mutation {
 }
 
 #
+type PageInfo {
+  #
+  totalCount: Int!
+
+  #
+  hasNextPage: Boolean!
+}
+
+#
 type Query {
   #
-  works(page: Int!, limit: Int!): [Work!]!
+  works(page: Int!, limit: Int!): WorkConnection!
 
   #
   work(id: ID!): Work!
 
   #
-  thumbnails(page: Int!, limit: Int!): [Thumbnail!]!
+  thumbnails(page: Int!, limit: Int!): ThumbnailConnection!
 }
 
 #
@@ -41,6 +50,21 @@ type Thumbnail {
 }
 
 #
+type ThumbnailConnection {
+  #
+  edges: [ThumbnailEdge!]!
+
+  #
+  pageInfo: PageInfo!
+}
+
+#
+type ThumbnailEdge {
+  #
+  node: Thumbnail!
+}
+
+#
 type Work {
   #
   id: ID!
@@ -50,4 +74,19 @@ type Work {
 
   #
   thumbnails: [Thumbnail!]!
+}
+
+#
+type WorkConnection {
+  #
+  edges: [WorkEdge!]!
+
+  #
+  pageInfo: PageInfo!
+}
+
+#
+type WorkEdge {
+  #
+  node: Work!
 }

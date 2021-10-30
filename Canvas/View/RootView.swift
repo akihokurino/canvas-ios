@@ -12,7 +12,7 @@ struct RootView: View {
                 .tabItem {
                     VStack {
                         Image(systemName: "scribble.variable")
-                        Text("表現")
+                        Text("作品")
                     }
                 }.tag(1)
 
@@ -22,7 +22,7 @@ struct RootView: View {
                 .tabItem {
                     VStack {
                         Image(systemName: "square.grid.2x2")
-                        Text("画像")
+                        Text("サムネ")
                     }
                 }.tag(2)
             }

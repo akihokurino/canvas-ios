@@ -1,7 +1,7 @@
 import Combine
 import SwiftUI
 
-class ThumbnailFetcher: ObservableObject {
+class ThumbnailListFetcher: ObservableObject {
     private var cancellable: AnyCancellable?
     private var page: Int = 1
 
@@ -10,7 +10,7 @@ class ThumbnailFetcher: ObservableObject {
     @Published var hasNext: Bool = false
     @Published var isFetching: Bool = false
 
-    func initThumbnails(callback: @escaping () -> ()) {
+    func initialize(callback: @escaping () -> ()) {
         guard FirebaseAuthManager.shared.isLogin() else {
             return
         }
@@ -19,7 +19,7 @@ class ThumbnailFetcher: ObservableObject {
         isFetching = true
         hasNext = false
         cancellable?.cancel()
-        
+
         cancellable = GraphQLClient.shared.caller()
             .flatMap { caller in caller.thumbnails(page: self.page) }
             .sink(receiveCompletion: { completion in
@@ -33,16 +33,16 @@ class ThumbnailFetcher: ObservableObject {
                         self.errors = error
                 }
             }, receiveValue: { val in
-                self.thumbnails = val
-                self.hasNext = !val.isEmpty
+                self.thumbnails = val.0
+                self.hasNext = val.1
             })
     }
 
-    func nextThumbnails(callback: @escaping () -> ()) {
+    func next(callback: @escaping () -> ()) {
         guard FirebaseAuthManager.shared.isLogin() else {
             return
         }
-        
+
         guard !isFetching else {
             return
         }
@@ -51,7 +51,7 @@ class ThumbnailFetcher: ObservableObject {
         isFetching = true
         hasNext = true
         cancellable?.cancel()
-        
+
         cancellable = GraphQLClient.shared.caller()
             .flatMap { caller in caller.thumbnails(page: self.page) }
             .sink(receiveCompletion: { completion in
@@ -65,8 +65,8 @@ class ThumbnailFetcher: ObservableObject {
                         self.errors = error
                 }
             }, receiveValue: { val in
-                self.thumbnails.append(contentsOf: val)
-                self.hasNext = !val.isEmpty
+                self.thumbnails.append(contentsOf: val.0)
+                self.hasNext = val.1
             })
     }
 }

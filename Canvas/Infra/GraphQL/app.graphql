@@ -1,6 +1,34 @@
 query ListThumbnail($page: Int!, $limit: Int!) {
     thumbnails(page: $page, limit: $limit) {
-        ...ThumbnailFragment
+        edges {
+            node {
+                ...ThumbnailFragment
+            }
+        }
+        pageInfo {
+            totalCount
+            hasNextPage
+        }
+    }
+}
+
+query ListWork($page: Int!, $limit: Int!) {
+    works(page: $page, limit: $limit) {
+        edges {
+            node {
+                ...WorkFragment
+            }
+        }
+        pageInfo {
+            totalCount
+            hasNextPage
+        }
+    }
+}
+
+query GetWork($id: ID!) {
+    work(id: $id) {
+        ...WorkFragment
     }
 }
 
@@ -11,6 +39,15 @@ fragment ThumbnailFragment on Thumbnail {
     work {
         id
         videoUrl
+    }
+}
+
+fragment WorkFragment on Work {
+    id
+    videoUrl
+    thumbnails {
+        id
+        imageUrl
     }
 }
 
