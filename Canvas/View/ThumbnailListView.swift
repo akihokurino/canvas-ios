@@ -36,6 +36,7 @@ struct ThumbnailListView: View {
 
             bottom
         }
+        .coordinateSpace(name: RefreshControlKey)
         .navigationBarTitle("", displayMode: .inline)
         .fullScreenCover(isPresented: $isPresentModal) {
             CropView(thumbnail: selectThumbnail)

@@ -55,6 +55,7 @@ struct ArchiveRow: View {
                     RemoteImageView(url: thumbnail.imageUrl)
                         .aspectRatio(contentMode: .fit)
                         .frame(maxWidth: .infinity)
+                        .cornerRadius(4)
                 }
             }
         }

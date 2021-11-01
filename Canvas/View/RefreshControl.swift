@@ -22,17 +22,13 @@ struct RefreshControl: View {
                 HStack {
                     Spacer()
                     ProgressView()
+                        .scaleEffect(x: 1.5, y: 1.5, anchor: .center)
                     Spacer()
                 }
                 .frame(height: RefreshControlHeight, alignment: .center)
             } else {
-                HStack {
-                    Spacer()
-                    Text("⬇︎")
-                        .font(.system(size: 28))
-                    Spacer()
-                }
-                .frame(height: RefreshControlHeight, alignment: .center)
+                HStack {}
+                    .frame(height: RefreshControlHeight, alignment: .center)
             }
         }
         .padding(.top, isRefreshing ? 0.0 : -RefreshControlHeight)

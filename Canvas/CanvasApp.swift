@@ -34,8 +34,6 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             }
         }
         
-        UINavigationBar.appearance().backgroundColor = .black
-
         return true
     }
 
