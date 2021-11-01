@@ -53,6 +53,9 @@
 		02D1DAEE272D6C7100DDA138 /* RefreshControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02D1DAED272D6C7100DDA138 /* RefreshControl.swift */; };
 		02D2A1122715CE5B00CF5AD1 /* Splash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02D2A1112715CE5B00CF5AD1 /* Splash.swift */; };
 		02E31FAB270F475100B94A81 /* LineArt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02E31FAA270F475100B94A81 /* LineArt.swift */; };
+		02F06B57273036F7006B671C /* WorkListFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F06B56273036F7006B671C /* WorkListFetcher.swift */; };
+		02F06B5927303C49006B671C /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F06B5827303C49006B671C /* Extension.swift */; };
+		02F06B5C273045A6006B671C /* SwiftUIRefresh in Frameworks */ = {isa = PBXBuildFile; productRef = 02F06B5B273045A6006B671C /* SwiftUIRefresh */; };
 		02F2EF0D27143FF800415B9A /* StreamDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F2EF0C27143FF800415B9A /* StreamDesign.swift */; };
 		02F6CC422714775E002C22B7 /* ParticleRotate3D.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F6CC412714775E002C22B7 /* ParticleRotate3D.swift */; };
 		02F944B7272DA321002A9B2B /* ArchiveListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F944B6272DA321002A9B2B /* ArchiveListView.swift */; };
@@ -104,6 +107,8 @@
 		02D78D9327295F340026A66A /* CanvasRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CanvasRelease.entitlements; sourceTree = "<group>"; };
 		02D78D9427295F7B0026A66A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		02E31FAA270F475100B94A81 /* LineArt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineArt.swift; sourceTree = "<group>"; };
+		02F06B56273036F7006B671C /* WorkListFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkListFetcher.swift; sourceTree = "<group>"; };
+		02F06B5827303C49006B671C /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		02F2EF0C27143FF800415B9A /* StreamDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamDesign.swift; sourceTree = "<group>"; };
 		02F6CC412714775E002C22B7 /* ParticleRotate3D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleRotate3D.swift; sourceTree = "<group>"; };
 		02F944B6272DA321002A9B2B /* ArchiveListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveListView.swift; sourceTree = "<group>"; };
@@ -116,6 +121,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				028D3AA02729AFCF000EC82F /* FirebaseMessaging in Frameworks */,
+				02F06B5C273045A6006B671C /* SwiftUIRefresh in Frameworks */,
 				026C5E702729BB0400995BCB /* Apollo in Frameworks */,
 				028D3A9E2729AFCF000EC82F /* FirebaseFunctions in Frameworks */,
 				028D3A9A2729AFCF000EC82F /* FirebaseAuth in Frameworks */,
@@ -209,6 +215,7 @@
 		026C5E652729B5DB00995BCB /* GraphQL */ = {
 			isa = PBXGroup;
 			children = (
+				02F06B5827303C49006B671C /* Extension.swift */,
 				026C5E6C2729BA8C00995BCB /* API.swift */,
 				026C5E662729B68100995BCB /* app.graphql */,
 				026C5E6A2729BA2500995BCB /* schema.graphql */,
@@ -234,6 +241,7 @@
 				0299D8142720684200483DE1 /* Recorder.swift */,
 				02449DA32722F926000A011A /* Authenticator.swift */,
 				02A19D41272C4F9F00DBFA24 /* ThumbnailListFetcher.swift */,
+				02F06B56273036F7006B671C /* WorkListFetcher.swift */,
 				02449DA727231D93000A011A /* Error.swift */,
 			);
 			path = Intractor;
@@ -276,6 +284,7 @@
 				028D3A9F2729AFCF000EC82F /* FirebaseMessaging */,
 				028D3AA12729AFCF000EC82F /* FirebaseStorage */,
 				026C5E6F2729BB0400995BCB /* Apollo */,
+				02F06B5B273045A6006B671C /* SwiftUIRefresh */,
 			);
 			productName = Canvas;
 			productReference = 021B286B270CB08C0093B0C9 /* Canvas.app */;
@@ -308,6 +317,7 @@
 			packageReferences = (
 				028D3A982729AFCF000EC82F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				026C5E6E2729BB0400995BCB /* XCRemoteSwiftPackageReference "apollo-ios" */,
+				02F06B5A273045A6006B671C /* XCRemoteSwiftPackageReference "SwiftUIRefresh" */,
 			);
 			productRefGroup = 021B286C270CB08C0093B0C9 /* Products */;
 			projectDirPath = "";
@@ -338,6 +348,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				02F06B57273036F7006B671C /* WorkListFetcher.swift in Sources */,
 				029E6A87271EA64F00F6A8EF /* ColorRain.swift in Sources */,
 				02392F1F271C502600D8931F /* RectangleGetter.swift in Sources */,
 				02449DA42722F926000A011A /* Authenticator.swift in Sources */,
@@ -369,6 +380,7 @@
 				026C5E6D2729BA8C00995BCB /* API.swift in Sources */,
 				02A19D47272C518C00DBFA24 /* ThumbnailListView.swift in Sources */,
 				02F2EF0D27143FF800415B9A /* StreamDesign.swift in Sources */,
+				02F06B5927303C49006B671C /* Extension.swift in Sources */,
 				02543C7D271D3C29009AE283 /* MapGenerator.swift in Sources */,
 				028DC777271F0B9D00B7AF1B /* Work.swift in Sources */,
 				021B2882270CB3790093B0C9 /* Functions.swift in Sources */,
@@ -611,6 +623,14 @@
 				minimumVersion = 8.0.0;
 			};
 		};
+		02F06B5A273045A6006B671C /* XCRemoteSwiftPackageReference "SwiftUIRefresh" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/timbersoftware/SwiftUIRefresh.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.0.3;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -643,6 +663,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 028D3A982729AFCF000EC82F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseStorage;
+		};
+		02F06B5B273045A6006B671C /* SwiftUIRefresh */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 02F06B5A273045A6006B671C /* XCRemoteSwiftPackageReference "SwiftUIRefresh" */;
+			productName = SwiftUIRefresh;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

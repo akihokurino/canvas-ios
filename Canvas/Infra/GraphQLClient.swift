@@ -87,9 +87,38 @@ struct GraphQLCaller {
                         promise(.failure(AppError.defaultError()))
                         return
                     }
-                    
+
                     let items = data.thumbnails.edges.map { $0.node.fragments.thumbnailFragment }
                     let hasNext = data.thumbnails.pageInfo.hasNextPage
+
+                    promise(.success((items, hasNext)))
+                case .failure(let error):
+                    promise(.failure(.wrap(error)))
+                }
+            }
+        }
+    }
+
+    func works(page: Int) -> Future<([GraphQL.WorkFragment], Bool), AppError> {
+        return Future<([GraphQL.WorkFragment], Bool), AppError> { promise in
+            cli.fetch(query: GraphQL.ListWorkQuery(page: page, limit: 20)) { result in
+                switch result {
+                case .success(let graphQLResult):
+                    if let errors = graphQLResult.errors {
+                        if !errors.filter({ $0.message != nil }).isEmpty {
+                            let messages = errors.filter { $0.message != nil }.map { $0.message! }
+                            promise(.failure(.plain(messages.joined(separator: "\n"))))
+                            return
+                        }
+                    }
+
+                    guard let data = graphQLResult.data else {
+                        promise(.failure(AppError.defaultError()))
+                        return
+                    }
+
+                    let items = data.works.edges.map { $0.node.fragments.workFragment }
+                    let hasNext = data.works.pageInfo.hasNextPage
 
                     promise(.success((items, hasNext)))
                 case .failure(let error):

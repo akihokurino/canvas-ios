@@ -1,8 +1,6 @@
 import Combine
 import SwiftUI
 
-extension GraphQL.ThumbnailFragment: Identifiable {}
-
 struct ThumbnailListView: View {
     @ObservedObject var thumbnailListFetcher = ThumbnailListFetcher()
     @State var isRefreshing = false
@@ -38,7 +36,6 @@ struct ThumbnailListView: View {
 
             bottom
         }
-        .coordinateSpace(name: RefreshControlKey)
         .navigationBarTitle("", displayMode: .inline)
         .fullScreenCover(isPresented: $isPresentModal) {
             CropView(thumbnail: selectThumbnail)

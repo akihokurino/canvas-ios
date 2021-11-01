@@ -61,8 +61,8 @@ class Recorder: ObservableObject {
             errorProvider = .plain("すでに録画中です")
             return
         }
-        
-        self.startTime = nil
+
+        startTime = nil
 
         do {
             try prepare()
@@ -84,7 +84,7 @@ class Recorder: ObservableObject {
                     self.isRecording = true
                 }
             }
-            
+
             if RPSampleBufferType.video == bufferType {
                 self.appendVideo(buffer: buffer)
             }
@@ -113,7 +113,7 @@ class Recorder: ObservableObject {
                 DispatchQueue.main.async {
                     self.isRecording = false
                     self.startTime = nil
-                    
+
                     guard withUpload else {
                         return
                     }
@@ -122,7 +122,7 @@ class Recorder: ObservableObject {
             }
         }
     }
-    
+
     private func upload() {
         guard let url = cacheFileURL else {
             return
@@ -192,7 +192,7 @@ class Recorder: ObservableObject {
 
         let currentTime: CMTime = CMSampleBufferGetPresentationTimeStamp(buffer)
         let diffTime: CMTime = CMTimeSubtract(currentTime, firstTime)
-        
+
         if writerInputPixelBufferAdaptor?.assetWriterInput.isReadyForMoreMediaData ?? false {
             writerInputPixelBufferAdaptor?.append(pixelBuffer, withPresentationTime: diffTime)
         }

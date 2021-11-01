@@ -21,7 +21,7 @@ struct RootView: View {
                 }
                 .tabItem {
                     VStack {
-                        Image(systemName: "video")
+                        Image(systemName: "archivebox")
                         Text("アーカイブ")
                     }
                 }.tag(2)

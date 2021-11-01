@@ -1,11 +1,11 @@
 import Combine
 import SwiftUI
 
-class ThumbnailListFetcher: ObservableObject {
+class WorkListFetcher: ObservableObject {
     private var cancellable: AnyCancellable?
     private var page: Int = 1
 
-    @Published var thumbnails: [GraphQL.ThumbnailFragment] = []
+    @Published var works: [GraphQL.WorkFragment] = []
     @Published var errors: AppError?
     @Published var hasNext: Bool = false
     @Published var isFetching: Bool = false
@@ -15,7 +15,7 @@ class ThumbnailListFetcher: ObservableObject {
             return
         }
 
-        if !isRefresh, !thumbnails.isEmpty {
+        if !isRefresh, !works.isEmpty {
             return
         }
 
@@ -25,7 +25,7 @@ class ThumbnailListFetcher: ObservableObject {
         cancellable?.cancel()
 
         cancellable = GraphQLClient.shared.caller()
-            .flatMap { caller in caller.thumbnails(page: self.page) }
+            .flatMap { caller in caller.works(page: self.page) }
             .sink(receiveCompletion: { completion in
                 switch completion {
                     case .finished:
@@ -37,7 +37,7 @@ class ThumbnailListFetcher: ObservableObject {
                         self.errors = error
                 }
             }, receiveValue: { val in
-                self.thumbnails = val.0
+                self.works = val.0
                 self.hasNext = val.1
             })
     }
@@ -57,7 +57,7 @@ class ThumbnailListFetcher: ObservableObject {
         cancellable?.cancel()
 
         cancellable = GraphQLClient.shared.caller()
-            .flatMap { caller in caller.thumbnails(page: self.page) }
+            .flatMap { caller in caller.works(page: self.page) }
             .sink(receiveCompletion: { completion in
                 switch completion {
                     case .finished:
@@ -69,7 +69,7 @@ class ThumbnailListFetcher: ObservableObject {
                         self.errors = error
                 }
             }, receiveValue: { val in
-                self.thumbnails.append(contentsOf: val.0)
+                self.works.append(contentsOf: val.0)
                 self.hasNext = val.1
             })
     }
