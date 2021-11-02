@@ -58,7 +58,7 @@ struct ThumbnailListView: View {
                 }) {
                     HStack {
                         Spacer()
-                        Text("次のページを表示する")
+                        Text("Next...")
                         Spacer()
                     }
                 }

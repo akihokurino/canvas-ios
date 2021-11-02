@@ -21,13 +21,16 @@ struct ArchiveListView: View {
                 .listRowSeparator(.hidden)
             }
 
-            if workListFetcher.hasNext && workListFetcher.isFetching {
+            if workListFetcher.hasNext {
                 HStack {
                     Spacer()
                     ProgressView()
                     Spacer()
                 }
                 .frame(height: 60)
+                .onAppear {
+                    workListFetcher.next {}
+                }
             }
         }
         .pullToRefresh(isShowing: $isRefreshing) {

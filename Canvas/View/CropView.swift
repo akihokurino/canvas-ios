@@ -72,14 +72,14 @@ struct CropView: View {
                 shouldHideFrame = true
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {}
             }) {
-                Text("登録する")
+                Text("Add Widget")
             }
             .padding()
 
             Button(action: {
                 self.presentationMode.wrappedValue.dismiss()
             }) {
-                Text("キャンセル")
+                Text("Cancel")
             }
             .padding()
         }
