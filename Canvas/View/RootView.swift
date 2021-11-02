@@ -12,17 +12,19 @@ struct RootView: View {
                 .tabItem {
                     VStack {
                         Image(systemName: "scribble.variable")
-                        Text("作品")
+                            .resizable()
+                            .frame(width: 50, height: 50, alignment: .center)
                     }
                 }.tag(1)
-                
+
                 NavigationView {
                     ArchiveListView()
                 }
                 .tabItem {
                     VStack {
                         Image(systemName: "archivebox")
-                        Text("アーカイブ")
+                            .resizable()
+                            .frame(width: 50, height: 50, alignment: .center)
                     }
                 }.tag(2)
 
@@ -32,7 +34,8 @@ struct RootView: View {
                 .tabItem {
                     VStack {
                         Image(systemName: "square.grid.2x2")
-                        Text("サムネ")
+                            .resizable()
+                            .frame(width: 50, height: 50, alignment: .center)
                     }
                 }.tag(3)
             }

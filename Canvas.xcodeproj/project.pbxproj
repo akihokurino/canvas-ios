@@ -51,6 +51,8 @@
 		02BFA0F3272A7969002997F8 /* GraphQLClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02BFA0F2272A7969002997F8 /* GraphQLClient.swift */; };
 		02C696962718467A00C65CDC /* SplashReturn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02C696952718467A00C65CDC /* SplashReturn.swift */; };
 		02D1DAEE272D6C7100DDA138 /* RefreshControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02D1DAED272D6C7100DDA138 /* RefreshControl.swift */; };
+		02D26CCB273183E500678F6F /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02D26CCA273183E500678F6F /* VideoView.swift */; };
+		02D26CCD2731848500678F6F /* ArchiveDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02D26CCC2731848500678F6F /* ArchiveDetailView.swift */; };
 		02D2A1122715CE5B00CF5AD1 /* Splash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02D2A1112715CE5B00CF5AD1 /* Splash.swift */; };
 		02E31FAB270F475100B94A81 /* LineArt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02E31FAA270F475100B94A81 /* LineArt.swift */; };
 		02F06B57273036F7006B671C /* WorkListFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F06B56273036F7006B671C /* WorkListFetcher.swift */; };
@@ -102,6 +104,8 @@
 		02BFA0F2272A7969002997F8 /* GraphQLClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphQLClient.swift; sourceTree = "<group>"; };
 		02C696952718467A00C65CDC /* SplashReturn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashReturn.swift; sourceTree = "<group>"; };
 		02D1DAED272D6C7100DDA138 /* RefreshControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshControl.swift; sourceTree = "<group>"; };
+		02D26CCA273183E500678F6F /* VideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
+		02D26CCC2731848500678F6F /* ArchiveDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveDetailView.swift; sourceTree = "<group>"; };
 		02D2A1112715CE5B00CF5AD1 /* Splash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Splash.swift; sourceTree = "<group>"; };
 		02D78D9227295F220026A66A /* Canvas.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Canvas.entitlements; sourceTree = "<group>"; };
 		02D78D9327295F340026A66A /* CanvasRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CanvasRelease.entitlements; sourceTree = "<group>"; };
@@ -254,9 +258,11 @@
 				02A19D44272C517D00DBFA24 /* WorkListView.swift */,
 				02A19D46272C518C00DBFA24 /* ThumbnailListView.swift */,
 				02F944B6272DA321002A9B2B /* ArchiveListView.swift */,
+				02D26CCC2731848500678F6F /* ArchiveDetailView.swift */,
 				023AC5FD272C69A2005C858D /* RemoteImageView.swift */,
 				02D1DAED272D6C7100DDA138 /* RefreshControl.swift */,
 				02F944B8272DA539002A9B2B /* CropView.swift */,
+				02D26CCA273183E500678F6F /* VideoView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -359,6 +365,7 @@
 				02F6CC422714775E002C22B7 /* ParticleRotate3D.swift in Sources */,
 				028DC773271EC45200B7AF1B /* Bound.swift in Sources */,
 				02B25ED92711361F0067A73D /* BoidsDesign.swift in Sources */,
+				02D26CCD2731848500678F6F /* ArchiveDetailView.swift in Sources */,
 				023AC5FE272C69A2005C858D /* RemoteImageView.swift in Sources */,
 				02F944B9272DA539002A9B2B /* CropView.swift in Sources */,
 				02A19D45272C517D00DBFA24 /* WorkListView.swift in Sources */,
@@ -384,6 +391,7 @@
 				02543C7D271D3C29009AE283 /* MapGenerator.swift in Sources */,
 				028DC777271F0B9D00B7AF1B /* Work.swift in Sources */,
 				021B2882270CB3790093B0C9 /* Functions.swift in Sources */,
+				02D26CCB273183E500678F6F /* VideoView.swift in Sources */,
 				02BFA0F3272A7969002997F8 /* GraphQLClient.swift in Sources */,
 				02D2A1122715CE5B00CF5AD1 /* Splash.swift in Sources */,
 				02F944B7272DA321002A9B2B /* ArchiveListView.swift in Sources */,

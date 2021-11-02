@@ -8,9 +8,17 @@ struct ArchiveListView: View {
 
     var body: some View {
         List {
-            ForEach(workListFetcher.works) {
-                ArchiveRow(data: $0)
-                    .listRowSeparator(.hidden)
+            ForEach(workListFetcher.works) { item in
+                ZStack {
+                    NavigationLink(destination: ArchiveDetailView(data: item)) {
+                        EmptyView()
+                    }
+                    .opacity(0.0)
+                    .buttonStyle(PlainButtonStyle())
+
+                    ArchiveRow(data: item)
+                }
+                .listRowSeparator(.hidden)
             }
 
             if workListFetcher.hasNext && workListFetcher.isFetching {
