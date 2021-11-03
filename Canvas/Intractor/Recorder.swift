@@ -14,6 +14,7 @@ class Recorder: ObservableObject {
         let bitrate: UInt = 16
     }
 
+    private static let MAX_SECONDS: Double = 30
     private let recorder = RPScreenRecorder.shared()
     private let configuration = Configuration()
     private let work: Work
@@ -42,7 +43,8 @@ class Recorder: ObservableObject {
     }
 
     @Published var isRecording = false
-    @Published var errorProvider: AppError?
+    @Published var errors: AppError?
+    @Published var forceFinished = false
 
     func toggle() {
         if isRecording {
@@ -54,20 +56,21 @@ class Recorder: ObservableObject {
 
     func start() {
         guard recorder.isAvailable else {
-            errorProvider = .plain("録画を利用できません")
+            errors = .plain("録画を利用できません")
             return
         }
         guard !recorder.isRecording else {
-            errorProvider = .plain("すでに録画中です")
+            errors = .plain("すでに録画中です")
             return
         }
 
         startTime = nil
+        forceFinished = false
 
         do {
             try prepare()
         } catch {
-            errorProvider = AppError.defaultError()
+            errors = AppError.defaultError()
             return
         }
 
@@ -95,11 +98,11 @@ class Recorder: ObservableObject {
 
     func stop(withUpload: Bool = true) {
         guard recorder.isAvailable else {
-            errorProvider = .plain("録画を利用できません")
+            errors = .plain("録画を利用できません")
             return
         }
         guard recorder.isRecording else {
-            errorProvider = .plain("すでに録画が終了しています")
+            errors = .plain("すでに録画が終了しています")
             return
         }
 
@@ -143,7 +146,7 @@ class Recorder: ObservableObject {
             case .finished:
                 break
             case .failure(let error):
-                self.errorProvider = error
+                self.errors = error
             }
         }, receiveValue: { _ in
             print("Complete Upload Video")
@@ -180,6 +183,7 @@ class Recorder: ObservableObject {
     }
 
     private func appendVideo(buffer: CMSampleBuffer) {
+        guard !forceFinished else { return }
         guard let pixelBuffer = CMSampleBufferGetImageBuffer(buffer) else { return }
 
         let firstTime: CMTime
@@ -192,6 +196,17 @@ class Recorder: ObservableObject {
 
         let currentTime: CMTime = CMSampleBufferGetPresentationTimeStamp(buffer)
         let diffTime: CMTime = CMTimeSubtract(currentTime, firstTime)
+        
+        let totalSecond = CMTimeSubtract(currentTime, self.startTime!).seconds
+        guard totalSecond <= Recorder.MAX_SECONDS else {
+            DispatchQueue.main.async {
+                self.forceFinished = true
+            }
+            stop(withUpload: true)
+            return
+        }
+        
+        print("録画秒数 \(totalSecond)")
 
         if writerInputPixelBufferAdaptor?.assetWriterInput.isReadyForMoreMediaData ?? false {
             writerInputPixelBufferAdaptor?.append(pixelBuffer, withPresentationTime: diffTime)
