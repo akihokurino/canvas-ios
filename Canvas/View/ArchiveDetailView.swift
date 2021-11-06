@@ -4,7 +4,10 @@ import SwiftUI
 struct ArchiveDetailView: View {
     let data: GraphQL.WorkFragment
 
-    static let thumbnailSize = UIScreen.main.bounds.size.width / 3
+    @State var isPresentModal = false
+    @State var selectThumbnail: GraphQL.WorkFragment.Thumbnail?
+
+    private let thumbnailSize = UIScreen.main.bounds.size.width / 3
     private let gridItemLayout = [
         GridItem(.flexible()),
         GridItem(.flexible()),
@@ -30,12 +33,20 @@ struct ArchiveDetailView: View {
 
                 LazyVGrid(columns: gridItemLayout, alignment: HorizontalAlignment.leading, spacing: 3) {
                     ForEach(data.thumbnails) { data in
-                        RemoteImageView(url: data.imageUrl)
-                            .frame(width: ArchiveDetailView.thumbnailSize, height: ArchiveDetailView.thumbnailSize * 2)
+                        Button(action: {
+                            self.selectThumbnail = data
+                            self.isPresentModal = true
+                        }) {
+                            RemoteImageView(url: data.imageUrl)
+                                .scaledToFit()
+                                .frame(width: thumbnailSize)
+                        }
                     }
                 }
             }
         }
-        .onAppear {}
+        .sheet(isPresented: $isPresentModal) {
+            PhotoView(url: selectThumbnail?.imageUrl)
+        }
     }
 }

@@ -12,6 +12,7 @@ struct RemoteImageView: View {
             Image(uiImage: image).resizable()
         } else {
             ProgressView()
+                .frame(minHeight: 150)
         }
     }
 }

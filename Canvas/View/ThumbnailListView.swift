@@ -7,7 +7,7 @@ struct ThumbnailListView: View {
     @State var isPresentModal = false
     @State var selectThumbnail: GraphQL.ThumbnailFragment?
 
-    static let thumbnailSize = UIScreen.main.bounds.size.width / 3
+    private let thumbnailSize = UIScreen.main.bounds.size.width / 3
     private let gridItemLayout = [
         GridItem(.flexible()),
         GridItem(.flexible()),
@@ -24,12 +24,14 @@ struct ThumbnailListView: View {
             })
 
             LazyVGrid(columns: gridItemLayout, alignment: HorizontalAlignment.leading, spacing: 3) {
-                ForEach(thumbnailListFetcher.thumbnails) { item in
+                ForEach(thumbnailListFetcher.thumbnails) { data in
                     Button(action: {
-                        self.selectThumbnail = item
+                        self.selectThumbnail = data
                         self.isPresentModal = true
                     }) {
-                        ThumbnailRow(data: item)
+                        RemoteImageView(url: data.imageUrl)
+                            .scaledToFit()
+                            .frame(width: thumbnailSize)
                     }
                 }
             }
@@ -38,14 +40,12 @@ struct ThumbnailListView: View {
         }
         .coordinateSpace(name: RefreshControlKey)
         .navigationBarTitle("", displayMode: .inline)
-        .fullScreenCover(isPresented: $isPresentModal) {
-            CropView(thumbnail: selectThumbnail)
+        .sheet(isPresented: $isPresentModal) {
+            PhotoView(url: selectThumbnail?.imageUrl)
         }
         .onAppear {
             thumbnailListFetcher.initialize {
                 self.isRefreshing = false
-                // 原因は不明だが、nil以外の値でここで初期化しておかないと最初のStateへの代入が反映されない
-                self.selectThumbnail = thumbnailListFetcher.thumbnails.first
             }
         }
     }
@@ -74,16 +74,5 @@ struct ThumbnailListView: View {
                 .frame(height: 60)
             }
         }
-    }
-}
-
-struct ThumbnailRow: View {
-    let data: GraphQL.ThumbnailFragment
-
-    private let size = CGSize(width: ThumbnailListView.thumbnailSize, height: ThumbnailListView.thumbnailSize * 2)
-
-    var body: some View {
-        RemoteImageView(url: data.imageUrl)
-            .frame(width: size.width, height: size.height)
     }
 }
