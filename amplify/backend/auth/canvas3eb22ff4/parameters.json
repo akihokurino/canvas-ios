@@ -1,0 +1,21 @@
+{
+  "authSelections": "userPoolOnly",
+  "resourceName": "canvas3eb22ff4",
+  "serviceType": "imported",
+  "region": "ap-northeast-1",
+  "usernameAttributes": [
+    "email"
+  ],
+  "requiredAttributes": [],
+  "passwordPolicyMinLength": 8,
+  "passwordPolicyCharacters": [
+    "Requires Lowercase",
+    "Requires Uppercase",
+    "Requires Numbers"
+  ],
+  "mfaConfiguration": "OFF",
+  "autoVerifiedAttributes": [
+    "email"
+  ],
+  "mfaTypes": []
+}

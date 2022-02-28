@@ -1,7 +1,9 @@
+import Amplify
+import AWSCognitoAuthPlugin
+import Combine
 import Firebase
 import SwiftUI
 import UserNotifications
-import Combine
 
 @main
 struct CanvasApp: App {
@@ -16,9 +18,25 @@ struct CanvasApp: App {
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     @ObservedObject var authenticator = Authenticator()
-    
+
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         FirebaseApp.configure()
+
+        do {
+            try Amplify.add(plugin: AWSCognitoAuthPlugin())
+            try Amplify.configure()
+            print("Amplify configured with auth plugin")
+            Amplify.Auth.signIn(username: "aki030402@gmail.com", password: "Test1234") { result in
+                switch result {
+                case .success:
+                    print("Sign in succeeded")
+                case .failure(let error):
+                    print("Sign in failed \(error)")
+                }
+            }
+        } catch {
+            print("Failed to initialize Amplify with \(error)")
+        }
 
         Messaging.messaging().delegate = self
         UNUserNotificationCenter.current().delegate = self
@@ -33,7 +51,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
                 }
             }
         }
-        
+
         return true
     }
 

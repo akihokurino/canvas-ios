@@ -1,0 +1,25 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-canvas-dev-232829-authRole",
+      "UnauthRoleArn": "arn:aws:iam::326914400610:role/amplify-canvas-dev-232829-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::326914400610:role/amplify-canvas-dev-232829-authRole",
+      "Region": "ap-northeast-1",
+      "DeploymentBucketName": "amplify-canvas-dev-232829-deployment",
+      "UnauthRoleName": "amplify-canvas-dev-232829-unauthRole",
+      "StackName": "amplify-canvas-dev-232829",
+      "StackId": "arn:aws:cloudformation:ap-northeast-1:326914400610:stack/amplify-canvas-dev-232829/b4a949c0-98a2-11ec-be6b-06589a1f57a3",
+      "AmplifyAppId": "d3arfq55cf5r2f"
+    },
+    "categories": {
+      "auth": {
+        "canvas3eb22ff4": {
+          "userPoolId": "ap-northeast-1_ad01JZ6My",
+          "userPoolName": "canvas-store",
+          "webClientId": "6c724j24efe4iopddpkpmn2oef",
+          "nativeClientId": "6c724j24efe4iopddpkpmn2oef"
+        }
+      }
+    }
+  }
+}

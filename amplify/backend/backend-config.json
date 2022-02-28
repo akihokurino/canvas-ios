@@ -1,0 +1,11 @@
+{
+  "auth": {
+    "canvas3eb22ff4": {
+      "service": "Cognito",
+      "serviceType": "imported",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false
+    }
+  }
+}
