@@ -2,10 +2,11 @@ import AVKit
 import SwiftUI
 
 struct ArchiveDetailView: View {
-    let data: GraphQL.WorkFragment
+    let data: CanvasAPI.WorkFragment
 
+    @ObservedObject var nftConnector = NftConnector()
     @State var isPresentModal = false
-    @State var selectThumbnail: GraphQL.WorkFragment.Thumbnail?
+    @State var selectThumbnail: CanvasAPI.WorkFragment.Thumbnail?
 
     private let thumbnailSize = UIScreen.main.bounds.size.width / 3
     private let gridItemLayout = [
@@ -47,6 +48,9 @@ struct ArchiveDetailView: View {
         }
         .sheet(isPresented: $isPresentModal) {
             PhotoView(url: selectThumbnail?.imageUrl)
+        }
+        .onAppear {
+            nftConnector.isOwn(workId: data.id)
         }
     }
 }

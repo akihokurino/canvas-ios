@@ -3,35 +3,15 @@ import Combine
 import Firebase
 import UIKit
 
-struct NetworkInterceptorProvider: InterceptorProvider {
-    private let store: ApolloStore
-    private let client: URLSessionClient
+extension CanvasAPI.WorkFragment: Identifiable {}
+extension CanvasAPI.WorkFragment.Thumbnail: Identifiable {}
+extension CanvasAPI.ThumbnailFragment: Identifiable {}
 
-    init(store: ApolloStore,
-         client: URLSessionClient)
-    {
-        self.store = store
-        self.client = client
-    }
+struct CanvasClient {
+    static let shared = CanvasClient()
 
-    func interceptors<Operation: GraphQLOperation>(for operation: Operation) -> [ApolloInterceptor] {
-        return [
-            MaxRetryInterceptor(),
-            CacheReadInterceptor(store: store),
-            NetworkFetchInterceptor(client: client),
-            ResponseCodeInterceptor(),
-            JSONResponseParsingInterceptor(cacheKeyForObject: store.cacheKeyForObject),
-            AutomaticPersistedQueryInterceptor(),
-            CacheWriteInterceptor(store: store)
-        ]
-    }
-}
-
-struct GraphQLClient {
-    static let shared = GraphQLClient()
-
-    func caller() -> Future<GraphQLCaller, AppError> {
-        return Future<GraphQLCaller, AppError> { promise in
+    func caller() -> Future<CanvasCaller, AppError> {
+        return Future<CanvasCaller, AppError> { promise in
             guard let me = Auth.auth().currentUser else {
                 promise(.failure(AppError.defaultError()))
                 return
@@ -61,18 +41,18 @@ struct GraphQLClient {
 
                 let apollo = ApolloClient(networkTransport: transport, store: store)
 
-                promise(.success(GraphQLCaller(cli: apollo)))
+                promise(.success(CanvasCaller(cli: apollo)))
             }
         }
     }
 }
 
-struct GraphQLCaller {
+struct CanvasCaller {
     let cli: ApolloClient
 
-    func thumbnails(page: Int) -> Future<([GraphQL.ThumbnailFragment], Bool), AppError> {
-        return Future<([GraphQL.ThumbnailFragment], Bool), AppError> { promise in
-            cli.fetch(query: GraphQL.ListThumbnailQuery(page: page, limit: 105)) { result in
+    func thumbnails(page: Int) -> Future<([CanvasAPI.ThumbnailFragment], Bool), AppError> {
+        return Future<([CanvasAPI.ThumbnailFragment], Bool), AppError> { promise in
+            cli.fetch(query: CanvasAPI.ListThumbnailQuery(page: page, limit: 105)) { result in
                 switch result {
                 case .success(let graphQLResult):
                     if let errors = graphQLResult.errors {
@@ -99,9 +79,9 @@ struct GraphQLCaller {
         }
     }
 
-    func works(page: Int) -> Future<([GraphQL.WorkFragment], Bool), AppError> {
-        return Future<([GraphQL.WorkFragment], Bool), AppError> { promise in
-            cli.fetch(query: GraphQL.ListWorkQuery(page: page, limit: 20)) { result in
+    func works(page: Int) -> Future<([CanvasAPI.WorkFragment], Bool), AppError> {
+        return Future<([CanvasAPI.WorkFragment], Bool), AppError> { promise in
+            cli.fetch(query: CanvasAPI.ListWorkQuery(page: page, limit: 20)) { result in
                 switch result {
                 case .success(let graphQLResult):
                     if let errors = graphQLResult.errors {
@@ -131,7 +111,7 @@ struct GraphQLCaller {
     func registerFCMToken(token: String) -> Future<Void, AppError> {
         let udid = UIDevice.current.identifierForVendor!.uuidString
         return Future<Void, AppError> { promise in
-            cli.perform(mutation: GraphQL.RegisterFmcTokenMutation(token: token, device: udid)) { result in
+            cli.perform(mutation: CanvasAPI.RegisterFmcTokenMutation(token: token, device: udid)) { result in
                 switch result {
                 case .success(let graphQLResult):
                     if let errors = graphQLResult.errors {

@@ -22,21 +22,8 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         FirebaseApp.configure()
 
-        do {
-            try Amplify.add(plugin: AWSCognitoAuthPlugin())
-            try Amplify.configure()
-            print("Amplify configured with auth plugin")
-            Amplify.Auth.signIn(username: "aki030402@gmail.com", password: "Test1234") { result in
-                switch result {
-                case .success:
-                    print("Sign in succeeded")
-                case .failure(let error):
-                    print("Sign in failed \(error)")
-                }
-            }
-        } catch {
-            print("Failed to initialize Amplify with \(error)")
-        }
+        try! Amplify.add(plugin: AWSCognitoAuthPlugin())
+        try! Amplify.configure()
 
         Messaging.messaging().delegate = self
         UNUserNotificationCenter.current().delegate = self

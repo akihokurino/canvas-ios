@@ -5,7 +5,7 @@ struct ThumbnailListView: View {
     @ObservedObject var thumbnailListFetcher = ThumbnailListFetcher()
     @State var isRefreshing = false
     @State var isPresentModal = false
-    @State var selectThumbnail: GraphQL.ThumbnailFragment?
+    @State var selectThumbnail: CanvasAPI.ThumbnailFragment?
 
     private let thumbnailSize = UIScreen.main.bounds.size.width / 3
     private let gridItemLayout = [

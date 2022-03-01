@@ -4,8 +4,8 @@
 import Apollo
 import Foundation
 
-/// GraphQL namespace
-public enum GraphQL {
+/// CanvasAPI namespace
+public enum CanvasAPI {
   public final class ListThumbnailQuery: GraphQLQuery {
     /// The raw GraphQL definition of this operation.
     public let operationDefinition: String =

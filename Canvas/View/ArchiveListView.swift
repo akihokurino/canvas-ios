@@ -49,7 +49,7 @@ struct ArchiveListView: View {
 }
 
 struct ArchiveRow: View {
-    let data: GraphQL.WorkFragment
+    let data: CanvasAPI.WorkFragment
 
     private let gridItemLayout = [
         GridItem(.flexible()),

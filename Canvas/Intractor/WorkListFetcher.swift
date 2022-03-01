@@ -5,7 +5,7 @@ class WorkListFetcher: ObservableObject {
     private var cancellable: AnyCancellable?
     private var page: Int = 1
 
-    @Published var works: [GraphQL.WorkFragment] = []
+    @Published var works: [CanvasAPI.WorkFragment] = []
     @Published var errors: AppError?
     @Published var hasNext: Bool = false
     @Published var isFetching: Bool = false
@@ -24,7 +24,7 @@ class WorkListFetcher: ObservableObject {
         hasNext = false
         cancellable?.cancel()
 
-        cancellable = GraphQLClient.shared.caller()
+        cancellable = CanvasClient.shared.caller()
             .flatMap { caller in caller.works(page: self.page) }
             .sink(receiveCompletion: { completion in
                 switch completion {
@@ -56,7 +56,7 @@ class WorkListFetcher: ObservableObject {
         hasNext = true
         cancellable?.cancel()
 
-        cancellable = GraphQLClient.shared.caller()
+        cancellable = CanvasClient.shared.caller()
             .flatMap { caller in caller.works(page: self.page) }
             .sink(receiveCompletion: { completion in
                 switch completion {
