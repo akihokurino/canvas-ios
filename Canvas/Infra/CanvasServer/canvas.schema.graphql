@@ -46,6 +46,9 @@ type Thumbnail {
   imageUrl: String!
 
   #
+  imageGsPath: String!
+
+  #
   work: Work!
 }
 
@@ -71,6 +74,9 @@ type Work {
 
   #
   videoUrl: String!
+
+  #
+  videoGsPath: String!
 
   #
   thumbnails: [Thumbnail!]!

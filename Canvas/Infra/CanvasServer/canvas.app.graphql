@@ -39,6 +39,7 @@ fragment ThumbnailFragment on Thumbnail {
     work {
         id
         videoUrl
+        videoGsPath
     }
 }
 
@@ -48,6 +49,7 @@ fragment WorkFragment on Work {
     thumbnails {
         id
         imageUrl
+        imageGsPath
     }
 }
 
