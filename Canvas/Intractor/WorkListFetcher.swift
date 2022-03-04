@@ -8,6 +8,7 @@ class WorkListFetcher: ObservableObject {
     @Published var works: [CanvasAPI.WorkFragment] = []
     @Published var errors: AppError?
     @Published var hasNext: Bool = false
+    @Published var isInitializing: Bool = false
     @Published var isFetching: Bool = false
 
     func initialize(isRefresh: Bool = false, callback: @escaping () -> ()) {
@@ -20,6 +21,7 @@ class WorkListFetcher: ObservableObject {
         }
 
         page = 1
+        isInitializing = true
         isFetching = true
         hasNext = false
         cancellable?.cancel()
@@ -30,9 +32,11 @@ class WorkListFetcher: ObservableObject {
                 switch completion {
                     case .finished:
                         callback()
+                        self.isInitializing = false
                         self.isFetching = false
                     case .failure(let error):
                         callback()
+                        self.isInitializing = false
                         self.isFetching = false
                         self.errors = error
                 }
@@ -47,7 +51,7 @@ class WorkListFetcher: ObservableObject {
             return
         }
 
-        guard !isFetching else {
+        guard !isInitializing else {
             return
         }
 

@@ -704,10 +704,12 @@ public enum CanvasAPI {
         id
         workId
         imageUrl
+        imageGsPath
         work {
           __typename
           id
           videoUrl
+          videoGsPath
         }
       }
       """
@@ -720,6 +722,7 @@ public enum CanvasAPI {
         GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
         GraphQLField("workId", type: .nonNull(.scalar(GraphQLID.self))),
         GraphQLField("imageUrl", type: .nonNull(.scalar(String.self))),
+        GraphQLField("imageGsPath", type: .nonNull(.scalar(String.self))),
         GraphQLField("work", type: .nonNull(.object(Work.selections))),
       ]
     }
@@ -730,8 +733,8 @@ public enum CanvasAPI {
       self.resultMap = unsafeResultMap
     }
 
-    public init(id: GraphQLID, workId: GraphQLID, imageUrl: String, work: Work) {
-      self.init(unsafeResultMap: ["__typename": "Thumbnail", "id": id, "workId": workId, "imageUrl": imageUrl, "work": work.resultMap])
+    public init(id: GraphQLID, workId: GraphQLID, imageUrl: String, imageGsPath: String, work: Work) {
+      self.init(unsafeResultMap: ["__typename": "Thumbnail", "id": id, "workId": workId, "imageUrl": imageUrl, "imageGsPath": imageGsPath, "work": work.resultMap])
     }
 
     public var __typename: String {
@@ -770,6 +773,15 @@ public enum CanvasAPI {
       }
     }
 
+    public var imageGsPath: String {
+      get {
+        return resultMap["imageGsPath"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "imageGsPath")
+      }
+    }
+
     public var work: Work {
       get {
         return Work(unsafeResultMap: resultMap["work"]! as! ResultMap)
@@ -787,6 +799,7 @@ public enum CanvasAPI {
           GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
           GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
           GraphQLField("videoUrl", type: .nonNull(.scalar(String.self))),
+          GraphQLField("videoGsPath", type: .nonNull(.scalar(String.self))),
         ]
       }
 
@@ -796,8 +809,8 @@ public enum CanvasAPI {
         self.resultMap = unsafeResultMap
       }
 
-      public init(id: GraphQLID, videoUrl: String) {
-        self.init(unsafeResultMap: ["__typename": "Work", "id": id, "videoUrl": videoUrl])
+      public init(id: GraphQLID, videoUrl: String, videoGsPath: String) {
+        self.init(unsafeResultMap: ["__typename": "Work", "id": id, "videoUrl": videoUrl, "videoGsPath": videoGsPath])
       }
 
       public var __typename: String {
@@ -826,6 +839,15 @@ public enum CanvasAPI {
           resultMap.updateValue(newValue, forKey: "videoUrl")
         }
       }
+
+      public var videoGsPath: String {
+        get {
+          return resultMap["videoGsPath"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "videoGsPath")
+        }
+      }
     }
   }
 
@@ -841,6 +863,7 @@ public enum CanvasAPI {
           __typename
           id
           imageUrl
+          imageGsPath
         }
       }
       """
@@ -910,6 +933,7 @@ public enum CanvasAPI {
           GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
           GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
           GraphQLField("imageUrl", type: .nonNull(.scalar(String.self))),
+          GraphQLField("imageGsPath", type: .nonNull(.scalar(String.self))),
         ]
       }
 
@@ -919,8 +943,8 @@ public enum CanvasAPI {
         self.resultMap = unsafeResultMap
       }
 
-      public init(id: GraphQLID, imageUrl: String) {
-        self.init(unsafeResultMap: ["__typename": "Thumbnail", "id": id, "imageUrl": imageUrl])
+      public init(id: GraphQLID, imageUrl: String, imageGsPath: String) {
+        self.init(unsafeResultMap: ["__typename": "Thumbnail", "id": id, "imageUrl": imageUrl, "imageGsPath": imageGsPath])
       }
 
       public var __typename: String {
@@ -947,6 +971,15 @@ public enum CanvasAPI {
         }
         set {
           resultMap.updateValue(newValue, forKey: "imageUrl")
+        }
+      }
+
+      public var imageGsPath: String {
+        get {
+          return resultMap["imageGsPath"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "imageGsPath")
         }
       }
     }

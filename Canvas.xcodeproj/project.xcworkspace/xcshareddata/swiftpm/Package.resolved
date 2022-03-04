@@ -11,6 +11,15 @@
         }
       },
       {
+        "package": "ActivityIndicatorView",
+        "repositoryURL": "https://github.com/exyte/ActivityIndicatorView.git",
+        "state": {
+          "branch": null,
+          "revision": "9ddf7c4290ed79d6d09a58fb644a3cc2ff751542",
+          "version": "1.0.1"
+        }
+      },
+      {
         "package": "Amplify",
         "repositoryURL": "https://github.com/aws-amplify/amplify-ios",
         "state": {

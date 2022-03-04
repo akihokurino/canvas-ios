@@ -18,6 +18,12 @@ struct ArchiveDetailView: View {
     var body: some View {
         ScrollView {
             VStack {
+                if nftConnector.hasNft != nil, nftConnector.hasNft! {
+                    Text("NFT already exist")
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 50)
+                }
+
                 ZStack(alignment: .center) {
                     VideoView(url: URL(string: data.videoUrl)!)
                         .frame(maxWidth: .infinity)
@@ -35,8 +41,10 @@ struct ArchiveDetailView: View {
                 LazyVGrid(columns: gridItemLayout, alignment: HorizontalAlignment.leading, spacing: 3) {
                     ForEach(data.thumbnails) { data in
                         Button(action: {
-                            self.selectThumbnail = data
-                            self.isPresentModal = true
+                            if nftConnector.hasNft != nil, !nftConnector.hasNft! {
+                                self.selectThumbnail = data
+                                self.isPresentModal = true
+                            }
                         }) {
                             RemoteImageView(url: data.imageUrl)
                                 .scaledToFit()
@@ -47,10 +55,23 @@ struct ArchiveDetailView: View {
             }
         }
         .sheet(isPresented: $isPresentModal) {
-            PhotoView(url: selectThumbnail?.imageUrl)
+            if let thumbnail = selectThumbnail {
+                CreateNftView(data: thumbnail) { point, level in
+                    self.isPresentModal = false
+
+                    nftConnector.create(workId: data.id, thumbnailUrl: thumbnail.imageGsPath, level: level, point: point)
+                }
+            }
         }
+        .overlay(
+            Group {
+                if nftConnector.isRequesting {
+                    HUD(isLoading: $nftConnector.isRequesting)
+                }
+            }, alignment: .center
+        )
         .onAppear {
-            nftConnector.isOwn(workId: data.id)
+            nftConnector.hasNft(workId: data.id)
         }
     }
 }

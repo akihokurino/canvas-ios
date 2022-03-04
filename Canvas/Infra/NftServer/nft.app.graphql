@@ -2,6 +2,10 @@ query IsOwnNft($workId: String!) {
   isOwnNft(address: "0x1341048E3d37046Ca18A09EFB154Ea9771744f41", workId: $workId)
 }
 
+query OwnerOfNft($workId: String!) {
+  ownerOfNft(workId: $workId)
+}
+
 mutation CreateNft($workId: String!, $thumbnailUrl: String!, $level: Int!, $point: Int!) {
   createNft(input: {
     workId: $workId,

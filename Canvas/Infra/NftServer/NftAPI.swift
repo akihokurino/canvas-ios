@@ -57,6 +57,57 @@ public enum NftAPI {
     }
   }
 
+  public final class OwnerOfNftQuery: GraphQLQuery {
+    /// The raw GraphQL definition of this operation.
+    public let operationDefinition: String =
+      """
+      query OwnerOfNft($workId: String!) {
+        ownerOfNft(workId: $workId)
+      }
+      """
+
+    public let operationName: String = "OwnerOfNft"
+
+    public var workId: String
+
+    public init(workId: String) {
+      self.workId = workId
+    }
+
+    public var variables: GraphQLMap? {
+      return ["workId": workId]
+    }
+
+    public struct Data: GraphQLSelectionSet {
+      public static let possibleTypes: [String] = ["QueryRoot"]
+
+      public static var selections: [GraphQLSelection] {
+        return [
+          GraphQLField("ownerOfNft", arguments: ["workId": GraphQLVariable("workId")], type: .nonNull(.scalar(String.self))),
+        ]
+      }
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public init(ownerOfNft: String) {
+        self.init(unsafeResultMap: ["__typename": "QueryRoot", "ownerOfNft": ownerOfNft])
+      }
+
+      public var ownerOfNft: String {
+        get {
+          return resultMap["ownerOfNft"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "ownerOfNft")
+        }
+      }
+    }
+  }
+
   public final class CreateNftMutation: GraphQLMutation {
     /// The raw GraphQL definition of this operation.
     public let operationDefinition: String =

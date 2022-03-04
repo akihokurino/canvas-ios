@@ -36,6 +36,7 @@ fragment ThumbnailFragment on Thumbnail {
     id
     workId
     imageUrl
+    imageGsPath
     work {
         id
         videoUrl

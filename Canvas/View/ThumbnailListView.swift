@@ -43,6 +43,13 @@ struct ThumbnailListView: View {
         .sheet(isPresented: $isPresentModal) {
             PhotoView(url: selectThumbnail?.imageUrl)
         }
+        .overlay(
+            Group {
+                if thumbnailListFetcher.isInitializing {
+                    HUD(isLoading: $thumbnailListFetcher.isInitializing)
+                }
+            }, alignment: .center
+        )
         .onAppear {
             thumbnailListFetcher.initialize {
                 self.isRefreshing = false

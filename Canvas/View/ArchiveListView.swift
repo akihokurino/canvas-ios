@@ -39,6 +39,13 @@ struct ArchiveListView: View {
                 self.isRefreshing = false
             }
         }
+        .overlay(
+            Group {
+                if workListFetcher.isInitializing {
+                    HUD(isLoading: $workListFetcher.isInitializing)
+                }
+            }, alignment: .center
+        )
         .navigationBarTitle("", displayMode: .inline)
         .onAppear {
             workListFetcher.initialize {

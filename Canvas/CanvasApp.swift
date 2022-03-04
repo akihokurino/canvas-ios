@@ -24,7 +24,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
         try! Amplify.add(plugin: AWSCognitoAuthPlugin())
         try! Amplify.configure()
-
+    
         Messaging.messaging().delegate = self
         UNUserNotificationCenter.current().delegate = self
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { granted, error in

@@ -9,7 +9,7 @@ struct RemoteImageView: View {
     
     var body: some View {
         if let image = remoteImageModel.displayImage {
-            Image(uiImage: image).resizable()
+            Image(uiImage: image).resizable().scaledToFit()
         } else {
             ProgressView()
                 .frame(minHeight: 150)
