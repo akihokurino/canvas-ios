@@ -11,6 +11,8 @@ class NftIntractor: ObservableObject {
     func hasNft(workId: String) {
         cancellable?.cancel()
         
+        hasNft = false
+        
 //        cancellable = NftClient.shared.caller()
 //            .flatMap { caller in caller.hasNft(workId: workId) }
 //            .sink(receiveCompletion: { completion in

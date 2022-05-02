@@ -1,12 +1,13 @@
 import AVKit
 import SwiftUI
 
-class SelectThumbnailState: ObservableObject {
-    @Published var thumbnail: CanvasAPI.ThumbnailFragment?
+class ArchiveDetailViewState: ObservableObject {
+    @Published var selected: CanvasAPI.WorkFragment.Thumbnail?
     @Published var isPresentModal = false
+    @Published var isRefreshing = false
 
-    func select(thumbnail: CanvasAPI.ThumbnailFragment) {
-        self.thumbnail = thumbnail
+    func select(thumbnail: CanvasAPI.WorkFragment.Thumbnail) {
+        self.selected = thumbnail
         self.isPresentModal = true
     }
 }
@@ -15,8 +16,7 @@ struct ArchiveDetailView: View {
     let data: CanvasAPI.WorkFragment
 
     @ObservedObject var nftIntractor = NftIntractor()
-    @State var isPresentModal = false
-    @State var selectThumbnail: CanvasAPI.WorkFragment.Thumbnail?
+    @ObservedObject var viewState = ArchiveDetailViewState()
 
     private let thumbnailSize = UIScreen.main.bounds.size.width / 3
     private let gridItemLayout = [
@@ -52,8 +52,7 @@ struct ArchiveDetailView: View {
                     ForEach(data.thumbnails) { data in
                         Button(action: {
                             if nftIntractor.hasNft != nil, !nftIntractor.hasNft! {
-                                self.selectThumbnail = data
-                                self.isPresentModal = true
+                                self.viewState.select(thumbnail: data)
                             }
                         }) {
                             RemoteImageView(url: data.imageUrl)
@@ -64,10 +63,10 @@ struct ArchiveDetailView: View {
                 }
             }
         }
-        .sheet(isPresented: $isPresentModal) {
-            if let thumbnail = selectThumbnail {
+        .sheet(isPresented: $viewState.isPresentModal) {
+            if let thumbnail = viewState.selected {
                 CreateNftView(data: thumbnail) { point, level in
-                    self.isPresentModal = false
+                    self.viewState.isPresentModal = false
 
                     nftIntractor.create(workId: data.id, thumbnailUrl: thumbnail.imageGsPath, level: level, point: point)
                 }
