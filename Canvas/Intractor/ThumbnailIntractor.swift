@@ -1,11 +1,11 @@
 import Combine
 import SwiftUI
 
-class WorkListFetcher: ObservableObject {
+class ThumbnailIntractor: ObservableObject {
     private var cancellable: AnyCancellable?
     private var page: Int = 1
 
-    @Published var works: [CanvasAPI.WorkFragment] = []
+    @Published var thumbnails: [CanvasAPI.ThumbnailFragment] = []
     @Published var errors: AppError?
     @Published var hasNext: Bool = false
     @Published var isInitializing: Bool = false
@@ -16,18 +16,20 @@ class WorkListFetcher: ObservableObject {
             return
         }
 
-        if !isRefresh, !works.isEmpty {
+        if !isRefresh, !thumbnails.isEmpty {
             return
         }
 
         page = 1
-        isInitializing = true
+        if !isRefresh {
+            isInitializing = true
+        }
         isFetching = true
         hasNext = false
         cancellable?.cancel()
 
         cancellable = CanvasClient.shared.caller()
-            .flatMap { caller in caller.works(page: self.page) }
+            .flatMap { caller in caller.thumbnails(page: self.page) }
             .sink(receiveCompletion: { completion in
                 switch completion {
                     case .finished:
@@ -41,7 +43,7 @@ class WorkListFetcher: ObservableObject {
                         self.errors = error
                 }
             }, receiveValue: { val in
-                self.works = val.0
+                self.thumbnails = val.0
                 self.hasNext = val.1
             })
     }
@@ -51,7 +53,7 @@ class WorkListFetcher: ObservableObject {
             return
         }
 
-        guard !isInitializing else {
+        guard !isFetching else {
             return
         }
 
@@ -61,7 +63,7 @@ class WorkListFetcher: ObservableObject {
         cancellable?.cancel()
 
         cancellable = CanvasClient.shared.caller()
-            .flatMap { caller in caller.works(page: self.page) }
+            .flatMap { caller in caller.thumbnails(page: self.page) }
             .sink(receiveCompletion: { completion in
                 switch completion {
                     case .finished:
@@ -73,7 +75,7 @@ class WorkListFetcher: ObservableObject {
                         self.errors = error
                 }
             }, receiveValue: { val in
-                self.works.append(contentsOf: val.0)
+                self.thumbnails.append(contentsOf: val.0)
                 self.hasNext = val.1
             })
     }

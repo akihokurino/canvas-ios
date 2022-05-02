@@ -3,12 +3,12 @@ import SwiftUI
 import SwiftUIRefresh
 
 struct ArchiveListView: View {
-    @ObservedObject var workListFetcher = WorkListFetcher()
+    @ObservedObject var workIntractor = WorkIntractor()
     @State var isRefreshing = false
 
     var body: some View {
         List {
-            ForEach(workListFetcher.works) { item in
+            ForEach(workIntractor.works) { item in
                 ZStack {
                     NavigationLink(destination: ArchiveDetailView(data: item)) {
                         EmptyView()
@@ -21,7 +21,7 @@ struct ArchiveListView: View {
                 .listRowSeparator(.hidden)
             }
 
-            if workListFetcher.hasNext {
+            if workIntractor.hasNext {
                 HStack {
                     Spacer()
                     ProgressView()
@@ -29,26 +29,26 @@ struct ArchiveListView: View {
                 }
                 .frame(height: 60)
                 .onAppear {
-                    workListFetcher.next {}
+                    workIntractor.next {}
                 }
             }
         }
         .pullToRefresh(isShowing: $isRefreshing) {
             isRefreshing = true
-            workListFetcher.initialize(isRefresh: true) {
+            workIntractor.initialize(isRefresh: true) {
                 self.isRefreshing = false
             }
         }
         .overlay(
             Group {
-                if workListFetcher.isInitializing {
-                    HUD(isLoading: $workListFetcher.isInitializing)
+                if workIntractor.isInitializing {
+                    HUD(isLoading: $workIntractor.isInitializing)
                 }
             }, alignment: .center
         )
         .navigationBarTitle("", displayMode: .inline)
         .onAppear {
-            workListFetcher.initialize {
+            workIntractor.initialize {
                 self.isRefreshing = false
             }
         }

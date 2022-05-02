@@ -1,11 +1,11 @@
 import Combine
 import SwiftUI
 
-class ThumbnailListFetcher: ObservableObject {
+class WorkIntractor: ObservableObject {
     private var cancellable: AnyCancellable?
     private var page: Int = 1
 
-    @Published var thumbnails: [CanvasAPI.ThumbnailFragment] = []
+    @Published var works: [CanvasAPI.WorkFragment] = []
     @Published var errors: AppError?
     @Published var hasNext: Bool = false
     @Published var isInitializing: Bool = false
@@ -16,18 +16,20 @@ class ThumbnailListFetcher: ObservableObject {
             return
         }
 
-        if !isRefresh, !thumbnails.isEmpty {
+        if !isRefresh, !works.isEmpty {
             return
         }
 
         page = 1
-        isInitializing = true
+        if !isRefresh {
+            isInitializing = true
+        }
         isFetching = true
         hasNext = false
         cancellable?.cancel()
 
         cancellable = CanvasClient.shared.caller()
-            .flatMap { caller in caller.thumbnails(page: self.page) }
+            .flatMap { caller in caller.works(page: self.page) }
             .sink(receiveCompletion: { completion in
                 switch completion {
                     case .finished:
@@ -41,17 +43,17 @@ class ThumbnailListFetcher: ObservableObject {
                         self.errors = error
                 }
             }, receiveValue: { val in
-                self.thumbnails = val.0
+                self.works = val.0
                 self.hasNext = val.1
             })
     }
-
+    
     func next(callback: @escaping () -> ()) {
         guard FirebaseAuthManager.shared.isLogin() else {
             return
         }
 
-        guard !isFetching else {
+        guard !isInitializing else {
             return
         }
 
@@ -61,7 +63,7 @@ class ThumbnailListFetcher: ObservableObject {
         cancellable?.cancel()
 
         cancellable = CanvasClient.shared.caller()
-            .flatMap { caller in caller.thumbnails(page: self.page) }
+            .flatMap { caller in caller.works(page: self.page) }
             .sink(receiveCompletion: { completion in
                 switch completion {
                     case .finished:
@@ -73,7 +75,7 @@ class ThumbnailListFetcher: ObservableObject {
                         self.errors = error
                 }
             }, receiveValue: { val in
-                self.thumbnails.append(contentsOf: val.0)
+                self.works.append(contentsOf: val.0)
                 self.hasNext = val.1
             })
     }

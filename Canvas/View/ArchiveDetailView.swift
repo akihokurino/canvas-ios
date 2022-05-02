@@ -1,10 +1,20 @@
 import AVKit
 import SwiftUI
 
+class SelectThumbnailState: ObservableObject {
+    @Published var thumbnail: CanvasAPI.ThumbnailFragment?
+    @Published var isPresentModal = false
+
+    func select(thumbnail: CanvasAPI.ThumbnailFragment) {
+        self.thumbnail = thumbnail
+        self.isPresentModal = true
+    }
+}
+
 struct ArchiveDetailView: View {
     let data: CanvasAPI.WorkFragment
 
-    @ObservedObject var nftConnector = NftConnector()
+    @ObservedObject var nftIntractor = NftIntractor()
     @State var isPresentModal = false
     @State var selectThumbnail: CanvasAPI.WorkFragment.Thumbnail?
 
@@ -18,7 +28,7 @@ struct ArchiveDetailView: View {
     var body: some View {
         ScrollView {
             VStack {
-                if nftConnector.hasNft != nil, nftConnector.hasNft! {
+                if nftIntractor.hasNft != nil, nftIntractor.hasNft! {
                     Text("NFT already exist")
                         .frame(maxWidth: .infinity)
                         .frame(height: 50)
@@ -41,7 +51,7 @@ struct ArchiveDetailView: View {
                 LazyVGrid(columns: gridItemLayout, alignment: HorizontalAlignment.leading, spacing: 3) {
                     ForEach(data.thumbnails) { data in
                         Button(action: {
-                            if nftConnector.hasNft != nil, !nftConnector.hasNft! {
+                            if nftIntractor.hasNft != nil, !nftIntractor.hasNft! {
                                 self.selectThumbnail = data
                                 self.isPresentModal = true
                             }
@@ -59,19 +69,19 @@ struct ArchiveDetailView: View {
                 CreateNftView(data: thumbnail) { point, level in
                     self.isPresentModal = false
 
-                    nftConnector.create(workId: data.id, thumbnailUrl: thumbnail.imageGsPath, level: level, point: point)
+                    nftIntractor.create(workId: data.id, thumbnailUrl: thumbnail.imageGsPath, level: level, point: point)
                 }
             }
         }
         .overlay(
             Group {
-                if nftConnector.isRequesting {
-                    HUD(isLoading: $nftConnector.isRequesting)
+                if nftIntractor.isRequesting {
+                    HUD(isLoading: $nftIntractor.isRequesting)
                 }
             }, alignment: .center
         )
         .onAppear {
-            nftConnector.hasNft(workId: data.id)
+            nftIntractor.hasNft(workId: data.id)
         }
     }
 }

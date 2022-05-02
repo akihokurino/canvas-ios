@@ -41,17 +41,17 @@ class Authenticator: ObservableObject {
         }
 
         if !AmplifyAuthManager.shared.isLogin() {
-            cancellable = AmplifyAuthManager.shared.signIn()
-                .sink(receiveCompletion: { completion in
-                    switch completion {
-                        case .finished:
-                            break
-                        case .failure(let error):
-                            self.errors = error
-                    }
-                }, receiveValue: { _ in
-
-                })
+//            cancellable = AmplifyAuthManager.shared.signIn()
+//                .sink(receiveCompletion: { completion in
+//                    switch completion {
+//                        case .finished:
+//                            break
+//                        case .failure(let error):
+//                            self.errors = error
+//                    }
+//                }, receiveValue: { _ in
+//
+//                })
         }
     }
 

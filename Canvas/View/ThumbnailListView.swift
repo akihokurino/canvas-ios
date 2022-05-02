@@ -1,11 +1,20 @@
 import Combine
 import SwiftUI
 
+class ThumbnailListViewState: ObservableObject {
+    @Published var selected: CanvasAPI.ThumbnailFragment?
+    @Published var isPresentModal = false
+    @Published var isRefreshing = false
+
+    func select(thumbnail: CanvasAPI.ThumbnailFragment) {
+        self.selected = thumbnail
+        self.isPresentModal = true
+    }
+}
+
 struct ThumbnailListView: View {
-    @ObservedObject var thumbnailListFetcher = ThumbnailListFetcher()
-    @State var isRefreshing = false
-    @State var isPresentModal = false
-    @State var selectThumbnail: CanvasAPI.ThumbnailFragment?
+    @ObservedObject var thumbnailIntractor = ThumbnailIntractor()
+    @ObservedObject var viewState = ThumbnailListViewState()
 
     private let thumbnailSize = UIScreen.main.bounds.size.width / 3
     private let gridItemLayout = [
@@ -16,18 +25,17 @@ struct ThumbnailListView: View {
 
     var body: some View {
         ScrollView {
-            RefreshControl(isRefreshing: $isRefreshing, coordinateSpaceName: RefreshControlKey, onRefresh: {
-                isRefreshing = true
-                thumbnailListFetcher.initialize(isRefresh: true) {
-                    self.isRefreshing = false
+            RefreshControl(isRefreshing: $viewState.isRefreshing, coordinateSpaceName: RefreshControlKey, onRefresh: {
+                viewState.isRefreshing = true
+                thumbnailIntractor.initialize(isRefresh: true) {
+                    self.viewState.isRefreshing = false
                 }
             })
 
             LazyVGrid(columns: gridItemLayout, alignment: HorizontalAlignment.leading, spacing: 3) {
-                ForEach(thumbnailListFetcher.thumbnails) { data in
+                ForEach(thumbnailIntractor.thumbnails) { data in
                     Button(action: {
-                        self.selectThumbnail = data
-                        self.isPresentModal = true
+                        viewState.select(thumbnail: data)
                     }) {
                         RemoteImageView(url: data.imageUrl)
                             .scaledToFit()
@@ -40,28 +48,28 @@ struct ThumbnailListView: View {
         }
         .coordinateSpace(name: RefreshControlKey)
         .navigationBarTitle("", displayMode: .inline)
-        .sheet(isPresented: $isPresentModal) {
-            PhotoView(url: selectThumbnail?.imageUrl)
+        .sheet(isPresented: $viewState.isPresentModal) {
+            PhotoView(url: viewState.selected?.imageUrl)
         }
         .overlay(
             Group {
-                if thumbnailListFetcher.isInitializing {
-                    HUD(isLoading: $thumbnailListFetcher.isInitializing)
+                if thumbnailIntractor.isInitializing {
+                    HUD(isLoading: $thumbnailIntractor.isInitializing)
                 }
             }, alignment: .center
         )
         .onAppear {
-            thumbnailListFetcher.initialize {
-                self.isRefreshing = false
+            thumbnailIntractor.initialize {
+                self.viewState.isRefreshing = false
             }
         }
     }
 
     private var bottom: some View {
         Group {
-            if thumbnailListFetcher.hasNext && !thumbnailListFetcher.isFetching {
+            if thumbnailIntractor.hasNext && !thumbnailIntractor.isFetching {
                 Button(action: {
-                    thumbnailListFetcher.next {}
+                    thumbnailIntractor.next {}
                 }) {
                     HStack {
                         Spacer()
@@ -72,7 +80,7 @@ struct ThumbnailListView: View {
                 .frame(height: 60)
             }
 
-            if thumbnailListFetcher.hasNext && thumbnailListFetcher.isFetching {
+            if thumbnailIntractor.hasNext && thumbnailIntractor.isFetching {
                 HStack {
                     Spacer()
                     ProgressView()
