@@ -1,5 +1,5 @@
 import Combine
-import Firebase
+import FirebaseStorage
 import Foundation
 
 class FirebaseStorageManager {

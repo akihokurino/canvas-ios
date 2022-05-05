@@ -14,10 +14,10 @@
     "categories": {
       "auth": {
         "canvas3eb22ff4": {
-          "userPoolId": "ap-northeast-1_ad01JZ6My",
+          "userPoolId": "ap-northeast-1_omBvnPYzl",
           "userPoolName": "canvas-store",
-          "webClientId": "6c724j24efe4iopddpkpmn2oef",
-          "nativeClientId": "6c724j24efe4iopddpkpmn2oef"
+          "webClientId": "ehd60ftsekljsqu683f2j6i0e",
+          "nativeClientId": "ehd60ftsekljsqu683f2j6i0e"
         }
       }
     }
