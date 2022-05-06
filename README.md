@@ -7,7 +7,7 @@
 - firebase auth
 - firebase cloud storage
 - firebase messaging
-- aws amplify
+- aws cognito
 - opensea
 
 ## Related
