@@ -18,7 +18,7 @@ class NftIntractor: ObservableObject {
         nft721 = nil
         hasNft1155 = nil
         nft1155 = nil
-
+        
         cancellable = NftClient.shared.caller()
             .flatMap { caller in caller.getNftAssets(workId: workId) }
             .sink(receiveCompletion: { completion in
@@ -46,12 +46,14 @@ class NftIntractor: ObservableObject {
                 switch completion {
                 case .finished:
                     self.isCreating = false
+                    self.hasNft(workId: workId)
                 case .failure(let error):
                     self.isCreating = false
                     self.errors = error
+                    self.hasNft(workId: workId)
                 }
             }, receiveValue: { _ in
-                self.hasNft(workId: workId)
+                
             })
     }
 
@@ -66,12 +68,14 @@ class NftIntractor: ObservableObject {
                 switch completion {
                 case .finished:
                     self.isCreating = false
+                    self.hasNft(workId: workId)
                 case .failure(let error):
                     self.isCreating = false
                     self.errors = error
+                    self.hasNft(workId: workId)
                 }
             }, receiveValue: { _ in
-                self.hasNft(workId: workId)
+                
             })
     }
 }
