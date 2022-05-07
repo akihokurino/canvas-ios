@@ -3,6 +3,7 @@ import SwiftUI
 enum ActionButtonColor {
     case primary
     case caution
+    case disable
 
     var color: Color {
         switch self {
@@ -10,6 +11,8 @@ enum ActionButtonColor {
             return Color.blue
         case .caution:
             return Color.red
+        case .disable:
+            return Color.gray
         }
     }
 }
@@ -27,6 +30,9 @@ struct ActionButton: View {
 
     var body: some View {
         Button(action: {
+            guard background != .disable else {
+                return
+            }
             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
             action()
         }) {

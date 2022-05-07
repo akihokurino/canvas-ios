@@ -3,51 +3,7 @@ schema {
   mutation: MutationRoot
 }
 
-type Thumbnail {
-  id: String!
-  imagePath: String!
-  signedImageUrl: String!
-  order: Int!
-}
-
-input CreateWorkInput {
-  fileName: String!
-}
-
-type MutationRoot {
-  registerUser(input: RegisterUserInput!): User!
-  createWork(input: CreateWorkInput!): Boolean!
-  createThumbnail(input: CreateThumbnailInput!): Boolean!
-  preSignUploadWork: PreSignUploadUrl!
-  preSignUploadThumbnail: PreSignUploadUrl!
-  updateWorkStatus(input: UpdateWorkStatusInput!): Boolean!
-  createNft(input: CreateNftInput!): Boolean!
-  bindNftToWork(input: BindNftToWorkInput!): Boolean!
-  deleteWork(id: String!): Boolean!
-}
-
-input CreateNftInput {
-  workId: String!
-  thumbnailUrl: String!
-  point: Int!
-  level: Int!
-}
-
-input RegisterUserInput {
-  address: String!
-}
-
-type QueryRoot {
-  getMe: User!
-  allWorks(status: WorkStatus, nextKey: String, limit: Int): WorkConnection!
-  purchasableWorks(nextKey: String, limit: Int): WorkConnection!
-  purchasableWorksByIds(ids: [String!]!): [Work!]!
-  work(id: String!): Work!
-  ownerOfNft(workId: String!): String!
-  isOwnNft(address: String!, workId: String!): Boolean!
-}
-
-type NFT {
+type Asset721 {
   workId: String!
   address: String!
   tokenId: String!
@@ -60,21 +16,82 @@ type NFT {
   ethPrice: Float!
 }
 
+type Thumbnail {
+  id: String!
+  imagePath: String!
+  signedImageUrl: String!
+  order: Int!
+}
+
+type MutationRoot {
+  debug: Boolean!
+  registerUser(input: RegisterUserInput!): String!
+  importWork(input: ImportWorkInput!): Boolean!
+  importThumbnail(input: ImportThumbnailInput!): Boolean!
+  preSignUploadWork: PreSignUploadUrl!
+  preSignUploadThumbnail: PreSignUploadUrl!
+  createNft721(input: CreateNft721Input!): Boolean!
+  createNft1155(input: CreateNft1155Input!): Boolean!
+  deleteWork(id: String!): Boolean!
+}
+
+type Asset1155 {
+  workId: String!
+  address: String!
+  tokenId: String!
+  name: String!
+  description: String!
+  imageUrl: String!
+  imagePreviewUrl: String!
+  permalink: String!
+  usdPrice: Float!
+  ethPrice: Float!
+}
+
+input ImportWorkInput {
+  fileName: String!
+}
+
+input RegisterUserInput {
+  email: String!
+  password: String!
+  walletAddress: String!
+  walletSecret: String!
+}
+
+type QueryRoot {
+  me: User!
+  allWorks(status: WorkStatus, nextKey: String, limit: Int): WorkConnection!
+  worksByIds(ids: [String!]!): [Work!]!
+  work(id: String!): Work!
+}
+
+input ImportThumbnailInput {
+  fileName: String!
+}
+
+input CreateNft721Input {
+  workId: String!
+  gsPath: String!
+  point: Int!
+  level: Int!
+}
+
 type WorkConnection {
   edges: [WorkEdge!]!
   nextKey: String
   totalCount: Int
 }
 
-enum WorkStatus {
-  PREPARE
-  FREE
+type Nft1155Balance {
+  workId: String!
+  balance: Int!
 }
 
-input BindNftToWorkInput {
-  workId: String!
-  contractAddress: String!
-  tokenId: String!
+enum WorkStatus {
+  PREPARE
+  PUBLISH_NFT
+  SELL_ORDER
 }
 
 type Work {
@@ -82,30 +99,30 @@ type Work {
   videoPath: String!
   signedVideoUrl: String!
   status: WorkStatus!
-  price: Int!
   thumbnails: [Thumbnail!]!
-  nft: NFT
+  asset721: Asset721
+  asset1155: Asset1155
 }
 
-input CreateThumbnailInput {
-  fileName: String!
+input CreateNft1155Input {
+  workId: String!
+  gsPath: String!
+  point: Int!
+  level: Int!
+  amount: Int!
 }
 
 type User {
   id: String!
-  address: String!
+  walletAddress: String!
   balance: Float!
-  nftNum: Int!
+  nft721Num: Int!
+  nft1155Num: [Nft1155Balance!]!
 }
 
 type PreSignUploadUrl {
   url: String!
   fileName: String!
-}
-
-input UpdateWorkStatusInput {
-  id: String!
-  status: WorkStatus!
 }
 
 type WorkEdge {

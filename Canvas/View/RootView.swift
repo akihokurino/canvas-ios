@@ -38,6 +38,17 @@ struct RootView: View {
                             .frame(width: 50, height: 50, alignment: .center)
                     }
                 }.tag(3)
+
+                NavigationView {
+                    WalletView()
+                }
+                .tabItem {
+                    VStack {
+                        Image(systemName: "wallet.pass")
+                            .resizable()
+                            .frame(width: 50, height: 50, alignment: .center)
+                    }
+                }.tag(4)
             }
         }
         .onAppear {

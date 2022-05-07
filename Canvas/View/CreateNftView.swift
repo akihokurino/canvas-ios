@@ -1,12 +1,20 @@
 import SwiftUI
 
+enum NftType {
+    case ERC721
+    case ERC1155
+}
+
 struct CreateNftView: View {
     let data: CanvasAPI.WorkFragment.Thumbnail
-    let callback: ((Int, Int) -> Void)
+    let hasNft721: Bool
+    let hasNft1155: Bool
+    let callback: (NftType, Int, Int, Int?) -> Void
 
     @Environment(\.presentationMode) private var presentationMode
     @State var point: String = ""
     @State var level: String = ""
+    @State var amount: String = ""
 
     var body: some View {
         VStack {
@@ -18,10 +26,20 @@ struct CreateNftView: View {
             TextFieldView(value: $point, label: "Point", keyboardType: .numberPad)
             Spacer().frame(height: 10)
             TextFieldView(value: $level, label: "Level", keyboardType: .numberPad)
+            Spacer().frame(height: 10)
+            TextFieldView(value: $amount, label: "Amount", keyboardType: .numberPad)
             Spacer()
-            ActionButton(text: "Create NFT", background: .primary) {
-                if !point.isEmpty && !level.isEmpty {
-                    callback(Int(point)!, Int(level)!)
+            HStack {
+                ActionButton(text: "Mint 721 NFT", background: hasNft721 ? .disable : .primary) {
+                    if !point.isEmpty, !level.isEmpty {
+                        callback(NftType.ERC721, Int(point)!, Int(level)!, nil)
+                    }
+                }
+                Spacer()
+                ActionButton(text: "Mint 1155 NFT", background: hasNft1155 ? .disable : .primary) {
+                    if !point.isEmpty, !level.isEmpty, !amount.isEmpty {
+                        callback(NftType.ERC1155, Int(point)!, Int(level)!, Int(amount)!)
+                    }
                 }
             }
         }

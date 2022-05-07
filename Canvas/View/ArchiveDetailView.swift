@@ -28,11 +28,21 @@ struct ArchiveDetailView: View {
     var body: some View {
         ScrollView {
             VStack {
-                if nftIntractor.hasNft != nil, nftIntractor.hasNft! {
-                    Text("NFT already exist")
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 50)
+                HStack {
+                    ActionButton(text: "721 NFT", background: nftIntractor.nft721 != nil ? .primary : .disable) {
+                        if let asset = nftIntractor.nft721 {
+                            UIApplication.shared.open(URL(string: "https://testnets.opensea.io/assets/\(asset.address)/\(asset.tokenId)")!)
+                        }
+                    }
+                    Spacer()
+                    ActionButton(text: "1155 NFT", background: nftIntractor.nft1155 != nil ? .primary : .disable) {
+                        if let asset = nftIntractor.nft1155 {
+                            UIApplication.shared.open(URL(string: "https://testnets.opensea.io/assets/\(asset.address)/\(asset.tokenId)")!)
+                        }
+                    }
                 }
+                .padding(.top, 20)
+                .padding(.horizontal, 20)
 
                 ZStack(alignment: .center) {
                     VideoView(url: URL(string: data.videoUrl)!)
@@ -51,9 +61,11 @@ struct ArchiveDetailView: View {
                 LazyVGrid(columns: gridItemLayout, alignment: HorizontalAlignment.leading, spacing: 3) {
                     ForEach(data.thumbnails) { data in
                         Button(action: {
-                            if nftIntractor.hasNft != nil, !nftIntractor.hasNft! {
-                                self.viewState.select(thumbnail: data)
+                            guard nftIntractor.hasNft721 != nil, nftIntractor.hasNft1155 != nil else {
+                                return
                             }
+
+                            self.viewState.select(thumbnail: data)
                         }) {
                             RemoteImageView(url: data.imageUrl)
                                 .scaledToFit()
@@ -65,17 +77,22 @@ struct ArchiveDetailView: View {
         }
         .sheet(isPresented: $viewState.isPresentModal) {
             if let thumbnail = viewState.selected {
-                CreateNftView(data: thumbnail) { point, level in
+                CreateNftView(data: thumbnail, hasNft721: nftIntractor.hasNft721!, hasNft1155: nftIntractor.hasNft1155!) { nftType, point, level, amount in
                     self.viewState.isPresentModal = false
 
-                    nftIntractor.create(workId: data.id, thumbnailUrl: thumbnail.imageGsPath, level: level, point: point)
+                    switch nftType {
+                    case .ERC721:
+                        nftIntractor.create721(workId: data.id, gsPath: thumbnail.imageGsPath, level: level, point: point)
+                    case .ERC1155:
+                        nftIntractor.create1155(workId: data.id, gsPath: thumbnail.imageGsPath, level: level, point: point, amount: amount!)
+                    }
                 }
             }
         }
         .overlay(
             Group {
-                if nftIntractor.isRequesting {
-                    HUD(isLoading: $nftIntractor.isRequesting)
+                if nftIntractor.isCreating {
+                    HUD(isLoading: $nftIntractor.isCreating)
                 }
             }, alignment: .center
         )

@@ -49,7 +49,7 @@ struct ThumbnailListView: View {
         .coordinateSpace(name: RefreshControlKey)
         .navigationBarTitle("", displayMode: .inline)
         .sheet(isPresented: $viewState.isPresentModal) {
-            PhotoView(url: viewState.selected?.imageUrl)
+            ThumbnailDetailView(url: viewState.selected?.imageUrl)
         }
         .overlay(
             Group {

@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct PhotoView: View {
+struct ThumbnailDetailView: View {
     let url: String?
 
     @Environment(\.presentationMode) private var presentationMode

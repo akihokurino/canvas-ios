@@ -1,16 +1,45 @@
-query IsOwnNft($workId: String!) {
-  isOwnNft(address: "0x1341048E3d37046Ca18A09EFB154Ea9771744f41", workId: $workId)
+query GetMe {
+  me {
+    id
+    walletAddress
+    balance
+    nft721Num
+    nft1155Num {
+      workId
+      balance
+    }
+  }
 }
 
-query OwnerOfNft($workId: String!) {
-  ownerOfNft(workId: $workId)
+query GetWork($workId: String!) {
+  work(id: $workId) {
+    id
+    asset721 {
+      address
+      tokenId
+    }
+    asset1155 {
+      address
+      tokenId
+    }
+  }
 }
 
-mutation CreateNft($workId: String!, $thumbnailUrl: String!, $level: Int!, $point: Int!) {
-  createNft(input: {
+mutation CreateNft721($workId: String!, $gsPath: String!, $level: Int!, $point: Int!) {
+  createNft721(input: {
     workId: $workId,
-    thumbnailUrl: $thumbnailUrl,
+    gsPath: $gsPath,
     level: $level,
     point: $point
+  })
+}
+
+mutation CreateNft1155($workId: String!, $gsPath: String!, $level: Int!, $point: Int!, $amount: Int!) {
+  createNft1155(input: {
+    workId: $workId,
+    gsPath: $gsPath,
+    level: $level,
+    point: $point,
+    amount: $amount
   })
 }
