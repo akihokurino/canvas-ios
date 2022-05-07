@@ -23,9 +23,12 @@ struct NftClient {
 
                     let cache = InMemoryNormalizedCache()
                     let store = ApolloStore(cache: cache)
-                    let client = URLSessionClient()
+                    let configuration = URLSessionConfiguration.default
+                    configuration.timeoutIntervalForRequest = 60.0
+                    configuration.timeoutIntervalForResource = 60.0
+                    let client = URLSessionClient(sessionConfiguration: configuration)
                     let provider = NetworkInterceptorProvider(store: store, client: client)
-                    
+
                     let transport = RequestChainNetworkTransport(
                         interceptorProvider: provider,
                         endpointURL: URL(string: "https://ji1t807ur2.execute-api.ap-northeast-1.amazonaws.com/default/graphql")!,

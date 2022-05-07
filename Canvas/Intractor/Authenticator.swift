@@ -13,6 +13,8 @@ class Authenticator: ObservableObject {
             cancellable = FirebaseMessageManager.shared.token()
                 .flatMap { token in CanvasClient.shared.caller().map { ($0, token) } }
                 .flatMap { tp in tp.0.registerFCMToken(token: tp.1) }
+                .subscribe(on: DispatchQueue.global())
+                .receive(on: DispatchQueue.main)
                 .sink(receiveCompletion: { completion in
                     switch completion {
                         case .finished:
@@ -28,6 +30,8 @@ class Authenticator: ObservableObject {
                 .flatMap { _ in FirebaseMessageManager.shared.token() }
                 .flatMap { token in CanvasClient.shared.caller().map { ($0, token) } }
                 .flatMap { tp in tp.0.registerFCMToken(token: tp.1) }
+                .subscribe(on: DispatchQueue.global())
+                .receive(on: DispatchQueue.main)
                 .sink(receiveCompletion: { completion in
                     switch completion {
                         case .finished:
@@ -42,6 +46,8 @@ class Authenticator: ObservableObject {
 
         if !AmplifyAuthManager.shared.isLogin() {
             cancellable = AmplifyAuthManager.shared.signIn()
+                .subscribe(on: DispatchQueue.global())
+                .receive(on: DispatchQueue.main)
                 .sink(receiveCompletion: { completion in
                     switch completion {
                         case .finished:
@@ -64,6 +70,8 @@ class Authenticator: ObservableObject {
 
         cancellable = CanvasClient.shared.caller()
             .flatMap { caller in caller.registerFCMToken(token: token) }
+            .subscribe(on: DispatchQueue.global())
+            .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { completion in
                 switch completion {
                     case .finished:

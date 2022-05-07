@@ -30,6 +30,8 @@ class ThumbnailIntractor: ObservableObject {
 
         cancellable = CanvasClient.shared.caller()
             .flatMap { caller in caller.thumbnails(page: self.page) }
+            .subscribe(on: DispatchQueue.global())
+            .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { completion in
                 switch completion {
                     case .finished:
@@ -64,6 +66,8 @@ class ThumbnailIntractor: ObservableObject {
 
         cancellable = CanvasClient.shared.caller()
             .flatMap { caller in caller.thumbnails(page: self.page) }
+            .subscribe(on: DispatchQueue.global())
+            .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { completion in
                 switch completion {
                     case .finished:

@@ -2,6 +2,7 @@ import SwiftUI
 
 struct WalletView: View {
     @ObservedObject var walletIntractor = WalletIntractor()
+    @State var isRefreshing = false
 
     var body: some View {
         ScrollView {
@@ -29,8 +30,16 @@ struct WalletView: View {
             }
             .padding()
         }
+        .overlay(
+            Group {
+                if walletIntractor.isInitializing {
+                    HUD(isLoading: $walletIntractor.isInitializing)
+                }
+            }, alignment: .center
+        )
+        .navigationBarTitle("", displayMode: .inline)
         .onAppear {
-            walletIntractor.getWallet()
+            walletIntractor.initialize()
         }
     }
 }

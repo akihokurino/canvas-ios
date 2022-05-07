@@ -21,6 +21,8 @@ class NftIntractor: ObservableObject {
         
         cancellable = NftClient.shared.caller()
             .flatMap { caller in caller.getNftAssets(workId: workId) }
+            .subscribe(on: DispatchQueue.global())
+            .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished: break
@@ -42,18 +44,18 @@ class NftIntractor: ObservableObject {
 
         cancellable = NftClient.shared.caller()
             .flatMap { caller in caller.createNft721(workId: workId, gsPath: gsPath, level: level, point: point) }
+            .subscribe(on: DispatchQueue.global())
+            .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { completion in
                 switch completion {
-                case .finished:
-                    self.isCreating = false
-                    self.hasNft(workId: workId)
+                case .finished: break
                 case .failure(let error):
                     self.isCreating = false
                     self.errors = error
-                    self.hasNft(workId: workId)
                 }
             }, receiveValue: { _ in
-                
+                self.isCreating = false
+                self.hasNft(workId: workId)
             })
     }
 
@@ -64,18 +66,18 @@ class NftIntractor: ObservableObject {
 
         cancellable = NftClient.shared.caller()
             .flatMap { caller in caller.createNft1155(workId: workId, gsPath: gsPath, level: level, point: point, amount: amount) }
+            .subscribe(on: DispatchQueue.global())
+            .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { completion in
                 switch completion {
-                case .finished:
-                    self.isCreating = false
-                    self.hasNft(workId: workId)
+                case .finished: break
                 case .failure(let error):
                     self.isCreating = false
                     self.errors = error
-                    self.hasNft(workId: workId)
                 }
             }, receiveValue: { _ in
-                
+                self.isCreating = false
+                self.hasNft(workId: workId)
             })
     }
 }

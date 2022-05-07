@@ -29,13 +29,13 @@ struct ArchiveDetailView: View {
         ScrollView {
             VStack {
                 HStack {
-                    ActionButton(text: "721 NFT", background: nftIntractor.nft721 != nil ? .primary : .disable) {
+                    ActionButton(text: "721 NFT", background: nftIntractor.nft721?.tokenId.isEmpty ?? true ? .disable : .primary) {
                         if let asset = nftIntractor.nft721 {
                             UIApplication.shared.open(URL(string: "https://testnets.opensea.io/assets/\(asset.address)/\(asset.tokenId)")!)
                         }
                     }
                     Spacer()
-                    ActionButton(text: "1155 NFT", background: nftIntractor.nft1155 != nil ? .primary : .disable) {
+                    ActionButton(text: "1155 NFT", background: nftIntractor.nft1155?.tokenId.isEmpty ?? true ? .disable : .primary) {
                         if let asset = nftIntractor.nft1155 {
                             UIApplication.shared.open(URL(string: "https://testnets.opensea.io/assets/\(asset.address)/\(asset.tokenId)")!)
                         }
