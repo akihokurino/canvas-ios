@@ -2,7 +2,7 @@ import Combine
 import SwiftUI
 
 class WalletIntractor: ObservableObject {
-    private var cancellable: AnyCancellable?
+    private var cancellables: Set<AnyCancellable> = []
 
     @Published var address: String = ""
     @Published var balance: Double = 0.0
@@ -14,11 +14,9 @@ class WalletIntractor: ObservableObject {
             return
         }
         
-        cancellable?.cancel()
-        
         isInitializing = true
 
-        cancellable = NftClient.shared.caller()
+        NftClient.shared.caller()
             .flatMap { caller in caller.getWallet() }
             .subscribe(on: DispatchQueue.global())
             .receive(on: DispatchQueue.main)
@@ -34,5 +32,6 @@ class WalletIntractor: ObservableObject {
                 self.address = val.address
                 self.balance = val.balance
             })
+            .store(in: &cancellables)
     }
 }

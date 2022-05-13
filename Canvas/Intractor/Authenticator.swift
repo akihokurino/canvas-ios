@@ -2,15 +2,13 @@ import Combine
 import SwiftUI
 
 class Authenticator: ObservableObject {
-    private var cancellable: AnyCancellable?
+    private var cancellables: Set<AnyCancellable> = []
 
     @Published var errors: AppError?
 
     func login() {
-        cancellable?.cancel()
-
         if FirebaseAuthManager.shared.isLogin() {
-            cancellable = FirebaseMessageManager.shared.token()
+            FirebaseMessageManager.shared.token()
                 .flatMap { token in CanvasClient.shared.caller().map { ($0, token) } }
                 .flatMap { tp in tp.0.registerFCMToken(token: tp.1) }
                 .subscribe(on: DispatchQueue.global())
@@ -25,8 +23,9 @@ class Authenticator: ObservableObject {
                 }, receiveValue: { _ in
 
                 })
+                .store(in: &cancellables)
         } else {
-            cancellable = FirebaseAuthManager.shared.signInAnonymously()
+            FirebaseAuthManager.shared.signInAnonymously()
                 .flatMap { _ in FirebaseMessageManager.shared.token() }
                 .flatMap { token in CanvasClient.shared.caller().map { ($0, token) } }
                 .flatMap { tp in tp.0.registerFCMToken(token: tp.1) }
@@ -42,10 +41,11 @@ class Authenticator: ObservableObject {
                 }, receiveValue: { _ in
 
                 })
+                .store(in: &cancellables)
         }
 
         if !AmplifyAuthManager.shared.isLogin() {
-            cancellable = AmplifyAuthManager.shared.signIn()
+            AmplifyAuthManager.shared.signIn()
                 .subscribe(on: DispatchQueue.global())
                 .receive(on: DispatchQueue.main)
                 .sink(receiveCompletion: { completion in
@@ -58,6 +58,7 @@ class Authenticator: ObservableObject {
                 }, receiveValue: { _ in
 
                 })
+                .store(in: &cancellables)
         }
     }
 
@@ -66,9 +67,7 @@ class Authenticator: ObservableObject {
             return
         }
 
-        cancellable?.cancel()
-
-        cancellable = CanvasClient.shared.caller()
+        CanvasClient.shared.caller()
             .flatMap { caller in caller.registerFCMToken(token: token) }
             .subscribe(on: DispatchQueue.global())
             .receive(on: DispatchQueue.main)
@@ -82,5 +81,6 @@ class Authenticator: ObservableObject {
             }, receiveValue: { _ in
 
             })
+            .store(in: &cancellables)
     }
 }

@@ -201,11 +201,13 @@ public enum NftAPI {
             __typename
             address
             tokenId
+            imageUrl
           }
           asset1155 {
             __typename
             address
             tokenId
+            imageUrl
           }
         }
       }
@@ -317,6 +319,7 @@ public enum NftAPI {
               GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
               GraphQLField("address", type: .nonNull(.scalar(String.self))),
               GraphQLField("tokenId", type: .nonNull(.scalar(String.self))),
+              GraphQLField("imageUrl", type: .nonNull(.scalar(String.self))),
             ]
           }
 
@@ -326,8 +329,8 @@ public enum NftAPI {
             self.resultMap = unsafeResultMap
           }
 
-          public init(address: String, tokenId: String) {
-            self.init(unsafeResultMap: ["__typename": "Asset721", "address": address, "tokenId": tokenId])
+          public init(address: String, tokenId: String, imageUrl: String) {
+            self.init(unsafeResultMap: ["__typename": "Asset721", "address": address, "tokenId": tokenId, "imageUrl": imageUrl])
           }
 
           public var __typename: String {
@@ -354,6 +357,15 @@ public enum NftAPI {
             }
             set {
               resultMap.updateValue(newValue, forKey: "tokenId")
+            }
+          }
+
+          public var imageUrl: String {
+            get {
+              return resultMap["imageUrl"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "imageUrl")
             }
           }
         }
@@ -366,6 +378,7 @@ public enum NftAPI {
               GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
               GraphQLField("address", type: .nonNull(.scalar(String.self))),
               GraphQLField("tokenId", type: .nonNull(.scalar(String.self))),
+              GraphQLField("imageUrl", type: .nonNull(.scalar(String.self))),
             ]
           }
 
@@ -375,8 +388,8 @@ public enum NftAPI {
             self.resultMap = unsafeResultMap
           }
 
-          public init(address: String, tokenId: String) {
-            self.init(unsafeResultMap: ["__typename": "Asset1155", "address": address, "tokenId": tokenId])
+          public init(address: String, tokenId: String, imageUrl: String) {
+            self.init(unsafeResultMap: ["__typename": "Asset1155", "address": address, "tokenId": tokenId, "imageUrl": imageUrl])
           }
 
           public var __typename: String {
@@ -404,6 +417,119 @@ public enum NftAPI {
             set {
               resultMap.updateValue(newValue, forKey: "tokenId")
             }
+          }
+
+          public var imageUrl: String {
+            get {
+              return resultMap["imageUrl"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "imageUrl")
+            }
+          }
+        }
+      }
+    }
+  }
+
+  public final class IsOwnNftQuery: GraphQLQuery {
+    /// The raw GraphQL definition of this operation.
+    public let operationDefinition: String =
+      """
+      query IsOwnNft($workId: String!) {
+        ownNft(workId: $workId) {
+          __typename
+          erc721
+          erc1155
+        }
+      }
+      """
+
+    public let operationName: String = "IsOwnNft"
+
+    public var workId: String
+
+    public init(workId: String) {
+      self.workId = workId
+    }
+
+    public var variables: GraphQLMap? {
+      return ["workId": workId]
+    }
+
+    public struct Data: GraphQLSelectionSet {
+      public static let possibleTypes: [String] = ["QueryRoot"]
+
+      public static var selections: [GraphQLSelection] {
+        return [
+          GraphQLField("ownNft", arguments: ["workId": GraphQLVariable("workId")], type: .nonNull(.object(OwnNft.selections))),
+        ]
+      }
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public init(ownNft: OwnNft) {
+        self.init(unsafeResultMap: ["__typename": "QueryRoot", "ownNft": ownNft.resultMap])
+      }
+
+      public var ownNft: OwnNft {
+        get {
+          return OwnNft(unsafeResultMap: resultMap["ownNft"]! as! ResultMap)
+        }
+        set {
+          resultMap.updateValue(newValue.resultMap, forKey: "ownNft")
+        }
+      }
+
+      public struct OwnNft: GraphQLSelectionSet {
+        public static let possibleTypes: [String] = ["OwnNft"]
+
+        public static var selections: [GraphQLSelection] {
+          return [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("erc721", type: .nonNull(.scalar(Bool.self))),
+            GraphQLField("erc1155", type: .nonNull(.scalar(Bool.self))),
+          ]
+        }
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(erc721: Bool, erc1155: Bool) {
+          self.init(unsafeResultMap: ["__typename": "OwnNft", "erc721": erc721, "erc1155": erc1155])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        public var erc721: Bool {
+          get {
+            return resultMap["erc721"]! as! Bool
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "erc721")
+          }
+        }
+
+        public var erc1155: Bool {
+          get {
+            return resultMap["erc1155"]! as! Bool
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "erc1155")
           }
         }
       }
@@ -525,6 +651,218 @@ public enum NftAPI {
         }
         set {
           resultMap.updateValue(newValue, forKey: "createNft1155")
+        }
+      }
+    }
+  }
+
+  public final class SellNft721Mutation: GraphQLMutation {
+    /// The raw GraphQL definition of this operation.
+    public let operationDefinition: String =
+      """
+      mutation SellNFT721($workId: String!, $ether: Float!) {
+        sellNft721(input: {workId: $workId, ether: $ether})
+      }
+      """
+
+    public let operationName: String = "SellNFT721"
+
+    public var workId: String
+    public var ether: Double
+
+    public init(workId: String, ether: Double) {
+      self.workId = workId
+      self.ether = ether
+    }
+
+    public var variables: GraphQLMap? {
+      return ["workId": workId, "ether": ether]
+    }
+
+    public struct Data: GraphQLSelectionSet {
+      public static let possibleTypes: [String] = ["MutationRoot"]
+
+      public static var selections: [GraphQLSelection] {
+        return [
+          GraphQLField("sellNft721", arguments: ["input": ["workId": GraphQLVariable("workId"), "ether": GraphQLVariable("ether")]], type: .nonNull(.scalar(Bool.self))),
+        ]
+      }
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public init(sellNft721: Bool) {
+        self.init(unsafeResultMap: ["__typename": "MutationRoot", "sellNft721": sellNft721])
+      }
+
+      public var sellNft721: Bool {
+        get {
+          return resultMap["sellNft721"]! as! Bool
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "sellNft721")
+        }
+      }
+    }
+  }
+
+  public final class SellNft1155Mutation: GraphQLMutation {
+    /// The raw GraphQL definition of this operation.
+    public let operationDefinition: String =
+      """
+      mutation SellNFT1155($workId: String!, $ether: Float!) {
+        sellNft1155(input: {workId: $workId, ether: $ether})
+      }
+      """
+
+    public let operationName: String = "SellNFT1155"
+
+    public var workId: String
+    public var ether: Double
+
+    public init(workId: String, ether: Double) {
+      self.workId = workId
+      self.ether = ether
+    }
+
+    public var variables: GraphQLMap? {
+      return ["workId": workId, "ether": ether]
+    }
+
+    public struct Data: GraphQLSelectionSet {
+      public static let possibleTypes: [String] = ["MutationRoot"]
+
+      public static var selections: [GraphQLSelection] {
+        return [
+          GraphQLField("sellNft1155", arguments: ["input": ["workId": GraphQLVariable("workId"), "ether": GraphQLVariable("ether")]], type: .nonNull(.scalar(Bool.self))),
+        ]
+      }
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public init(sellNft1155: Bool) {
+        self.init(unsafeResultMap: ["__typename": "MutationRoot", "sellNft1155": sellNft1155])
+      }
+
+      public var sellNft1155: Bool {
+        get {
+          return resultMap["sellNft1155"]! as! Bool
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "sellNft1155")
+        }
+      }
+    }
+  }
+
+  public final class TransferNft721Mutation: GraphQLMutation {
+    /// The raw GraphQL definition of this operation.
+    public let operationDefinition: String =
+      """
+      mutation TransferNFT721($workId: String!, $toAddress: String!) {
+        transferNft721(input: {workId: $workId, toAddress: $toAddress})
+      }
+      """
+
+    public let operationName: String = "TransferNFT721"
+
+    public var workId: String
+    public var toAddress: String
+
+    public init(workId: String, toAddress: String) {
+      self.workId = workId
+      self.toAddress = toAddress
+    }
+
+    public var variables: GraphQLMap? {
+      return ["workId": workId, "toAddress": toAddress]
+    }
+
+    public struct Data: GraphQLSelectionSet {
+      public static let possibleTypes: [String] = ["MutationRoot"]
+
+      public static var selections: [GraphQLSelection] {
+        return [
+          GraphQLField("transferNft721", arguments: ["input": ["workId": GraphQLVariable("workId"), "toAddress": GraphQLVariable("toAddress")]], type: .nonNull(.scalar(Bool.self))),
+        ]
+      }
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public init(transferNft721: Bool) {
+        self.init(unsafeResultMap: ["__typename": "MutationRoot", "transferNft721": transferNft721])
+      }
+
+      public var transferNft721: Bool {
+        get {
+          return resultMap["transferNft721"]! as! Bool
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "transferNft721")
+        }
+      }
+    }
+  }
+
+  public final class TransferNft1155Mutation: GraphQLMutation {
+    /// The raw GraphQL definition of this operation.
+    public let operationDefinition: String =
+      """
+      mutation TransferNFT1155($workId: String!, $toAddress: String!) {
+        transferNft1155(input: {workId: $workId, toAddress: $toAddress})
+      }
+      """
+
+    public let operationName: String = "TransferNFT1155"
+
+    public var workId: String
+    public var toAddress: String
+
+    public init(workId: String, toAddress: String) {
+      self.workId = workId
+      self.toAddress = toAddress
+    }
+
+    public var variables: GraphQLMap? {
+      return ["workId": workId, "toAddress": toAddress]
+    }
+
+    public struct Data: GraphQLSelectionSet {
+      public static let possibleTypes: [String] = ["MutationRoot"]
+
+      public static var selections: [GraphQLSelection] {
+        return [
+          GraphQLField("transferNft1155", arguments: ["input": ["workId": GraphQLVariable("workId"), "toAddress": GraphQLVariable("toAddress")]], type: .nonNull(.scalar(Bool.self))),
+        ]
+      }
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public init(transferNft1155: Bool) {
+        self.init(unsafeResultMap: ["__typename": "MutationRoot", "transferNft1155": transferNft1155])
+      }
+
+      public var transferNft1155: Bool {
+        get {
+          return resultMap["transferNft1155"]! as! Bool
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "transferNft1155")
         }
       }
     }

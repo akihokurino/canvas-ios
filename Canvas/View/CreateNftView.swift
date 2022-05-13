@@ -1,10 +1,5 @@
 import SwiftUI
 
-enum NftType {
-    case ERC721
-    case ERC1155
-}
-
 struct CreateNftView: View {
     let data: CanvasAPI.WorkFragment.Thumbnail
     let hasNft721: Bool
@@ -30,13 +25,13 @@ struct CreateNftView: View {
             TextFieldView(value: $amount, label: "Amount", keyboardType: .numberPad)
             Spacer()
             HStack {
-                ActionButton(text: "Mint 721 NFT", background: hasNft721 ? .disable : .primary) {
+                ActionButton(text: "Mint NFT721", background: hasNft721 ? .disable : .primary) {
                     if !point.isEmpty, !level.isEmpty {
                         callback(NftType.ERC721, Int(point)!, Int(level)!, nil)
                     }
                 }
                 Spacer()
-                ActionButton(text: "Mint 1155 NFT", background: hasNft1155 ? .disable : .primary) {
+                ActionButton(text: "Mint NFT1155", background: hasNft1155 ? .disable : .primary) {
                     if !point.isEmpty, !level.isEmpty, !amount.isEmpty {
                         callback(NftType.ERC1155, Int(point)!, Int(level)!, Int(amount)!)
                     }

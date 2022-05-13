@@ -2,13 +2,13 @@ import Combine
 import SwiftUI
 
 class ThumbnailListViewState: ObservableObject {
-    @Published var selected: CanvasAPI.ThumbnailFragment?
-    @Published var isPresentModal = false
+    @Published var selectedThumbnail: CanvasAPI.ThumbnailFragment?
+    @Published var isPresentDetailView = false
     @Published var isRefreshing = false
 
     func select(thumbnail: CanvasAPI.ThumbnailFragment) {
-        self.selected = thumbnail
-        self.isPresentModal = true
+        self.selectedThumbnail = thumbnail
+        self.isPresentDetailView = true
     }
 }
 
@@ -48,8 +48,8 @@ struct ThumbnailListView: View {
         }
         .coordinateSpace(name: RefreshControlKey)
         .navigationBarTitle("", displayMode: .inline)
-        .sheet(isPresented: $viewState.isPresentModal) {
-            ThumbnailDetailView(url: viewState.selected?.imageUrl)
+        .sheet(isPresented: $viewState.isPresentDetailView) {
+            ThumbnailDetailView(url: viewState.selectedThumbnail?.imageUrl)
         }
         .overlay(
             Group {

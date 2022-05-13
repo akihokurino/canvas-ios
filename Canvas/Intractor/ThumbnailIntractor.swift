@@ -2,7 +2,7 @@ import Combine
 import SwiftUI
 
 class ThumbnailIntractor: ObservableObject {
-    private var cancellable: AnyCancellable?
+    private var cancellables: Set<AnyCancellable> = []
     private var page: Int = 1
 
     @Published var thumbnails: [CanvasAPI.ThumbnailFragment] = []
@@ -26,9 +26,8 @@ class ThumbnailIntractor: ObservableObject {
         }
         isFetching = true
         hasNext = false
-        cancellable?.cancel()
-
-        cancellable = CanvasClient.shared.caller()
+       
+        CanvasClient.shared.caller()
             .flatMap { caller in caller.thumbnails(page: self.page) }
             .subscribe(on: DispatchQueue.global())
             .receive(on: DispatchQueue.main)
@@ -48,6 +47,7 @@ class ThumbnailIntractor: ObservableObject {
                 self.thumbnails = val.0
                 self.hasNext = val.1
             })
+            .store(in: &cancellables)
     }
 
     func next(callback: @escaping () -> ()) {
@@ -62,9 +62,8 @@ class ThumbnailIntractor: ObservableObject {
         page += 1
         isFetching = true
         hasNext = true
-        cancellable?.cancel()
-
-        cancellable = CanvasClient.shared.caller()
+        
+        CanvasClient.shared.caller()
             .flatMap { caller in caller.thumbnails(page: self.page) }
             .subscribe(on: DispatchQueue.global())
             .receive(on: DispatchQueue.main)
@@ -82,5 +81,6 @@ class ThumbnailIntractor: ObservableObject {
                 self.thumbnails.append(contentsOf: val.0)
                 self.hasNext = val.1
             })
+            .store(in: &cancellables)
     }
 }

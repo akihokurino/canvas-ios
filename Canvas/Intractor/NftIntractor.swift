@@ -1,26 +1,41 @@
 import Combine
 import SwiftUI
 
+enum NftType {
+    case ERC721
+    case ERC1155
+}
+
+struct Asset {
+    let address: String
+    let tokenId: String
+    let imageUrl: String
+}
+
 class NftIntractor: ObservableObject {
-    private var cancellable: AnyCancellable?
+    private var cancellables: Set<AnyCancellable> = []
 
-    @Published var hasNft721: Bool?
+    @Published var ownNft721: Bool = false
     @Published var nft721: Asset?
-    @Published var hasNft1155: Bool?
+
+    @Published var ownNft1155: Bool = false
     @Published var nft1155: Asset?
+
     @Published var errors: AppError?
-    @Published var isCreating: Bool = false
+    @Published var isLoading: Bool = false
+    @Published var isInitAsset: Bool = false
 
-    func hasNft(workId: String) {
-        cancellable?.cancel()
-
-        hasNft721 = nil
+    func getNft(workId: String) {
+        ownNft721 = false
         nft721 = nil
-        hasNft1155 = nil
+
+        ownNft1155 = false
         nft1155 = nil
-        
-        cancellable = NftClient.shared.caller()
-            .flatMap { caller in caller.getNftAssets(workId: workId) }
+
+        isLoading = true
+
+        NftClient.shared.caller()
+            .flatMap { caller in caller.getNftAssets(workId: workId).combineLatest(caller.isOwnNft(workId: workId)) }
             .subscribe(on: DispatchQueue.global())
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { completion in
@@ -30,19 +45,21 @@ class NftIntractor: ObservableObject {
                     self.errors = error
                 }
             }, receiveValue: { val in
-                self.hasNft721 = val.nft721 != nil
-                self.nft721 = val.nft721
-                self.hasNft1155 = val.nft1155 != nil
-                self.nft1155 = val.nft1155
+                self.nft721 = val.0.erc721
+                self.nft1155 = val.0.erc1155
+                self.ownNft721 = val.1.erc721
+                self.ownNft1155 = val.1.erc1155
+
+                self.isInitAsset = true
+                self.isLoading = false
             })
+            .store(in: &cancellables)
     }
 
     func create721(workId: String, gsPath: String, level: Int, point: Int) {
-        cancellable?.cancel()
+        isLoading = true
 
-        isCreating = true
-
-        cancellable = NftClient.shared.caller()
+        NftClient.shared.caller()
             .flatMap { caller in caller.createNft721(workId: workId, gsPath: gsPath, level: level, point: point) }
             .subscribe(on: DispatchQueue.global())
             .receive(on: DispatchQueue.main)
@@ -50,21 +67,20 @@ class NftIntractor: ObservableObject {
                 switch completion {
                 case .finished: break
                 case .failure(let error):
-                    self.isCreating = false
+                    self.isLoading = false
                     self.errors = error
                 }
             }, receiveValue: { _ in
-                self.isCreating = false
-                self.hasNft(workId: workId)
+                self.isLoading = false
+                self.getNft(workId: workId)
             })
+            .store(in: &cancellables)
     }
 
     func create1155(workId: String, gsPath: String, level: Int, point: Int, amount: Int) {
-        cancellable?.cancel()
+        isLoading = true
 
-        isCreating = true
-
-        cancellable = NftClient.shared.caller()
+        NftClient.shared.caller()
             .flatMap { caller in caller.createNft1155(workId: workId, gsPath: gsPath, level: level, point: point, amount: amount) }
             .subscribe(on: DispatchQueue.global())
             .receive(on: DispatchQueue.main)
@@ -72,12 +88,96 @@ class NftIntractor: ObservableObject {
                 switch completion {
                 case .finished: break
                 case .failure(let error):
-                    self.isCreating = false
+                    self.isLoading = false
                     self.errors = error
                 }
             }, receiveValue: { _ in
-                self.isCreating = false
-                self.hasNft(workId: workId)
+                self.isLoading = false
+                self.getNft(workId: workId)
             })
+            .store(in: &cancellables)
+    }
+
+    func sell721(workId: String, ether: Double) {
+        isLoading = true
+
+        NftClient.shared.caller()
+            .flatMap { caller in caller.sellNft721(workId: workId, ether: ether) }
+            .subscribe(on: DispatchQueue.global())
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished: break
+                case .failure(let error):
+                    print(error.localizedDescription)
+                    self.isLoading = false
+                    self.errors = error
+                }
+            }, receiveValue: { _ in
+                self.isLoading = false
+            })
+            .store(in: &cancellables)
+    }
+
+    func sell1155(workId: String, ether: Double) {
+        isLoading = true
+
+        NftClient.shared.caller()
+            .flatMap { caller in caller.sellNft1155(workId: workId, ether: ether) }
+            .subscribe(on: DispatchQueue.global())
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished: break
+                case .failure(let error):
+                    self.isLoading = false
+                    self.errors = error
+                }
+            }, receiveValue: { _ in
+                self.isLoading = false
+            })
+            .store(in: &cancellables)
+    }
+
+    func transfer721(workId: String, address: String) {
+        isLoading = true
+
+        NftClient.shared.caller()
+            .flatMap { caller in caller.transferNft721(workId: workId, toAddress: address) }
+            .subscribe(on: DispatchQueue.global())
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished: break
+                case .failure(let error):
+                    self.isLoading = false
+                    self.errors = error
+                }
+            }, receiveValue: { _ in
+                self.isLoading = false
+                self.getNft(workId: workId)
+            })
+            .store(in: &cancellables)
+    }
+
+    func transfer1155(workId: String, address: String) {
+        isLoading = true
+
+        NftClient.shared.caller()
+            .flatMap { caller in caller.transferNft1155(workId: workId, toAddress: address) }
+            .subscribe(on: DispatchQueue.global())
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished: break
+                case .failure(let error):
+                    self.isLoading = false
+                    self.errors = error
+                }
+            }, receiveValue: { _ in
+                self.isLoading = false
+                self.getNft(workId: workId)
+            })
+            .store(in: &cancellables)
     }
 }

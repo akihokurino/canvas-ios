@@ -47,11 +47,6 @@ struct NftClient {
     }
 }
 
-struct Asset {
-    let address: String
-    let tokenId: String
-}
-
 struct NftCaller {
     let cli: ApolloClient
 
@@ -81,8 +76,8 @@ struct NftCaller {
         }
     }
 
-    func getNftAssets(workId: String) -> Future<(nft721: Asset?, nft1155: Asset?), AppError> {
-        return Future<(nft721: Asset?, nft1155: Asset?), AppError> { promise in
+    func getNftAssets(workId: String) -> Future<(erc721: Asset?, erc1155: Asset?), AppError> {
+        return Future<(erc721: Asset?, erc1155: Asset?), AppError> { promise in
             cli.fetch(query: NftAPI.GetWorkQuery(workId: workId)) { result in
                 switch result {
                 case .success(let graphQLResult):
@@ -100,8 +95,37 @@ struct NftCaller {
                     }
 
                     promise(.success((
-                        nft721: data.work.asset721 != nil ? Asset(address: data.work.asset721!.address, tokenId: data.work.asset721!.tokenId) : nil,
-                        nft1155: data.work.asset1155 != nil ? Asset(address: data.work.asset1155!.address, tokenId: data.work.asset1155!.tokenId) : nil
+                        erc721: data.work.asset721 != nil ? Asset(address: data.work.asset721!.address, tokenId: data.work.asset721!.tokenId, imageUrl: data.work.asset721!.imageUrl) : nil,
+                        erc1155: data.work.asset1155 != nil ? Asset(address: data.work.asset1155!.address, tokenId: data.work.asset1155!.tokenId, imageUrl: data.work.asset1155!.imageUrl) : nil
+                    )))
+                case .failure(let error):
+                    promise(.failure(.wrap(error)))
+                }
+            }
+        }
+    }
+
+    func isOwnNft(workId: String) -> Future<(erc721: Bool, erc1155: Bool), AppError> {
+        return Future<(erc721: Bool, erc1155: Bool), AppError> { promise in
+            cli.fetch(query: NftAPI.IsOwnNftQuery(workId: workId)) { result in
+                switch result {
+                case .success(let graphQLResult):
+                    if let errors = graphQLResult.errors {
+                        if !errors.filter({ $0.message != nil }).isEmpty {
+                            let messages = errors.filter { $0.message != nil }.map { $0.message! }
+                            promise(.failure(.plain(messages.joined(separator: "\n"))))
+                            return
+                        }
+                    }
+
+                    guard let data = graphQLResult.data else {
+                        promise(.failure(AppError.defaultError()))
+                        return
+                    }
+
+                    promise(.success((
+                        erc721: data.ownNft.erc721,
+                        erc1155: data.ownNft.erc1155
                     )))
                 case .failure(let error):
                     promise(.failure(.wrap(error)))
@@ -134,6 +158,93 @@ struct NftCaller {
     func createNft1155(workId: String, gsPath: String, level: Int, point: Int, amount: Int) -> Future<Void, AppError> {
         return Future<Void, AppError> { promise in
             cli.perform(mutation: NftAPI.CreateNft1155Mutation(workId: workId, gsPath: gsPath, level: level, point: point, amount: amount)) { result in
+                switch result {
+                case .success(let graphQLResult):
+                    if let errors = graphQLResult.errors {
+                        if !errors.filter({ $0.message != nil }).isEmpty {
+                            let messages = errors.filter { $0.message != nil }.map { $0.message! }
+                            promise(.failure(.plain(messages.joined(separator: "\n"))))
+                            return
+                        }
+                    }
+
+                    promise(.success(()))
+                case .failure(let error):
+                    promise(.failure(.wrap(error)))
+                }
+            }
+        }
+    }
+
+    func sellNft721(workId: String, ether: Double) -> Future<Void, AppError> {
+        return Future<Void, AppError> { promise in
+            cli.perform(mutation: NftAPI.SellNft721Mutation(workId: workId, ether: ether)) { result in
+                switch result {
+                case .success(let graphQLResult):
+                    if let errors = graphQLResult.errors {
+                        if !errors.filter({ $0.message != nil }).isEmpty {
+                            let messages = errors.filter { $0.message != nil }.map { $0.message! }
+                            promise(.failure(.plain(messages.joined(separator: "\n"))))
+                            print("テスト1")
+                            print(messages.joined(separator: "\n"))
+                            return
+                        }
+                    }
+
+                    promise(.success(()))
+                case .failure(let error):
+                    promise(.failure(.wrap(error)))
+                }
+            }
+        }
+    }
+
+    func sellNft1155(workId: String, ether: Double) -> Future<Void, AppError> {
+        return Future<Void, AppError> { promise in
+            cli.perform(mutation: NftAPI.SellNft1155Mutation(workId: workId, ether: ether)) { result in
+                switch result {
+                case .success(let graphQLResult):
+                    if let errors = graphQLResult.errors {
+                        if !errors.filter({ $0.message != nil }).isEmpty {
+                            let messages = errors.filter { $0.message != nil }.map { $0.message! }
+                            print(messages.joined(separator: "\n"))
+                            promise(.failure(.plain(messages.joined(separator: "\n"))))
+                            return
+                        }
+                    }
+
+                    promise(.success(()))
+                case .failure(let error):
+                    promise(.failure(.wrap(error)))
+                }
+            }
+        }
+    }
+
+    func transferNft721(workId: String, toAddress: String) -> Future<Void, AppError> {
+        return Future<Void, AppError> { promise in
+            cli.perform(mutation: NftAPI.TransferNft721Mutation(workId: workId, toAddress: toAddress)) { result in
+                switch result {
+                case .success(let graphQLResult):
+                    if let errors = graphQLResult.errors {
+                        if !errors.filter({ $0.message != nil }).isEmpty {
+                            let messages = errors.filter { $0.message != nil }.map { $0.message! }
+                            promise(.failure(.plain(messages.joined(separator: "\n"))))
+                            return
+                        }
+                    }
+
+                    promise(.success(()))
+                case .failure(let error):
+                    promise(.failure(.wrap(error)))
+                }
+            }
+        }
+    }
+
+    func transferNft1155(workId: String, toAddress: String) -> Future<Void, AppError> {
+        return Future<Void, AppError> { promise in
+            cli.perform(mutation: NftAPI.TransferNft1155Mutation(workId: workId, toAddress: toAddress)) { result in
                 switch result {
                 case .success(let graphQLResult):
                     if let errors = graphQLResult.errors {

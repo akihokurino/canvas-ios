@@ -17,11 +17,20 @@ query GetWork($workId: String!) {
     asset721 {
       address
       tokenId
+      imageUrl
     }
     asset1155 {
       address
       tokenId
+      imageUrl
     }
+  }
+}
+
+query IsOwnNft($workId: String!) {
+  ownNft(workId: $workId) {
+    erc721
+    erc1155
   }
 }
 
@@ -41,5 +50,33 @@ mutation CreateNft1155($workId: String!, $gsPath: String!, $level: Int!, $point:
     level: $level,
     point: $point,
     amount: $amount
+  })
+}
+
+mutation SellNFT721($workId: String!, $ether: Float!) {
+  sellNft721(input: {
+    workId: $workId,
+    ether: $ether,
+  })
+}
+
+mutation SellNFT1155($workId: String!, $ether: Float!) {
+  sellNft1155(input: {
+    workId: $workId,
+    ether: $ether,
+  })
+}
+
+mutation TransferNFT721($workId: String!, $toAddress: String!) {
+  transferNft721(input: {
+    workId: $workId,
+    toAddress: $toAddress,
+  })
+}
+
+mutation TransferNFT1155($workId: String!, $toAddress: String!) {
+  transferNft1155(input: {
+    workId: $workId,
+    toAddress: $toAddress,
   })
 }

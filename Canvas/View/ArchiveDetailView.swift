@@ -2,13 +2,24 @@ import AVKit
 import SwiftUI
 
 class ArchiveDetailViewState: ObservableObject {
-    @Published var selected: CanvasAPI.WorkFragment.Thumbnail?
-    @Published var isPresentModal = false
+    @Published var selectedThumbnail: CanvasAPI.WorkFragment.Thumbnail?
+    @Published var isPresentCreateNftView = false
+    @Published var isPresentSellNft721View = false
+    @Published var isPresentSellNft1155View = false
     @Published var isRefreshing = false
 
     func select(thumbnail: CanvasAPI.WorkFragment.Thumbnail) {
-        self.selected = thumbnail
-        self.isPresentModal = true
+        self.selectedThumbnail = thumbnail
+        self.isPresentCreateNftView = true
+    }
+
+    func sell(erc: NftType) {
+        switch erc {
+        case NftType.ERC721:
+            self.isPresentSellNft721View = true
+        case NftType.ERC1155:
+            self.isPresentSellNft1155View = true
+        }
     }
 }
 
@@ -29,16 +40,12 @@ struct ArchiveDetailView: View {
         ScrollView {
             VStack {
                 HStack {
-                    ActionButton(text: "721 NFT", background: nftIntractor.nft721?.tokenId.isEmpty ?? true ? .disable : .primary) {
-                        if let asset = nftIntractor.nft721 {
-                            UIApplication.shared.open(URL(string: "https://testnets.opensea.io/assets/\(asset.address)/\(asset.tokenId)")!)
-                        }
+                    ActionButton(text: "NFT721", background: !(nftIntractor.nft721?.tokenId.isEmpty ?? true) ? .primary : .disable) {
+                        viewState.sell(erc: .ERC721)
                     }
                     Spacer()
-                    ActionButton(text: "1155 NFT", background: nftIntractor.nft1155?.tokenId.isEmpty ?? true ? .disable : .primary) {
-                        if let asset = nftIntractor.nft1155 {
-                            UIApplication.shared.open(URL(string: "https://testnets.opensea.io/assets/\(asset.address)/\(asset.tokenId)")!)
-                        }
+                    ActionButton(text: "NFT1155", background: !(nftIntractor.nft1155?.tokenId.isEmpty ?? true) ? .primary : .disable) {
+                        viewState.sell(erc: .ERC1155)
                     }
                 }
                 .padding(.top, 20)
@@ -61,7 +68,7 @@ struct ArchiveDetailView: View {
                 LazyVGrid(columns: gridItemLayout, alignment: HorizontalAlignment.leading, spacing: 3) {
                     ForEach(data.thumbnails) { data in
                         Button(action: {
-                            guard nftIntractor.hasNft721 != nil, nftIntractor.hasNft1155 != nil else {
+                            guard nftIntractor.isInitAsset else {
                                 return
                             }
 
@@ -75,10 +82,10 @@ struct ArchiveDetailView: View {
                 }
             }
         }
-        .sheet(isPresented: $viewState.isPresentModal) {
-            if let thumbnail = viewState.selected {
-                CreateNftView(data: thumbnail, hasNft721: nftIntractor.hasNft721!, hasNft1155: nftIntractor.hasNft1155!) { nftType, point, level, amount in
-                    self.viewState.isPresentModal = false
+        .sheet(isPresented: $viewState.isPresentCreateNftView) {
+            if let thumbnail = viewState.selectedThumbnail {
+                CreateNftView(data: thumbnail, hasNft721: nftIntractor.nft721 != nil, hasNft1155: nftIntractor.nft1155 != nil) { nftType, point, level, amount in
+                    self.viewState.isPresentCreateNftView = false
 
                     switch nftType {
                     case .ERC721:
@@ -89,15 +96,33 @@ struct ArchiveDetailView: View {
                 }
             }
         }
+        .sheet(isPresented: $viewState.isPresentSellNft721View) {
+            SellNftView(nftType: .ERC721, asset: nftIntractor.nft721!, isOwn: nftIntractor.ownNft721, sell: { ether in
+                self.viewState.isPresentSellNft721View = false
+                nftIntractor.sell721(workId: data.id, ether: ether)
+            }, transfer: { address in
+                self.viewState.isPresentSellNft721View = false
+                nftIntractor.transfer721(workId: data.id, address: address)
+            })
+        }
+        .sheet(isPresented: $viewState.isPresentSellNft1155View) {
+            SellNftView(nftType: .ERC1155, asset: nftIntractor.nft1155!, isOwn: nftIntractor.ownNft1155, sell: { ether in
+                self.viewState.isPresentSellNft1155View = false
+                nftIntractor.sell1155(workId: data.id, ether: ether)
+            }, transfer: { address in
+                self.viewState.isPresentSellNft1155View = false
+                nftIntractor.transfer1155(workId: data.id, address: address)
+            })
+        }
         .overlay(
             Group {
-                if nftIntractor.isCreating {
-                    HUD(isLoading: $nftIntractor.isCreating)
+                if nftIntractor.isLoading {
+                    HUD(isLoading: $nftIntractor.isLoading)
                 }
             }, alignment: .center
         )
         .onAppear {
-            nftIntractor.hasNft(workId: data.id)
+            self.nftIntractor.getNft(workId: self.data.id)
         }
     }
 }

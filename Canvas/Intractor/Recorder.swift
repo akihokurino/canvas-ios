@@ -22,7 +22,7 @@ class Recorder: ObservableObject {
     private var videoAssetWriterInput: AVAssetWriterInput?
     private var writerInputPixelBufferAdaptor: AVAssetWriterInputPixelBufferAdaptor?
     private var startTime: CMTime?
-    private var cancellable: AnyCancellable?
+    private var cancellables: Set<AnyCancellable> = []
 
     private var cacheDirectoryURL: URL? = {
         guard let path = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first else {
@@ -140,8 +140,7 @@ class Recorder: ObservableObject {
 
         let path = "\(work.rawValue).mp4"
 
-        cancellable?.cancel()
-        cancellable = FirebaseStorageManager.shared.uploadVideo(data: data, path: path).sink(receiveCompletion: { completion in
+        FirebaseStorageManager.shared.uploadVideo(data: data, path: path).sink(receiveCompletion: { completion in
             switch completion {
             case .finished:
                 break
@@ -150,7 +149,7 @@ class Recorder: ObservableObject {
             }
         }, receiveValue: { _ in
             print("Complete Upload Video")
-        })
+        }).store(in: &cancellables)
     }
 
     private func prepare() throws {
@@ -196,8 +195,8 @@ class Recorder: ObservableObject {
 
         let currentTime: CMTime = CMSampleBufferGetPresentationTimeStamp(buffer)
         let diffTime: CMTime = CMTimeSubtract(currentTime, firstTime)
-        
-        let totalSecond = CMTimeSubtract(currentTime, self.startTime!).seconds
+
+        let totalSecond = CMTimeSubtract(currentTime, startTime!).seconds
         guard totalSecond <= Recorder.MAX_SECONDS else {
             DispatchQueue.main.async {
                 self.forceFinished = true
@@ -205,7 +204,7 @@ class Recorder: ObservableObject {
             stop(withUpload: true)
             return
         }
-        
+
         print("録画秒数 \(totalSecond)")
 
         if writerInputPixelBufferAdaptor?.assetWriterInput.isReadyForMoreMediaData ?? false {

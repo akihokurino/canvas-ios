@@ -44,7 +44,7 @@ struct ActionButton: View {
                 Spacer()
             }
         }
-        .padding(.horizontal, 15)
+        .padding(.horizontal, 5)
         .padding(.vertical, 15)
         .background(background.color)
         .cornerRadius(4.0)
