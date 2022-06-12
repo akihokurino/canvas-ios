@@ -43,7 +43,7 @@ class Authenticator: ObservableObject {
                 })
                 .store(in: &cancellables)
         }
-
+        
         if !AmplifyAuthManager.shared.isLogin() {
             AmplifyAuthManager.shared.signIn()
                 .subscribe(on: DispatchQueue.global())

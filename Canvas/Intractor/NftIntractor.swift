@@ -109,7 +109,6 @@ class NftIntractor: ObservableObject {
                 switch completion {
                 case .finished: break
                 case .failure(let error):
-                    print(error.localizedDescription)
                     self.isLoading = false
                     self.errors = error
                 }

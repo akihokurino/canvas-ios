@@ -124,5 +124,15 @@ struct ArchiveDetailView: View {
         .onAppear {
             self.nftIntractor.getNft(workId: self.data.id)
         }
+        .navigationBarTitle("", displayMode: .inline)
+        .navigationBarItems(
+            trailing: HStack {
+                Button(action: {
+                    self.nftIntractor.getNft(workId: self.data.id)
+                }) {
+                    Image(systemName: "arrow.counterclockwise")
+                }
+            }
+        )
     }
 }

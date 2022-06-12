@@ -185,8 +185,6 @@ struct NftCaller {
                         if !errors.filter({ $0.message != nil }).isEmpty {
                             let messages = errors.filter { $0.message != nil }.map { $0.message! }
                             promise(.failure(.plain(messages.joined(separator: "\n"))))
-                            print("テスト1")
-                            print(messages.joined(separator: "\n"))
                             return
                         }
                     }
@@ -207,7 +205,6 @@ struct NftCaller {
                     if let errors = graphQLResult.errors {
                         if !errors.filter({ $0.message != nil }).isEmpty {
                             let messages = errors.filter { $0.message != nil }.map { $0.message! }
-                            print(messages.joined(separator: "\n"))
                             promise(.failure(.plain(messages.joined(separator: "\n"))))
                             return
                         }

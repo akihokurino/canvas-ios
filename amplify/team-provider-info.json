@@ -1,21 +1,21 @@
 {
   "dev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-canvas-dev-232829-authRole",
-      "UnauthRoleArn": "arn:aws:iam::326914400610:role/amplify-canvas-dev-232829-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::326914400610:role/amplify-canvas-dev-232829-authRole",
+      "AuthRoleName": "amplify-canvasios-dev-135719-authRole",
+      "UnauthRoleArn": "arn:aws:iam::326914400610:role/amplify-canvasios-dev-135719-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::326914400610:role/amplify-canvasios-dev-135719-authRole",
       "Region": "ap-northeast-1",
-      "DeploymentBucketName": "amplify-canvas-dev-232829-deployment",
-      "UnauthRoleName": "amplify-canvas-dev-232829-unauthRole",
-      "StackName": "amplify-canvas-dev-232829",
-      "StackId": "arn:aws:cloudformation:ap-northeast-1:326914400610:stack/amplify-canvas-dev-232829/b4a949c0-98a2-11ec-be6b-06589a1f57a3",
-      "AmplifyAppId": "d3arfq55cf5r2f"
+      "DeploymentBucketName": "amplify-canvasios-dev-135719-deployment",
+      "UnauthRoleName": "amplify-canvasios-dev-135719-unauthRole",
+      "StackName": "amplify-canvasios-dev-135719",
+      "StackId": "arn:aws:cloudformation:ap-northeast-1:326914400610:stack/amplify-canvasios-dev-135719/2424a050-ea0c-11ec-8c2c-0a4c6d688847",
+      "AmplifyAppId": "d1urdib04c6i3f"
     },
     "categories": {
       "auth": {
-        "canvas3eb22ff4": {
+        "canvasios2655b1bb": {
           "userPoolId": "ap-northeast-1_omBvnPYzl",
-          "userPoolName": "canvas-store",
+          "userPoolName": "canvas-nft",
           "webClientId": "ehd60ftsekljsqu683f2j6i0e",
           "nativeClientId": "ehd60ftsekljsqu683f2j6i0e"
         }

@@ -1,6 +1,6 @@
 {
   "auth": {
-    "canvas3eb22ff4": {
+    "canvasios2655b1bb": {
       "service": "Cognito",
       "serviceType": "imported",
       "providerPlugin": "awscloudformation",
