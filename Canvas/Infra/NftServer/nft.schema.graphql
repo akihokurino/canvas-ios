@@ -16,16 +16,22 @@ type Asset721 {
   ethPrice: Float!
 }
 
+input TransferERC1155Input {
+  workId: String!
+  toAddress: String!
+  amount: Int!
+}
+
+input SellERC721Input {
+  workId: String!
+  ether: Float!
+}
+
 type Thumbnail {
   id: String!
   imagePath: String!
   signedImageUrl: String!
   order: Int!
-}
-
-input SellNftInput {
-  workId: String!
-  ether: Float!
 }
 
 type MutationRoot {
@@ -34,18 +40,19 @@ type MutationRoot {
   importThumbnail(input: ImportThumbnailInput!): Boolean!
   preSignUploadWork: PreSignUploadUrl!
   preSignUploadThumbnail: PreSignUploadUrl!
-  createNft721(input: CreateNft721Input!): Boolean!
-  createNft1155(input: CreateNft1155Input!): Boolean!
   deleteWork(id: String!): Boolean!
-  sellNft721(input: SellNftInput!): Boolean!
-  sellNft1155(input: SellNftInput!): Boolean!
-  transferNft721(input: TransferNftInput!): Boolean!
-  transferNft1155(input: TransferNftInput!): Boolean!
+  createErc721(input: CreateERC721Input!): Boolean!
+  createErc1155(input: CreateERC1155Input!): Boolean!
+  sellErc721(input: SellERC721Input!): Boolean!
+  sellErc1155(input: SellERC1155Input!): Boolean!
+  transferErc721(input: TransferERC721Input!): Boolean!
+  transferErc1155(input: TransferERC1155Input!): Boolean!
 }
 
-input TransferNftInput {
+input CreateERC721Input {
   workId: String!
-  toAddress: String!
+  gsPath: String!
+  useIpfs: Boolean!
 }
 
 type Asset1155 {
@@ -72,23 +79,34 @@ input RegisterUserInput {
   walletSecret: String!
 }
 
+input CreateERC1155Input {
+  workId: String!
+  gsPath: String!
+  amount: Int!
+  useIpfs: Boolean!
+}
+
+input TransferERC721Input {
+  workId: String!
+  toAddress: String!
+}
+
 type QueryRoot {
   me: User!
   allWorks(status: WorkStatus, nextKey: String, limit: Int): WorkConnection!
   worksByIds(ids: [String!]!): [Work!]!
   work(id: String!): Work!
-  ownNft(workId: String!): OwnNft!
+  isOwnNft(workId: String!): OwnNft!
 }
 
 input ImportThumbnailInput {
   fileName: String!
 }
 
-input CreateNft721Input {
+input SellERC1155Input {
   workId: String!
-  gsPath: String!
-  point: Int!
-  level: Int!
+  ether: Float!
+  amount: Int!
 }
 
 type WorkConnection {
@@ -121,14 +139,6 @@ type Work {
   thumbnails: [Thumbnail!]!
   asset721: Asset721
   asset1155: Asset1155
-}
-
-input CreateNft1155Input {
-  workId: String!
-  gsPath: String!
-  point: Int!
-  level: Int!
-  amount: Int!
 }
 
 type User {

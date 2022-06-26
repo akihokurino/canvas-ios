@@ -124,8 +124,8 @@ struct NftCaller {
                     }
 
                     promise(.success((
-                        erc721: data.ownNft.erc721,
-                        erc1155: data.ownNft.erc1155
+                        erc721: data.isOwnNft.erc721,
+                        erc1155: data.isOwnNft.erc1155
                     )))
                 case .failure(let error):
                     promise(.failure(.wrap(error)))
@@ -134,9 +134,9 @@ struct NftCaller {
         }
     }
 
-    func createNft721(workId: String, gsPath: String, level: Int, point: Int) -> Future<Void, AppError> {
+    func createERC721(workId: String, gsPath: String) -> Future<Void, AppError> {
         return Future<Void, AppError> { promise in
-            cli.perform(mutation: NftAPI.CreateNft721Mutation(workId: workId, gsPath: gsPath, level: level, point: point)) { result in
+            cli.perform(mutation: NftAPI.CreateErc721Mutation(workId: workId, gsPath: gsPath)) { result in
                 switch result {
                 case .success(let graphQLResult):
                     if let errors = graphQLResult.errors {
@@ -155,9 +155,9 @@ struct NftCaller {
         }
     }
 
-    func createNft1155(workId: String, gsPath: String, level: Int, point: Int, amount: Int) -> Future<Void, AppError> {
+    func createERC1155(workId: String, gsPath: String, amount: Int) -> Future<Void, AppError> {
         return Future<Void, AppError> { promise in
-            cli.perform(mutation: NftAPI.CreateNft1155Mutation(workId: workId, gsPath: gsPath, level: level, point: point, amount: amount)) { result in
+            cli.perform(mutation: NftAPI.CreateErc1155Mutation(workId: workId, gsPath: gsPath, amount: amount)) { result in
                 switch result {
                 case .success(let graphQLResult):
                     if let errors = graphQLResult.errors {
@@ -176,9 +176,9 @@ struct NftCaller {
         }
     }
 
-    func sellNft721(workId: String, ether: Double) -> Future<Void, AppError> {
+    func sellERC721(workId: String, ether: Double) -> Future<Void, AppError> {
         return Future<Void, AppError> { promise in
-            cli.perform(mutation: NftAPI.SellNft721Mutation(workId: workId, ether: ether)) { result in
+            cli.perform(mutation: NftAPI.SellErc721Mutation(workId: workId, ether: ether)) { result in
                 switch result {
                 case .success(let graphQLResult):
                     if let errors = graphQLResult.errors {
@@ -197,9 +197,9 @@ struct NftCaller {
         }
     }
 
-    func sellNft1155(workId: String, ether: Double) -> Future<Void, AppError> {
+    func sellERC1155(workId: String, ether: Double) -> Future<Void, AppError> {
         return Future<Void, AppError> { promise in
-            cli.perform(mutation: NftAPI.SellNft1155Mutation(workId: workId, ether: ether)) { result in
+            cli.perform(mutation: NftAPI.SellErc1155Mutation(workId: workId, ether: ether)) { result in
                 switch result {
                 case .success(let graphQLResult):
                     if let errors = graphQLResult.errors {
@@ -218,9 +218,9 @@ struct NftCaller {
         }
     }
 
-    func transferNft721(workId: String, toAddress: String) -> Future<Void, AppError> {
+    func transferERC721(workId: String, toAddress: String) -> Future<Void, AppError> {
         return Future<Void, AppError> { promise in
-            cli.perform(mutation: NftAPI.TransferNft721Mutation(workId: workId, toAddress: toAddress)) { result in
+            cli.perform(mutation: NftAPI.TransferErc721Mutation(workId: workId, toAddress: toAddress)) { result in
                 switch result {
                 case .success(let graphQLResult):
                     if let errors = graphQLResult.errors {
@@ -239,9 +239,9 @@ struct NftCaller {
         }
     }
 
-    func transferNft1155(workId: String, toAddress: String) -> Future<Void, AppError> {
+    func transferERC1155(workId: String, toAddress: String) -> Future<Void, AppError> {
         return Future<Void, AppError> { promise in
-            cli.perform(mutation: NftAPI.TransferNft1155Mutation(workId: workId, toAddress: toAddress)) { result in
+            cli.perform(mutation: NftAPI.TransferErc1155Mutation(workId: workId, toAddress: toAddress)) { result in
                 switch result {
                 case .success(let graphQLResult):
                     if let errors = graphQLResult.errors {

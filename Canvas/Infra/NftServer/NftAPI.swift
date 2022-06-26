@@ -437,7 +437,7 @@ public enum NftAPI {
     public let operationDefinition: String =
       """
       query IsOwnNft($workId: String!) {
-        ownNft(workId: $workId) {
+        isOwnNft(workId: $workId) {
           __typename
           erc721
           erc1155
@@ -462,7 +462,7 @@ public enum NftAPI {
 
       public static var selections: [GraphQLSelection] {
         return [
-          GraphQLField("ownNft", arguments: ["workId": GraphQLVariable("workId")], type: .nonNull(.object(OwnNft.selections))),
+          GraphQLField("isOwnNft", arguments: ["workId": GraphQLVariable("workId")], type: .nonNull(.object(IsOwnNft.selections))),
         ]
       }
 
@@ -472,20 +472,20 @@ public enum NftAPI {
         self.resultMap = unsafeResultMap
       }
 
-      public init(ownNft: OwnNft) {
-        self.init(unsafeResultMap: ["__typename": "QueryRoot", "ownNft": ownNft.resultMap])
+      public init(isOwnNft: IsOwnNft) {
+        self.init(unsafeResultMap: ["__typename": "QueryRoot", "isOwnNft": isOwnNft.resultMap])
       }
 
-      public var ownNft: OwnNft {
+      public var isOwnNft: IsOwnNft {
         get {
-          return OwnNft(unsafeResultMap: resultMap["ownNft"]! as! ResultMap)
+          return IsOwnNft(unsafeResultMap: resultMap["isOwnNft"]! as! ResultMap)
         }
         set {
-          resultMap.updateValue(newValue.resultMap, forKey: "ownNft")
+          resultMap.updateValue(newValue.resultMap, forKey: "isOwnNft")
         }
       }
 
-      public struct OwnNft: GraphQLSelectionSet {
+      public struct IsOwnNft: GraphQLSelectionSet {
         public static let possibleTypes: [String] = ["OwnNft"]
 
         public static var selections: [GraphQLSelection] {
@@ -536,33 +536,27 @@ public enum NftAPI {
     }
   }
 
-  public final class CreateNft721Mutation: GraphQLMutation {
+  public final class CreateErc721Mutation: GraphQLMutation {
     /// The raw GraphQL definition of this operation.
     public let operationDefinition: String =
       """
-      mutation CreateNft721($workId: String!, $gsPath: String!, $level: Int!, $point: Int!) {
-        createNft721(
-          input: {workId: $workId, gsPath: $gsPath, level: $level, point: $point}
-        )
+      mutation CreateERC721($workId: String!, $gsPath: String!) {
+        createErc721(input: {workId: $workId, gsPath: $gsPath, useIpfs: true})
       }
       """
 
-    public let operationName: String = "CreateNft721"
+    public let operationName: String = "CreateERC721"
 
     public var workId: String
     public var gsPath: String
-    public var level: Int
-    public var point: Int
 
-    public init(workId: String, gsPath: String, level: Int, point: Int) {
+    public init(workId: String, gsPath: String) {
       self.workId = workId
       self.gsPath = gsPath
-      self.level = level
-      self.point = point
     }
 
     public var variables: GraphQLMap? {
-      return ["workId": workId, "gsPath": gsPath, "level": level, "point": point]
+      return ["workId": workId, "gsPath": gsPath]
     }
 
     public struct Data: GraphQLSelectionSet {
@@ -570,7 +564,7 @@ public enum NftAPI {
 
       public static var selections: [GraphQLSelection] {
         return [
-          GraphQLField("createNft721", arguments: ["input": ["workId": GraphQLVariable("workId"), "gsPath": GraphQLVariable("gsPath"), "level": GraphQLVariable("level"), "point": GraphQLVariable("point")]], type: .nonNull(.scalar(Bool.self))),
+          GraphQLField("createErc721", arguments: ["input": ["workId": GraphQLVariable("workId"), "gsPath": GraphQLVariable("gsPath"), "useIpfs": true]], type: .nonNull(.scalar(Bool.self))),
         ]
       }
 
@@ -580,50 +574,46 @@ public enum NftAPI {
         self.resultMap = unsafeResultMap
       }
 
-      public init(createNft721: Bool) {
-        self.init(unsafeResultMap: ["__typename": "MutationRoot", "createNft721": createNft721])
+      public init(createErc721: Bool) {
+        self.init(unsafeResultMap: ["__typename": "MutationRoot", "createErc721": createErc721])
       }
 
-      public var createNft721: Bool {
+      public var createErc721: Bool {
         get {
-          return resultMap["createNft721"]! as! Bool
+          return resultMap["createErc721"]! as! Bool
         }
         set {
-          resultMap.updateValue(newValue, forKey: "createNft721")
+          resultMap.updateValue(newValue, forKey: "createErc721")
         }
       }
     }
   }
 
-  public final class CreateNft1155Mutation: GraphQLMutation {
+  public final class CreateErc1155Mutation: GraphQLMutation {
     /// The raw GraphQL definition of this operation.
     public let operationDefinition: String =
       """
-      mutation CreateNft1155($workId: String!, $gsPath: String!, $level: Int!, $point: Int!, $amount: Int!) {
-        createNft1155(
-          input: {workId: $workId, gsPath: $gsPath, level: $level, point: $point, amount: $amount}
+      mutation CreateERC1155($workId: String!, $gsPath: String!, $amount: Int!) {
+        createErc1155(
+          input: {workId: $workId, gsPath: $gsPath, amount: $amount, useIpfs: true}
         )
       }
       """
 
-    public let operationName: String = "CreateNft1155"
+    public let operationName: String = "CreateERC1155"
 
     public var workId: String
     public var gsPath: String
-    public var level: Int
-    public var point: Int
     public var amount: Int
 
-    public init(workId: String, gsPath: String, level: Int, point: Int, amount: Int) {
+    public init(workId: String, gsPath: String, amount: Int) {
       self.workId = workId
       self.gsPath = gsPath
-      self.level = level
-      self.point = point
       self.amount = amount
     }
 
     public var variables: GraphQLMap? {
-      return ["workId": workId, "gsPath": gsPath, "level": level, "point": point, "amount": amount]
+      return ["workId": workId, "gsPath": gsPath, "amount": amount]
     }
 
     public struct Data: GraphQLSelectionSet {
@@ -631,7 +621,7 @@ public enum NftAPI {
 
       public static var selections: [GraphQLSelection] {
         return [
-          GraphQLField("createNft1155", arguments: ["input": ["workId": GraphQLVariable("workId"), "gsPath": GraphQLVariable("gsPath"), "level": GraphQLVariable("level"), "point": GraphQLVariable("point"), "amount": GraphQLVariable("amount")]], type: .nonNull(.scalar(Bool.self))),
+          GraphQLField("createErc1155", arguments: ["input": ["workId": GraphQLVariable("workId"), "gsPath": GraphQLVariable("gsPath"), "amount": GraphQLVariable("amount"), "useIpfs": true]], type: .nonNull(.scalar(Bool.self))),
         ]
       }
 
@@ -641,31 +631,31 @@ public enum NftAPI {
         self.resultMap = unsafeResultMap
       }
 
-      public init(createNft1155: Bool) {
-        self.init(unsafeResultMap: ["__typename": "MutationRoot", "createNft1155": createNft1155])
+      public init(createErc1155: Bool) {
+        self.init(unsafeResultMap: ["__typename": "MutationRoot", "createErc1155": createErc1155])
       }
 
-      public var createNft1155: Bool {
+      public var createErc1155: Bool {
         get {
-          return resultMap["createNft1155"]! as! Bool
+          return resultMap["createErc1155"]! as! Bool
         }
         set {
-          resultMap.updateValue(newValue, forKey: "createNft1155")
+          resultMap.updateValue(newValue, forKey: "createErc1155")
         }
       }
     }
   }
 
-  public final class SellNft721Mutation: GraphQLMutation {
+  public final class SellErc721Mutation: GraphQLMutation {
     /// The raw GraphQL definition of this operation.
     public let operationDefinition: String =
       """
-      mutation SellNFT721($workId: String!, $ether: Float!) {
-        sellNft721(input: {workId: $workId, ether: $ether})
+      mutation SellERC721($workId: String!, $ether: Float!) {
+        sellErc721(input: {workId: $workId, ether: $ether})
       }
       """
 
-    public let operationName: String = "SellNFT721"
+    public let operationName: String = "SellERC721"
 
     public var workId: String
     public var ether: Double
@@ -684,7 +674,7 @@ public enum NftAPI {
 
       public static var selections: [GraphQLSelection] {
         return [
-          GraphQLField("sellNft721", arguments: ["input": ["workId": GraphQLVariable("workId"), "ether": GraphQLVariable("ether")]], type: .nonNull(.scalar(Bool.self))),
+          GraphQLField("sellErc721", arguments: ["input": ["workId": GraphQLVariable("workId"), "ether": GraphQLVariable("ether")]], type: .nonNull(.scalar(Bool.self))),
         ]
       }
 
@@ -694,31 +684,31 @@ public enum NftAPI {
         self.resultMap = unsafeResultMap
       }
 
-      public init(sellNft721: Bool) {
-        self.init(unsafeResultMap: ["__typename": "MutationRoot", "sellNft721": sellNft721])
+      public init(sellErc721: Bool) {
+        self.init(unsafeResultMap: ["__typename": "MutationRoot", "sellErc721": sellErc721])
       }
 
-      public var sellNft721: Bool {
+      public var sellErc721: Bool {
         get {
-          return resultMap["sellNft721"]! as! Bool
+          return resultMap["sellErc721"]! as! Bool
         }
         set {
-          resultMap.updateValue(newValue, forKey: "sellNft721")
+          resultMap.updateValue(newValue, forKey: "sellErc721")
         }
       }
     }
   }
 
-  public final class SellNft1155Mutation: GraphQLMutation {
+  public final class SellErc1155Mutation: GraphQLMutation {
     /// The raw GraphQL definition of this operation.
     public let operationDefinition: String =
       """
-      mutation SellNFT1155($workId: String!, $ether: Float!) {
-        sellNft1155(input: {workId: $workId, ether: $ether})
+      mutation SellERC1155($workId: String!, $ether: Float!) {
+        sellErc1155(input: {workId: $workId, ether: $ether})
       }
       """
 
-    public let operationName: String = "SellNFT1155"
+    public let operationName: String = "SellERC1155"
 
     public var workId: String
     public var ether: Double
@@ -737,7 +727,7 @@ public enum NftAPI {
 
       public static var selections: [GraphQLSelection] {
         return [
-          GraphQLField("sellNft1155", arguments: ["input": ["workId": GraphQLVariable("workId"), "ether": GraphQLVariable("ether")]], type: .nonNull(.scalar(Bool.self))),
+          GraphQLField("sellErc1155", arguments: ["input": ["workId": GraphQLVariable("workId"), "ether": GraphQLVariable("ether")]], type: .nonNull(.scalar(Bool.self))),
         ]
       }
 
@@ -747,31 +737,31 @@ public enum NftAPI {
         self.resultMap = unsafeResultMap
       }
 
-      public init(sellNft1155: Bool) {
-        self.init(unsafeResultMap: ["__typename": "MutationRoot", "sellNft1155": sellNft1155])
+      public init(sellErc1155: Bool) {
+        self.init(unsafeResultMap: ["__typename": "MutationRoot", "sellErc1155": sellErc1155])
       }
 
-      public var sellNft1155: Bool {
+      public var sellErc1155: Bool {
         get {
-          return resultMap["sellNft1155"]! as! Bool
+          return resultMap["sellErc1155"]! as! Bool
         }
         set {
-          resultMap.updateValue(newValue, forKey: "sellNft1155")
+          resultMap.updateValue(newValue, forKey: "sellErc1155")
         }
       }
     }
   }
 
-  public final class TransferNft721Mutation: GraphQLMutation {
+  public final class TransferErc721Mutation: GraphQLMutation {
     /// The raw GraphQL definition of this operation.
     public let operationDefinition: String =
       """
-      mutation TransferNFT721($workId: String!, $toAddress: String!) {
-        transferNft721(input: {workId: $workId, toAddress: $toAddress})
+      mutation TransferERC721($workId: String!, $toAddress: String!) {
+        transferErc721(input: {workId: $workId, toAddress: $toAddress})
       }
       """
 
-    public let operationName: String = "TransferNFT721"
+    public let operationName: String = "TransferERC721"
 
     public var workId: String
     public var toAddress: String
@@ -790,7 +780,7 @@ public enum NftAPI {
 
       public static var selections: [GraphQLSelection] {
         return [
-          GraphQLField("transferNft721", arguments: ["input": ["workId": GraphQLVariable("workId"), "toAddress": GraphQLVariable("toAddress")]], type: .nonNull(.scalar(Bool.self))),
+          GraphQLField("transferErc721", arguments: ["input": ["workId": GraphQLVariable("workId"), "toAddress": GraphQLVariable("toAddress")]], type: .nonNull(.scalar(Bool.self))),
         ]
       }
 
@@ -800,31 +790,31 @@ public enum NftAPI {
         self.resultMap = unsafeResultMap
       }
 
-      public init(transferNft721: Bool) {
-        self.init(unsafeResultMap: ["__typename": "MutationRoot", "transferNft721": transferNft721])
+      public init(transferErc721: Bool) {
+        self.init(unsafeResultMap: ["__typename": "MutationRoot", "transferErc721": transferErc721])
       }
 
-      public var transferNft721: Bool {
+      public var transferErc721: Bool {
         get {
-          return resultMap["transferNft721"]! as! Bool
+          return resultMap["transferErc721"]! as! Bool
         }
         set {
-          resultMap.updateValue(newValue, forKey: "transferNft721")
+          resultMap.updateValue(newValue, forKey: "transferErc721")
         }
       }
     }
   }
 
-  public final class TransferNft1155Mutation: GraphQLMutation {
+  public final class TransferErc1155Mutation: GraphQLMutation {
     /// The raw GraphQL definition of this operation.
     public let operationDefinition: String =
       """
-      mutation TransferNFT1155($workId: String!, $toAddress: String!) {
-        transferNft1155(input: {workId: $workId, toAddress: $toAddress})
+      mutation TransferERC1155($workId: String!, $toAddress: String!) {
+        transferErc1155(input: {workId: $workId, toAddress: $toAddress})
       }
       """
 
-    public let operationName: String = "TransferNFT1155"
+    public let operationName: String = "TransferERC1155"
 
     public var workId: String
     public var toAddress: String
@@ -843,7 +833,7 @@ public enum NftAPI {
 
       public static var selections: [GraphQLSelection] {
         return [
-          GraphQLField("transferNft1155", arguments: ["input": ["workId": GraphQLVariable("workId"), "toAddress": GraphQLVariable("toAddress")]], type: .nonNull(.scalar(Bool.self))),
+          GraphQLField("transferErc1155", arguments: ["input": ["workId": GraphQLVariable("workId"), "toAddress": GraphQLVariable("toAddress")]], type: .nonNull(.scalar(Bool.self))),
         ]
       }
 
@@ -853,16 +843,16 @@ public enum NftAPI {
         self.resultMap = unsafeResultMap
       }
 
-      public init(transferNft1155: Bool) {
-        self.init(unsafeResultMap: ["__typename": "MutationRoot", "transferNft1155": transferNft1155])
+      public init(transferErc1155: Bool) {
+        self.init(unsafeResultMap: ["__typename": "MutationRoot", "transferErc1155": transferErc1155])
       }
 
-      public var transferNft1155: Bool {
+      public var transferErc1155: Bool {
         get {
-          return resultMap["transferNft1155"]! as! Bool
+          return resultMap["transferErc1155"]! as! Bool
         }
         set {
-          resultMap.updateValue(newValue, forKey: "transferNft1155")
+          resultMap.updateValue(newValue, forKey: "transferErc1155")
         }
       }
     }

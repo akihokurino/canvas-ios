@@ -28,54 +28,52 @@ query GetWork($workId: String!) {
 }
 
 query IsOwnNft($workId: String!) {
-  ownNft(workId: $workId) {
+  isOwnNft(workId: $workId) {
     erc721
     erc1155
   }
 }
 
-mutation CreateNft721($workId: String!, $gsPath: String!, $level: Int!, $point: Int!) {
-  createNft721(input: {
+mutation CreateERC721($workId: String!, $gsPath: String!) {
+  createErc721(input: {
     workId: $workId,
     gsPath: $gsPath,
-    level: $level,
-    point: $point
+    useIpfs: true,
   })
 }
 
-mutation CreateNft1155($workId: String!, $gsPath: String!, $level: Int!, $point: Int!, $amount: Int!) {
-  createNft1155(input: {
+mutation CreateERC1155($workId: String!, $gsPath: String!, $amount: Int!) {
+  createErc1155(input: {
     workId: $workId,
     gsPath: $gsPath,
-    level: $level,
-    point: $point,
-    amount: $amount
+    amount: $amount,
+    useIpfs: true,
   })
 }
 
-mutation SellNFT721($workId: String!, $ether: Float!) {
-  sellNft721(input: {
+mutation SellERC721($workId: String!, $ether: Float!) {
+  sellErc721(input: {
     workId: $workId,
     ether: $ether,
   })
 }
 
-mutation SellNFT1155($workId: String!, $ether: Float!) {
-  sellNft1155(input: {
+mutation SellERC1155($workId: String!, $ether: Float!) {
+  sellErc1155(input: {
     workId: $workId,
     ether: $ether,
   })
 }
 
-mutation TransferNFT721($workId: String!, $toAddress: String!) {
-  transferNft721(input: {
+mutation TransferERC721($workId: String!, $toAddress: String!) {
+  transferErc721(input: {
     workId: $workId,
     toAddress: $toAddress,
   })
 }
 
-mutation TransferNFT1155($workId: String!, $toAddress: String!) {
-  transferNft1155(input: {
+mutation TransferERC1155($workId: String!, $toAddress: String!) {
+  transferErc1155(input: {
     workId: $workId,
     toAddress: $toAddress,
   })

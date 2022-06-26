@@ -15,22 +15,22 @@ struct Asset {
 class NftIntractor: ObservableObject {
     private var cancellables: Set<AnyCancellable> = []
 
-    @Published var ownNft721: Bool = false
-    @Published var nft721: Asset?
+    @Published var ownERC721: Bool = false
+    @Published var erc721: Asset?
 
-    @Published var ownNft1155: Bool = false
-    @Published var nft1155: Asset?
+    @Published var ownERC1155: Bool = false
+    @Published var erc1155: Asset?
 
     @Published var errors: AppError?
     @Published var isLoading: Bool = false
     @Published var isInitAsset: Bool = false
 
     func getNft(workId: String) {
-        ownNft721 = false
-        nft721 = nil
+        ownERC721 = false
+        erc721 = nil
 
-        ownNft1155 = false
-        nft1155 = nil
+        ownERC1155 = false
+        erc1155 = nil
 
         isLoading = true
 
@@ -45,10 +45,11 @@ class NftIntractor: ObservableObject {
                     self.errors = error
                 }
             }, receiveValue: { val in
-                self.nft721 = val.0.erc721
-                self.nft1155 = val.0.erc1155
-                self.ownNft721 = val.1.erc721
-                self.ownNft1155 = val.1.erc1155
+                self.erc721 = val.0.erc721
+                self.erc1155 = val.0.erc1155
+                
+                self.ownERC721 = val.1.erc721
+                self.ownERC1155 = val.1.erc1155
 
                 self.isInitAsset = true
                 self.isLoading = false
@@ -56,11 +57,11 @@ class NftIntractor: ObservableObject {
             .store(in: &cancellables)
     }
 
-    func create721(workId: String, gsPath: String, level: Int, point: Int) {
+    func createERC721(workId: String, gsPath: String) {
         isLoading = true
 
         NftClient.shared.caller()
-            .flatMap { caller in caller.createNft721(workId: workId, gsPath: gsPath, level: level, point: point) }
+            .flatMap { caller in caller.createERC721(workId: workId, gsPath: gsPath) }
             .subscribe(on: DispatchQueue.global())
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { completion in
@@ -77,11 +78,11 @@ class NftIntractor: ObservableObject {
             .store(in: &cancellables)
     }
 
-    func create1155(workId: String, gsPath: String, level: Int, point: Int, amount: Int) {
+    func createERC1155(workId: String, gsPath: String, amount: Int) {
         isLoading = true
 
         NftClient.shared.caller()
-            .flatMap { caller in caller.createNft1155(workId: workId, gsPath: gsPath, level: level, point: point, amount: amount) }
+            .flatMap { caller in caller.createERC1155(workId: workId, gsPath: gsPath, amount: amount) }
             .subscribe(on: DispatchQueue.global())
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { completion in
@@ -98,11 +99,11 @@ class NftIntractor: ObservableObject {
             .store(in: &cancellables)
     }
 
-    func sell721(workId: String, ether: Double) {
+    func sellERC721(workId: String, ether: Double) {
         isLoading = true
 
         NftClient.shared.caller()
-            .flatMap { caller in caller.sellNft721(workId: workId, ether: ether) }
+            .flatMap { caller in caller.sellERC721(workId: workId, ether: ether) }
             .subscribe(on: DispatchQueue.global())
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { completion in
@@ -118,11 +119,11 @@ class NftIntractor: ObservableObject {
             .store(in: &cancellables)
     }
 
-    func sell1155(workId: String, ether: Double) {
+    func sellERC1155(workId: String, ether: Double) {
         isLoading = true
 
         NftClient.shared.caller()
-            .flatMap { caller in caller.sellNft1155(workId: workId, ether: ether) }
+            .flatMap { caller in caller.sellERC1155(workId: workId, ether: ether) }
             .subscribe(on: DispatchQueue.global())
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { completion in
@@ -138,11 +139,11 @@ class NftIntractor: ObservableObject {
             .store(in: &cancellables)
     }
 
-    func transfer721(workId: String, address: String) {
+    func transferERC721(workId: String, address: String) {
         isLoading = true
 
         NftClient.shared.caller()
-            .flatMap { caller in caller.transferNft721(workId: workId, toAddress: address) }
+            .flatMap { caller in caller.transferERC721(workId: workId, toAddress: address) }
             .subscribe(on: DispatchQueue.global())
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { completion in
@@ -159,11 +160,11 @@ class NftIntractor: ObservableObject {
             .store(in: &cancellables)
     }
 
-    func transfer1155(workId: String, address: String) {
+    func transferERC1155(workId: String, address: String) {
         isLoading = true
 
         NftClient.shared.caller()
-            .flatMap { caller in caller.transferNft1155(workId: workId, toAddress: address) }
+            .flatMap { caller in caller.transferERC1155(workId: workId, toAddress: address) }
             .subscribe(on: DispatchQueue.global())
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { completion in
