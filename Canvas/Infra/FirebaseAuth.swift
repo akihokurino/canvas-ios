@@ -15,7 +15,7 @@ class FirebaseAuthManager {
         return Future<String, AppError> { promise in
             Auth.auth().signInAnonymously { authResult, error in
                 guard error == nil else {
-                    promise(.failure(.wrap(error!)))
+                    promise(.failure(.plain(error!.localizedDescription)))
                     return
                 }
 

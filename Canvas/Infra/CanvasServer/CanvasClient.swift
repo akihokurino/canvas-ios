@@ -19,7 +19,7 @@ struct CanvasClient {
 
             me.getIDTokenForcingRefresh(true) { idToken, error in
                 if let error = error {
-                    promise(.failure(.wrap(error)))
+                    promise(.failure(.plain(error.localizedDescription)))
                     return
                 }
 
@@ -73,7 +73,7 @@ struct CanvasCaller {
 
                     promise(.success((items, hasNext)))
                 case .failure(let error):
-                    promise(.failure(.wrap(error)))
+                    promise(.failure(.plain(error.localizedDescription)))
                 }
             }
         }
@@ -102,7 +102,7 @@ struct CanvasCaller {
 
                     promise(.success((items, hasNext)))
                 case .failure(let error):
-                    promise(.failure(.wrap(error)))
+                    promise(.failure(.plain(error.localizedDescription)))
                 }
             }
         }
@@ -129,7 +129,7 @@ struct CanvasCaller {
 
                     promise(.success(()))
                 case .failure(let error):
-                    promise(.failure(.wrap(error)))
+                    promise(.failure(.plain(error.localizedDescription)))
                 }
             }
         }

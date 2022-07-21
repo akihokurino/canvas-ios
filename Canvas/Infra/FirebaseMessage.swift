@@ -11,7 +11,7 @@ class FirebaseMessageManager {
         return Future<String, AppError> { promise in
             Messaging.messaging().token { token, error in
                 guard error == nil else {
-                    promise(.failure(.wrap(error!)))
+                    promise(.failure(.plain(error!.localizedDescription)))
                     return
                 }
 

@@ -18,7 +18,7 @@ class AmplifyAuthManager {
                 case .success:
                     promise(.success(()))
                 case .failure(let error):
-                    promise(.failure(AppError.wrap(error)))
+                    promise(.failure(.plain(error.localizedDescription)))
                 }
             }
         }

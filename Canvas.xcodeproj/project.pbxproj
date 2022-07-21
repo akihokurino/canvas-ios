@@ -45,6 +45,9 @@
 		029B2FFC2722CAA5008BC3F3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 029B2FFB2722CAA5008BC3F3 /* GoogleService-Info.plist */; };
 		029B30072722E25F008BC3F3 /* FirebaseStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029B30062722E25F008BC3F3 /* FirebaseStorage.swift */; };
 		029B30092722E959008BC3F3 /* FirebaseAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029B30082722E959008BC3F3 /* FirebaseAuth.swift */; };
+		029DDF0A2889BAA800118174 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 029DDF092889BAA800118174 /* ComposableArchitecture */; };
+		029DDF0E2889BAE600118174 /* Navigation+TCA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029DDF0D2889BAE600118174 /* Navigation+TCA.swift */; };
+		029DDF102889BB3600118174 /* RootVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029DDF0F2889BB3600118174 /* RootVM.swift */; };
 		029E6A87271EA64F00F6A8EF /* ColorRain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029E6A86271EA64F00F6A8EF /* ColorRain.swift */; };
 		02A19D42272C4F9F00DBFA24 /* ThumbnailIntractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A19D41272C4F9F00DBFA24 /* ThumbnailIntractor.swift */; };
 		02A19D45272C517D00DBFA24 /* WorkListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A19D44272C517D00DBFA24 /* WorkListView.swift */; };
@@ -116,6 +119,8 @@
 		029B2FFB2722CAA5008BC3F3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		029B30062722E25F008BC3F3 /* FirebaseStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseStorage.swift; sourceTree = "<group>"; };
 		029B30082722E959008BC3F3 /* FirebaseAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAuth.swift; sourceTree = "<group>"; };
+		029DDF0D2889BAE600118174 /* Navigation+TCA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Navigation+TCA.swift"; sourceTree = "<group>"; };
+		029DDF0F2889BB3600118174 /* RootVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootVM.swift; sourceTree = "<group>"; };
 		029E6A86271EA64F00F6A8EF /* ColorRain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorRain.swift; sourceTree = "<group>"; };
 		02A19D41272C4F9F00DBFA24 /* ThumbnailIntractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailIntractor.swift; sourceTree = "<group>"; };
 		02A19D44272C517D00DBFA24 /* WorkListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkListView.swift; sourceTree = "<group>"; };
@@ -159,6 +164,7 @@
 			files = (
 				0205F1652823FCF2008B8FF8 /* FirebaseMessaging in Frameworks */,
 				02AB3C3327D28470008043A6 /* ActivityIndicatorView in Frameworks */,
+				029DDF0A2889BAA800118174 /* ComposableArchitecture in Frameworks */,
 				0205F15F2823FCF2008B8FF8 /* FirebaseAuth in Frameworks */,
 				0205F1672823FCF2008B8FF8 /* FirebaseStorage in Frameworks */,
 				02F4C30D27CCF99F00746255 /* Amplify in Frameworks */,
@@ -196,6 +202,7 @@
 				029B30042722E1CD008BC3F3 /* Infra */,
 				022691B4271DAB9F00C0D209 /* Helper */,
 				029B300A2722F11F008BC3F3 /* Intractor */,
+				029DDF0B2889BAB600118174 /* TCA */,
 				021B287C270CB2590093B0C9 /* Work */,
 				02A19D43272C516500DBFA24 /* View */,
 				021B286E270CB08C0093B0C9 /* CanvasApp.swift */,
@@ -292,6 +299,23 @@
 			path = Intractor;
 			sourceTree = "<group>";
 		};
+		029DDF0B2889BAB600118174 /* TCA */ = {
+			isa = PBXGroup;
+			children = (
+				029DDF0C2889BAC800118174 /* Extension */,
+				029DDF0F2889BB3600118174 /* RootVM.swift */,
+			);
+			path = TCA;
+			sourceTree = "<group>";
+		};
+		029DDF0C2889BAC800118174 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				029DDF0D2889BAE600118174 /* Navigation+TCA.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
 		02A19D43272C516500DBFA24 /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -369,6 +393,7 @@
 				0205F1622823FCF2008B8FF8 /* FirebaseFunctions */,
 				0205F1642823FCF2008B8FF8 /* FirebaseMessaging */,
 				0205F1662823FCF2008B8FF8 /* FirebaseStorage */,
+				029DDF092889BAA800118174 /* ComposableArchitecture */,
 			);
 			productName = Canvas;
 			productReference = 021B286B270CB08C0093B0C9 /* Canvas.app */;
@@ -404,6 +429,7 @@
 				02F4C30927CCF99F00746255 /* XCRemoteSwiftPackageReference "amplify-ios" */,
 				02AB3C3127D28470008043A6 /* XCRemoteSwiftPackageReference "ActivityIndicatorView" */,
 				0205F15D2823FCF2008B8FF8 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				029DDF082889BAA800118174 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 			);
 			productRefGroup = 021B286C270CB08C0093B0C9 /* Products */;
 			projectDirPath = "";
@@ -448,6 +474,7 @@
 				021B2871270CB08C0093B0C9 /* RootView.swift in Sources */,
 				02F6CC422714775E002C22B7 /* ParticleRotate3D.swift in Sources */,
 				028DC773271EC45200B7AF1B /* Bound.swift in Sources */,
+				029DDF0E2889BAE600118174 /* Navigation+TCA.swift in Sources */,
 				02B25ED92711361F0067A73D /* BoidsDesign.swift in Sources */,
 				02D26CCD2731848500678F6F /* ArchiveDetailView.swift in Sources */,
 				023AC5FE272C69A2005C858D /* RemoteImageView.swift in Sources */,
@@ -467,6 +494,7 @@
 				021B287E270CB27E0093B0C9 /* Abstract.swift in Sources */,
 				02E31FAB270F475100B94A81 /* LineArt.swift in Sources */,
 				02F05F4F2824F08100A36AD4 /* WalletView.swift in Sources */,
+				029DDF102889BB3600118174 /* RootVM.swift in Sources */,
 				02780675282E0E9A00074144 /* SellNftView.swift in Sources */,
 				0299D8152720684200483DE1 /* Recorder.swift in Sources */,
 				022C17CB2712C26200D2FD62 /* Lightning.swift in Sources */,
@@ -726,6 +754,14 @@
 				minimumVersion = 0.3.0;
 			};
 		};
+		029DDF082889BAA800118174 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		02AB3C3127D28470008043A6 /* XCRemoteSwiftPackageReference "ActivityIndicatorView" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/exyte/ActivityIndicatorView.git";
@@ -782,6 +818,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 026C5E6E2729BB0400995BCB /* XCRemoteSwiftPackageReference "apollo-ios" */;
 			productName = Apollo;
+		};
+		029DDF092889BAA800118174 /* ComposableArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 029DDF082889BAA800118174 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = ComposableArchitecture;
 		};
 		02AB3C3227D28470008043A6 /* ActivityIndicatorView */ = {
 			isa = XCSwiftPackageProductDependency;

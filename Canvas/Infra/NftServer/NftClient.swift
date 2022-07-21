@@ -40,7 +40,7 @@ struct NftClient {
                     promise(.success(NftCaller(cli: apollo)))
 
                 } catch {
-                    promise(.failure(AppError.wrap(error)))
+                    promise(.failure(.plain(error.localizedDescription)))
                 }
             }
         }
@@ -70,7 +70,7 @@ struct NftCaller {
 
                     promise(.success((address: data.me.walletAddress, balance: data.me.balance)))
                 case .failure(let error):
-                    promise(.failure(.wrap(error)))
+                    promise(.failure(.plain(error.localizedDescription)))
                 }
             }
         }
@@ -99,7 +99,7 @@ struct NftCaller {
                         erc1155: data.work.asset1155 != nil ? Asset(address: data.work.asset1155!.address, tokenId: data.work.asset1155!.tokenId, imageUrl: data.work.asset1155!.imageUrl) : nil
                     )))
                 case .failure(let error):
-                    promise(.failure(.wrap(error)))
+                    promise(.failure(.plain(error.localizedDescription)))
                 }
             }
         }
@@ -128,7 +128,7 @@ struct NftCaller {
                         erc1155: data.isOwnNft.erc1155
                     )))
                 case .failure(let error):
-                    promise(.failure(.wrap(error)))
+                    promise(.failure(.plain(error.localizedDescription)))
                 }
             }
         }
@@ -149,7 +149,7 @@ struct NftCaller {
 
                     promise(.success(()))
                 case .failure(let error):
-                    promise(.failure(.wrap(error)))
+                    promise(.failure(.plain(error.localizedDescription)))
                 }
             }
         }
@@ -170,7 +170,7 @@ struct NftCaller {
 
                     promise(.success(()))
                 case .failure(let error):
-                    promise(.failure(.wrap(error)))
+                    promise(.failure(.plain(error.localizedDescription)))
                 }
             }
         }
@@ -191,7 +191,7 @@ struct NftCaller {
 
                     promise(.success(()))
                 case .failure(let error):
-                    promise(.failure(.wrap(error)))
+                    promise(.failure(.plain(error.localizedDescription)))
                 }
             }
         }
@@ -212,7 +212,7 @@ struct NftCaller {
 
                     promise(.success(()))
                 case .failure(let error):
-                    promise(.failure(.wrap(error)))
+                    promise(.failure(.plain(error.localizedDescription)))
                 }
             }
         }
@@ -233,7 +233,7 @@ struct NftCaller {
 
                     promise(.success(()))
                 case .failure(let error):
-                    promise(.failure(.wrap(error)))
+                    promise(.failure(.plain(error.localizedDescription)))
                 }
             }
         }
@@ -254,7 +254,7 @@ struct NftCaller {
 
                     promise(.success(()))
                 case .failure(let error):
-                    promise(.failure(.wrap(error)))
+                    promise(.failure(.plain(error.localizedDescription)))
                 }
             }
         }
