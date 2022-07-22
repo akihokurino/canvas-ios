@@ -6,7 +6,7 @@ enum RootVM {
     static let reducer = Reducer<State, Action, Environment> { state, action, environment in
         switch action {
             case .startInitialize:
-                state.initializing = true
+                state.shouldShowHUD = true
 
                 let firebaseAuthFlow = { () -> AnyPublisher<Void, AppError> in
                     if FirebaseAuthManager.shared.isLogin() {
@@ -24,11 +24,7 @@ enum RootVM {
                 }
 
                 let amplifyAuthFlow = { () -> AnyPublisher<Void, AppError> in
-                    if !AmplifyAuthManager.shared.isLogin() {
-                        return AmplifyAuthManager.shared.signIn().eraseToAnyPublisher()
-                    } else {
-                        return Empty(completeImmediately: false).eraseToAnyPublisher()
-                    }
+                    AmplifyAuthManager.shared.signIn().eraseToAnyPublisher()
                 }
 
                 return firebaseAuthFlow().flatMap { _ in amplifyAuthFlow() }
@@ -38,10 +34,13 @@ enum RootVM {
                     .catchToEffect()
                     .map(RootVM.Action.endInitialize)
             case .endInitialize(.success(_)):
-                state.initializing = false
+                state.shouldShowHUD = false
                 return .none
             case .endInitialize(.failure(_)):
-                state.initializing = false
+                state.shouldShowHUD = false
+                return .none
+            case .shouldShowHUD(let val):
+                state.shouldShowHUD = val
                 return .none
         }
     }
@@ -51,10 +50,11 @@ extension RootVM {
     enum Action: Equatable {
         case startInitialize
         case endInitialize(Result<Bool, AppError>)
+        case shouldShowHUD(Bool)
     }
 
     struct State: Equatable {
-        var initializing: Bool
+        var shouldShowHUD = false
     }
 
     struct Environment {

@@ -12,6 +12,8 @@
 		0205F1632823FCF2008B8FF8 /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = 0205F1622823FCF2008B8FF8 /* FirebaseFunctions */; };
 		0205F1652823FCF2008B8FF8 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 0205F1642823FCF2008B8FF8 /* FirebaseMessaging */; };
 		0205F1672823FCF2008B8FF8 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 0205F1662823FCF2008B8FF8 /* FirebaseStorage */; };
+		0211F95E288AB3C3002A797E /* UIView+Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0211F95D288AB3C3002A797E /* UIView+Image.swift */; };
+		0211F960288AB3E2002A797E /* Shape+Fill.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0211F95F288AB3E2002A797E /* Shape+Fill.swift */; };
 		021B286F270CB08C0093B0C9 /* CanvasApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 021B286E270CB08C0093B0C9 /* CanvasApp.swift */; };
 		021B2871270CB08C0093B0C9 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 021B2870270CB08C0093B0C9 /* RootView.swift */; };
 		021B2873270CB08D0093B0C9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 021B2872270CB08D0093B0C9 /* Assets.xcassets */; };
@@ -25,7 +27,6 @@
 		02392F1F271C502600D8931F /* RectangleGetter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02392F1E271C502600D8931F /* RectangleGetter.swift */; };
 		02392F21271C551200D8931F /* SpiderDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02392F20271C551200D8931F /* SpiderDesign.swift */; };
 		023AC5FE272C69A2005C858D /* RemoteImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 023AC5FD272C69A2005C858D /* RemoteImageView.swift */; };
-		02449DA42722F926000A011A /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02449DA32722F926000A011A /* Authenticator.swift */; };
 		02449DA827231D93000A011A /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02449DA727231D93000A011A /* Error.swift */; };
 		02495FDD2711A3E30023230B /* BoidsMajic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02495FDC2711A3E30023230B /* BoidsMajic.swift */; };
 		024C0AB927CE5066009741C6 /* NftIntractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 024C0AB827CE5066009741C6 /* NftIntractor.swift */; };
@@ -52,7 +53,6 @@
 		02A19D42272C4F9F00DBFA24 /* ThumbnailIntractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A19D41272C4F9F00DBFA24 /* ThumbnailIntractor.swift */; };
 		02A19D45272C517D00DBFA24 /* WorkListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A19D44272C517D00DBFA24 /* WorkListView.swift */; };
 		02A19D47272C518C00DBFA24 /* ThumbnailListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A19D46272C518C00DBFA24 /* ThumbnailListView.swift */; };
-		02A7A5202710862900F48016 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A7A51F2710862900F48016 /* Extensions.swift */; };
 		02AB3C2B27D27C84008043A6 /* CreateNftView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02AB3C2A27D27C84008043A6 /* CreateNftView.swift */; };
 		02AB3C2E27D2810B008043A6 /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02AB3C2D27D2810B008043A6 /* TextField.swift */; };
 		02AB3C3027D281F2008043A6 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02AB3C2F27D281F2008043A6 /* Button.swift */; };
@@ -86,6 +86,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0211F95D288AB3C3002A797E /* UIView+Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Image.swift"; sourceTree = "<group>"; };
+		0211F95F288AB3E2002A797E /* Shape+Fill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shape+Fill.swift"; sourceTree = "<group>"; };
 		021B286B270CB08C0093B0C9 /* Canvas.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Canvas.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		021B286E270CB08C0093B0C9 /* CanvasApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasApp.swift; sourceTree = "<group>"; };
 		021B2870270CB08C0093B0C9 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
@@ -100,7 +102,6 @@
 		02392F1E271C502600D8931F /* RectangleGetter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RectangleGetter.swift; sourceTree = "<group>"; };
 		02392F20271C551200D8931F /* SpiderDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpiderDesign.swift; sourceTree = "<group>"; };
 		023AC5FD272C69A2005C858D /* RemoteImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteImageView.swift; sourceTree = "<group>"; };
-		02449DA32722F926000A011A /* Authenticator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Authenticator.swift; sourceTree = "<group>"; };
 		02449DA727231D93000A011A /* Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
 		02495FDC2711A3E30023230B /* BoidsMajic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoidsMajic.swift; sourceTree = "<group>"; };
 		024C0AB827CE5066009741C6 /* NftIntractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftIntractor.swift; sourceTree = "<group>"; };
@@ -125,7 +126,6 @@
 		02A19D41272C4F9F00DBFA24 /* ThumbnailIntractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailIntractor.swift; sourceTree = "<group>"; };
 		02A19D44272C517D00DBFA24 /* WorkListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkListView.swift; sourceTree = "<group>"; };
 		02A19D46272C518C00DBFA24 /* ThumbnailListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailListView.swift; sourceTree = "<group>"; };
-		02A7A51F2710862900F48016 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		02AB3C2A27D27C84008043A6 /* CreateNftView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNftView.swift; sourceTree = "<group>"; };
 		02AB3C2D27D2810B008043A6 /* TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextField.swift; sourceTree = "<group>"; };
 		02AB3C2F27D281F2008043A6 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
@@ -179,6 +179,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0211F95C288AB3A2002A797E /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				0211F95D288AB3C3002A797E /* UIView+Image.swift */,
+				0211F95F288AB3E2002A797E /* Shape+Fill.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
 		021B2862270CB08C0093B0C9 = {
 			isa = PBXGroup;
 			children = (
@@ -200,7 +209,6 @@
 			isa = PBXGroup;
 			children = (
 				029B30042722E1CD008BC3F3 /* Infra */,
-				022691B4271DAB9F00C0D209 /* Helper */,
 				029B300A2722F11F008BC3F3 /* Intractor */,
 				029DDF0B2889BAB600118174 /* TCA */,
 				021B287C270CB2590093B0C9 /* Work */,
@@ -227,6 +235,8 @@
 		021B287C270CB2590093B0C9 /* Work */ = {
 			isa = PBXGroup;
 			children = (
+				0299D8142720684200483DE1 /* Recorder.swift */,
+				021B2881270CB3790093B0C9 /* Functions.swift */,
 				028DC776271F0B9D00B7AF1B /* Work.swift */,
 				021B287D270CB27E0093B0C9 /* Abstract.swift */,
 				02E31FAA270F475100B94A81 /* LineArt.swift */,
@@ -250,16 +260,6 @@
 			path = Work;
 			sourceTree = "<group>";
 		};
-		022691B4271DAB9F00C0D209 /* Helper */ = {
-			isa = PBXGroup;
-			children = (
-				021B2881270CB3790093B0C9 /* Functions.swift */,
-				02A7A51F2710862900F48016 /* Extensions.swift */,
-				02392F1E271C502600D8931F /* RectangleGetter.swift */,
-			);
-			path = Helper;
-			sourceTree = "<group>";
-		};
 		026C5E652729B5DB00995BCB /* CanvasServer */ = {
 			isa = PBXGroup;
 			children = (
@@ -281,6 +281,7 @@
 				028D3AA32729B1DA000EC82F /* FirebaseMessage.swift */,
 				02E20E2227CDFD1700AED50C /* NetworkInterceptor.swift */,
 				02E20E2427CE36E400AED50C /* AmplifyAuth.swift */,
+				02449DA727231D93000A011A /* Error.swift */,
 			);
 			path = Infra;
 			sourceTree = "<group>";
@@ -288,13 +289,10 @@
 		029B300A2722F11F008BC3F3 /* Intractor */ = {
 			isa = PBXGroup;
 			children = (
-				0299D8142720684200483DE1 /* Recorder.swift */,
-				02449DA32722F926000A011A /* Authenticator.swift */,
 				02F06B56273036F7006B671C /* WorkIntractor.swift */,
 				02A19D41272C4F9F00DBFA24 /* ThumbnailIntractor.swift */,
 				024C0AB827CE5066009741C6 /* NftIntractor.swift */,
 				027FA91B282644330074F957 /* WalletIntractor.swift */,
-				02449DA727231D93000A011A /* Error.swift */,
 			);
 			path = Intractor;
 			sourceTree = "<group>";
@@ -319,6 +317,7 @@
 		02A19D43272C516500DBFA24 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				0211F95C288AB3A2002A797E /* Extension */,
 				02AB3C2C27D280F8008043A6 /* Component */,
 				021B2870270CB08C0093B0C9 /* RootView.swift */,
 				02A19D44272C517D00DBFA24 /* WorkListView.swift */,
@@ -339,6 +338,7 @@
 		02AB3C2C27D280F8008043A6 /* Component */ = {
 			isa = PBXGroup;
 			children = (
+				02392F1E271C502600D8931F /* RectangleGetter.swift */,
 				02AB3C2D27D2810B008043A6 /* TextField.swift */,
 				02AB3C2F27D281F2008043A6 /* Button.swift */,
 				02AB3C3427D2848F008043A6 /* HUD.swift */,
@@ -467,7 +467,6 @@
 				02F06B57273036F7006B671C /* WorkIntractor.swift in Sources */,
 				029E6A87271EA64F00F6A8EF /* ColorRain.swift in Sources */,
 				02392F1F271C502600D8931F /* RectangleGetter.swift in Sources */,
-				02449DA42722F926000A011A /* Authenticator.swift in Sources */,
 				02495FDD2711A3E30023230B /* BoidsMajic.swift in Sources */,
 				028DC775271EED0C00B7AF1B /* Fish.swift in Sources */,
 				022C17CD2712FE6700D2FD62 /* ParticleStream.swift in Sources */,
@@ -486,7 +485,6 @@
 				022691B6271DABEA00C0D209 /* LineArt2.swift in Sources */,
 				027FA91C282644330074F957 /* WalletIntractor.swift in Sources */,
 				02AB3C2E27D2810B008043A6 /* TextField.swift in Sources */,
-				02A7A5202710862900F48016 /* Extensions.swift in Sources */,
 				028D3AA42729B1DA000EC82F /* FirebaseMessage.swift in Sources */,
 				02392F21271C551200D8931F /* SpiderDesign.swift in Sources */,
 				02A19D42272C4F9F00DBFA24 /* ThumbnailIntractor.swift in Sources */,
@@ -517,6 +515,8 @@
 				02BFA0F3272A7969002997F8 /* CanvasClient.swift in Sources */,
 				02D2A1122715CE5B00CF5AD1 /* Splash.swift in Sources */,
 				02F944B7272DA321002A9B2B /* ArchiveListView.swift in Sources */,
+				0211F95E288AB3C3002A797E /* UIView+Image.swift in Sources */,
+				0211F960288AB3E2002A797E /* Shape+Fill.swift in Sources */,
 				02E20E2527CE36E500AED50C /* AmplifyAuth.swift in Sources */,
 				02392F1D271C35B200D8931F /* Lorenz3D.swift in Sources */,
 				029B30072722E25F008BC3F3 /* FirebaseStorage.swift in Sources */,

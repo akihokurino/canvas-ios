@@ -13,6 +13,10 @@ class AmplifyAuthManager {
 
     func signIn() -> Future<Void, AppError> {
         return Future<Void, AppError> { promise in
+            if self.isLogin() {
+                promise(.success(()))
+            }
+            
             Amplify.Auth.signIn(username: "aki030402@gmail.com", password: "Test1234") { result in
                 switch result {
                 case .success:

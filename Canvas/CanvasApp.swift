@@ -1,6 +1,7 @@
 import Amplify
 import AWSCognitoAuthPlugin
 import Combine
+import ComposableArchitecture
 import Firebase
 import SwiftUI
 import UserNotifications
@@ -9,22 +10,29 @@ import UserNotifications
 struct CanvasApp: App {
     @UIApplicationDelegateAdaptor private var appDelegate: AppDelegate
 
+    let store: Store<RootVM.State, RootVM.Action> = Store(
+        initialState: RootVM.State(),
+        reducer: RootVM.reducer,
+        environment: RootVM.Environment(
+            mainQueue: .main,
+            backgroundQueue: .init(DispatchQueue.global(qos: .background))
+        )
+    )
+
     var body: some Scene {
         WindowGroup {
-            RootView()
+            RootView(store: store)
         }
     }
 }
 
 class AppDelegate: NSObject, UIApplicationDelegate {
-    @ObservedObject var authenticator = Authenticator()
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         FirebaseApp.configure()
 
         try! Amplify.add(plugin: AWSCognitoAuthPlugin())
         try! Amplify.configure()
-    
+
         Messaging.messaging().delegate = self
         UNUserNotificationCenter.current().delegate = self
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { granted, error in
@@ -72,6 +80,15 @@ extension AppDelegate: MessagingDelegate {
         guard let token = fcmToken else {
             return
         }
-        authenticator.syncFCMToken(token: token)
+
+        _ = CanvasClient.shared.caller()
+            .flatMap { caller in caller.registerFCMToken(token: token) }
+            .subscribe(on: DispatchQueue.global())
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { _ in
+
+            }, receiveValue: { _ in
+
+            })
     }
 }
