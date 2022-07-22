@@ -1,45 +1,61 @@
+import CombineSchedulers
+import ComposableArchitecture
 import SwiftUI
 
 struct WalletView: View {
-    @ObservedObject var walletIntractor = WalletIntractor()
-    @State var isRefreshing = false
+    let store: Store<WalletVM.State, WalletVM.Action>
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading) {
-                Button(action: {}) {
-                    Text(walletIntractor.address)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .multilineTextAlignment(.leading)
-                        .font(.title3)
-                        .lineLimit(nil)
+        WithViewStore(store) { viewStore in
+            List {
+                VStack(alignment: .leading) {
+                    Button(action: {}) {
+                        Text(viewStore.address)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .multilineTextAlignment(.leading)
+                            .font(.title3)
+                            .lineLimit(nil)
+                    }
+                    Spacer().frame(height: 20)
+                    Text("\(viewStore.balance) Ether")
+                        .frame(
+                            minWidth: 0,
+                            maxWidth: .infinity,
+                            minHeight: 100,
+                            maxHeight: 100,
+                            alignment: .center
+                        )
+                        .background(Color.green)
+                        .foregroundColor(Color.white)
+                        .cornerRadius(5.0)
+                        .font(.largeTitle)
                 }
-                Spacer().frame(height: 20)
-                Text("\(walletIntractor.balance) Ether")
-                    .frame(
-                        minWidth: 0,
-                        maxWidth: .infinity,
-                        minHeight: 100,
-                        maxHeight: 100,
-                        alignment: .center
-                    )
-                    .background(Color.green)
-                    .foregroundColor(Color.white)
-                    .cornerRadius(5.0)
-                    .font(.largeTitle)
+                .padding()
+                .listRowSeparator(.hidden)
+                .listRowInsets(EdgeInsets())
+                .buttonStyle(PlainButtonStyle())
             }
-            .padding()
-        }
-        .overlay(
-            Group {
-                if walletIntractor.isInitializing {
-                    HUD(isLoading: $walletIntractor.isInitializing)
-                }
-            }, alignment: .center
-        )
-        .navigationBarTitle("", displayMode: .inline)
-        .onAppear {
-            walletIntractor.initialize()
+            .listStyle(PlainListStyle())
+            .overlay(
+                Group {
+                    if viewStore.state.shouldShowHUD {
+                        HUD(isLoading: viewStore.binding(
+                            get: \.shouldShowHUD,
+                            send: WalletVM.Action.shouldShowHUD
+                        ))
+                    }
+                }, alignment: .center
+            )
+            .pullToRefresh(isShowing: viewStore.binding(
+                get: \.shouldPullToRefresh,
+                send: WalletVM.Action.shouldPullToRefresh
+            )) {
+                viewStore.send(.startRefresh)
+            }
+            .navigationBarTitle("", displayMode: .inline)
+            .onAppear {
+                viewStore.send(.startInitialize)
+            }
         }
     }
 }

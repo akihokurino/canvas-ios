@@ -48,7 +48,13 @@ struct RootView: View {
                     }.tag(3)
 
                     NavigationView {
-                        WalletView()
+                        IfLetStore(
+                            store.scope(
+                                state: { $0.walletView },
+                                action: RootVM.Action.walletView
+                            ),
+                            then: WalletView.init(store:)
+                        )
                     }
                     .tabItem {
                         VStack {

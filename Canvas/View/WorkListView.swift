@@ -22,7 +22,7 @@ struct WorkListView: View {
             }
             .navigationBarTitle("", displayMode: .inline)
             .onAppear {
-                viewStore.send(.onAppear)
+                viewStore.send(.initialize)
             }
         }
     }

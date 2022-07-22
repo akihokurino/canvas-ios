@@ -6,6 +6,10 @@ enum RootVM {
     static let reducer = Reducer<State, Action, Environment> { state, action, environment in
         switch action {
             case .startInitialize:
+                guard !state.initialized else {
+                    return .none
+                }
+
                 state.shouldShowHUD = true
 
                 let firebaseAuthFlow = { () -> AnyPublisher<Void, AppError> in
@@ -27,7 +31,8 @@ enum RootVM {
                     AmplifyAuthManager.shared.signIn().eraseToAnyPublisher()
                 }
 
-                return firebaseAuthFlow().flatMap { _ in amplifyAuthFlow() }
+                return firebaseAuthFlow()
+                    .flatMap { _ in amplifyAuthFlow() }
                     .map { _ in true }
                     .subscribe(on: environment.backgroundQueue)
                     .receive(on: environment.mainQueue)
@@ -35,6 +40,8 @@ enum RootVM {
                     .map(RootVM.Action.endInitialize)
             case .endInitialize(.success(_)):
                 state.workListView = WorkListVM.State()
+                state.walletView = WalletVM.State()
+                state.initialized = true
                 state.shouldShowHUD = false
                 return .none
             case .endInitialize(.failure(_)):
@@ -44,6 +51,8 @@ enum RootVM {
                 state.shouldShowHUD = val
                 return .none
             case .workListView(let action):
+                return .none
+            case .walletView(let action):
                 return .none
         }
     }
@@ -58,6 +67,17 @@ enum RootVM {
             )
         }
     )
+    .connect(
+        WalletVM.reducer,
+        state: \.walletView,
+        action: /RootVM.Action.walletView,
+        environment: { _environment in
+            WalletVM.Environment(
+                mainQueue: _environment.mainQueue,
+                backgroundQueue: _environment.backgroundQueue
+            )
+        }
+    )
 }
 
 extension RootVM {
@@ -67,12 +87,15 @@ extension RootVM {
         case shouldShowHUD(Bool)
 
         case workListView(WorkListVM.Action)
+        case walletView(WalletVM.Action)
     }
 
     struct State: Equatable {
+        var initialized = false
         var shouldShowHUD = false
 
         var workListView: WorkListVM.State?
+        var walletView: WalletVM.State?
     }
 
     struct Environment {

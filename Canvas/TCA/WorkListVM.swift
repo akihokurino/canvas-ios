@@ -5,7 +5,7 @@ import Foundation
 enum WorkListVM {
     static let reducer = Reducer<State, Action, Environment> { _, action, _ in
         switch action {
-        case .onAppear:
+        case .initialize:
             return .none
         }
     }
@@ -13,7 +13,7 @@ enum WorkListVM {
 
 extension WorkListVM {
     enum Action: Equatable {
-        case onAppear
+        case initialize
     }
 
     struct State: Equatable {}
