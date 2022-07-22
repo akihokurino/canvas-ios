@@ -9,7 +9,13 @@ struct RootView: View {
             Group {
                 TabView {
                     NavigationView {
-                        WorkListView()
+                        IfLetStore(
+                            store.scope(
+                                state: { $0.workListView },
+                                action: RootVM.Action.workListView
+                            ),
+                            then: WorkListView.init(store:)
+                        )
                     }
                     .tabItem {
                         VStack {

@@ -14,6 +14,7 @@
 		0205F1672823FCF2008B8FF8 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 0205F1662823FCF2008B8FF8 /* FirebaseStorage */; };
 		0211F95E288AB3C3002A797E /* UIView+Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0211F95D288AB3C3002A797E /* UIView+Image.swift */; };
 		0211F960288AB3E2002A797E /* Shape+Fill.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0211F95F288AB3E2002A797E /* Shape+Fill.swift */; };
+		0211F962288AB59E002A797E /* WorkListVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0211F961288AB59E002A797E /* WorkListVM.swift */; };
 		021B286F270CB08C0093B0C9 /* CanvasApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 021B286E270CB08C0093B0C9 /* CanvasApp.swift */; };
 		021B2871270CB08C0093B0C9 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 021B2870270CB08C0093B0C9 /* RootView.swift */; };
 		021B2873270CB08D0093B0C9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 021B2872270CB08D0093B0C9 /* Assets.xcassets */; };
@@ -88,6 +89,7 @@
 /* Begin PBXFileReference section */
 		0211F95D288AB3C3002A797E /* UIView+Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Image.swift"; sourceTree = "<group>"; };
 		0211F95F288AB3E2002A797E /* Shape+Fill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shape+Fill.swift"; sourceTree = "<group>"; };
+		0211F961288AB59E002A797E /* WorkListVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkListVM.swift; sourceTree = "<group>"; };
 		021B286B270CB08C0093B0C9 /* Canvas.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Canvas.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		021B286E270CB08C0093B0C9 /* CanvasApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasApp.swift; sourceTree = "<group>"; };
 		021B2870270CB08C0093B0C9 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
@@ -302,6 +304,7 @@
 			children = (
 				029DDF0C2889BAC800118174 /* Extension */,
 				029DDF0F2889BB3600118174 /* RootVM.swift */,
+				0211F961288AB59E002A797E /* WorkListVM.swift */,
 			);
 			path = TCA;
 			sourceTree = "<group>";
@@ -472,6 +475,7 @@
 				022C17CD2712FE6700D2FD62 /* ParticleStream.swift in Sources */,
 				021B2871270CB08C0093B0C9 /* RootView.swift in Sources */,
 				02F6CC422714775E002C22B7 /* ParticleRotate3D.swift in Sources */,
+				0211F962288AB59E002A797E /* WorkListVM.swift in Sources */,
 				028DC773271EC45200B7AF1B /* Bound.swift in Sources */,
 				029DDF0E2889BAE600118174 /* Navigation+TCA.swift in Sources */,
 				02B25ED92711361F0067A73D /* BoidsDesign.swift in Sources */,

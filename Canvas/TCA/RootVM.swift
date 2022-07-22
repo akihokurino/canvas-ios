@@ -34,6 +34,7 @@ enum RootVM {
                     .catchToEffect()
                     .map(RootVM.Action.endInitialize)
             case .endInitialize(.success(_)):
+                state.workListView = WorkListVM.State()
                 state.shouldShowHUD = false
                 return .none
             case .endInitialize(.failure(_)):
@@ -42,8 +43,21 @@ enum RootVM {
             case .shouldShowHUD(let val):
                 state.shouldShowHUD = val
                 return .none
+            case .workListView(let action):
+                return .none
         }
     }
+    .connect(
+        WorkListVM.reducer,
+        state: \.workListView,
+        action: /RootVM.Action.workListView,
+        environment: { _environment in
+            WorkListVM.Environment(
+                mainQueue: _environment.mainQueue,
+                backgroundQueue: _environment.backgroundQueue
+            )
+        }
+    )
 }
 
 extension RootVM {
@@ -51,10 +65,14 @@ extension RootVM {
         case startInitialize
         case endInitialize(Result<Bool, AppError>)
         case shouldShowHUD(Bool)
+
+        case workListView(WorkListVM.Action)
     }
 
     struct State: Equatable {
         var shouldShowHUD = false
+
+        var workListView: WorkListVM.State?
     }
 
     struct Environment {
