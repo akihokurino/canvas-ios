@@ -1,6 +1,7 @@
 import CombineSchedulers
 import ComposableArchitecture
 import SwiftUI
+import SwiftUIRefresh
 
 struct WalletView: View {
     let store: Store<WalletVM.State, WalletVM.Action>
@@ -17,9 +18,9 @@ struct WalletView: View {
                             .lineLimit(nil)
                     }
                     .foregroundColor(Color.blue)
-                    
+
                     Spacer().frame(height: 20)
-                    
+
                     Text("\(viewStore.balance) Ether")
                         .frame(
                             minWidth: 0,

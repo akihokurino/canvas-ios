@@ -121,7 +121,6 @@ extension ThumbnailListVM {
         var page = 1
         var hasNext = false
         var isPresentedDetailView = false
-
         var thumbnails: [CanvasAPI.ThumbnailFragment] = []
         var selectThumbnail: CanvasAPI.ThumbnailFragment? = nil
     }

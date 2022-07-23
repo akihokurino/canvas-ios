@@ -1,6 +1,7 @@
 import Combine
 import ComposableArchitecture
 import SwiftUI
+import SwiftUIRefresh
 
 struct ThumbnailListView: View {
     let store: Store<ThumbnailListVM.State, ThumbnailListVM.Action>

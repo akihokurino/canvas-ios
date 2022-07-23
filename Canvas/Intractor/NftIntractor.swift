@@ -1,16 +1,7 @@
 import Combine
 import SwiftUI
 
-enum NftType {
-    case ERC721
-    case ERC1155
-}
 
-struct Asset {
-    let address: String
-    let tokenId: String
-    let imageUrl: String
-}
 
 class NftIntractor: ObservableObject {
     private var cancellables: Set<AnyCancellable> = []

@@ -89,14 +89,27 @@ enum ArchiveListVM {
             state.shouldPullToRefresh = val
             return .none
         case .presentDetailView(let data):
-            state.selectArchive = data
-            state.isPresentedDetailView = true
+            state.archiveDetailView = ArchiveDetailVM.State(archive: data)
             return .none
-        case .isPresentedDetailView(let val):
-            state.isPresentedDetailView = val
+        case .popDetailView:
+            state.archiveDetailView = nil
+            return .none
+
+        case .archiveDetailView(let action):
             return .none
         }
     }
+    .connect(
+        ArchiveDetailVM.reducer,
+        state: \.archiveDetailView,
+        action: /ArchiveListVM.Action.archiveDetailView,
+        environment: { _environment in
+            ArchiveDetailVM.Environment(
+                mainQueue: _environment.mainQueue,
+                backgroundQueue: _environment.backgroundQueue
+            )
+        }
+    )
 }
 
 extension ArchiveListVM {
@@ -110,7 +123,9 @@ extension ArchiveListVM {
         case shouldShowHUD(Bool)
         case shouldPullToRefresh(Bool)
         case presentDetailView(CanvasAPI.WorkFragment)
-        case isPresentedDetailView(Bool)
+        case popDetailView
+
+        case archiveDetailView(ArchiveDetailVM.Action)
     }
 
     struct State: Equatable {
@@ -120,10 +135,9 @@ extension ArchiveListVM {
         var shouldShowNextLoading = false
         var page = 1
         var hasNext = false
-        var isPresentedDetailView = false
-
         var archives: [CanvasAPI.WorkFragment] = []
-        var selectArchive: CanvasAPI.WorkFragment? = nil
+
+        var archiveDetailView: ArchiveDetailVM.State?
     }
 
     struct Environment {

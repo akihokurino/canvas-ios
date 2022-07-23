@@ -44,6 +44,16 @@ struct ArchiveListView: View {
                 viewStore.send(.startInitialize)
             }
         }
+        .navigate(
+            using: store.scope(
+                state: \.archiveDetailView,
+                action: ArchiveListVM.Action.archiveDetailView
+            ),
+            destination: ArchiveDetailView.init(store:),
+            onDismiss: {
+                ViewStore(store.stateless).send(.popDetailView)
+            }
+        )
     }
 
     private var bottom: some View {
