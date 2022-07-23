@@ -43,7 +43,7 @@ enum ArchiveDetailVM {
                 .subscribe(on: environment.backgroundQueue)
                 .receive(on: environment.mainQueue)
                 .catchToEffect()
-                .map(ArchiveDetailVM.Action.endInitialize)
+                .map(ArchiveDetailVM.Action.endRefresh)
         case .endRefresh(.success(let result)):
             state.erc721 = result.erc721
             state.ownERC721 = result.ownERC721
