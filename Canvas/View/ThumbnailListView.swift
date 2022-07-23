@@ -76,6 +76,7 @@ struct ThumbnailListView: View {
                         }
                     }
                     .frame(height: 60)
+                    .foregroundColor(Color.blue)
                 }
 
                 if viewStore.state.hasNext && viewStore.state.shouldShowNextLoading {

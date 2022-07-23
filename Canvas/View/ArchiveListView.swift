@@ -1,55 +1,76 @@
 import Combine
+import ComposableArchitecture
 import SwiftUI
 import SwiftUIRefresh
 
 struct ArchiveListView: View {
-    @ObservedObject var workIntractor = WorkIntractor()
-    @State var isRefreshing = false
+    let store: Store<ArchiveListVM.State, ArchiveListVM.Action>
 
     var body: some View {
-        List {
-            ForEach(workIntractor.works) { item in
-                ZStack {
-                    NavigationLink(destination: ArchiveDetailView(data: item)) {
-                        EmptyView()
+        WithViewStore(store) { viewStore in
+            List {
+                ForEach(viewStore.state.archives) { item in
+                    ZStack {
+                        Button(action: {
+                            viewStore.send(.presentDetailView(item))
+                        }) {
+                            ArchiveRow(data: item)
+                        }
                     }
-                    .opacity(0.0)
-                    .buttonStyle(PlainButtonStyle())
-
-                    ArchiveRow(data: item)
                 }
                 .listRowSeparator(.hidden)
-            }
+                .buttonStyle(PlainButtonStyle())
 
-            if workIntractor.hasNext {
-                HStack {
-                    Spacer()
-                    ProgressView()
-                    Spacer()
-                }
-                .frame(height: 60)
-                .onAppear {
-                    workIntractor.next {}
-                }
+                bottom
+            }
+            .overlay(
+                Group {
+                    if viewStore.state.shouldShowHUD {
+                        HUD(isLoading: viewStore.binding(
+                            get: \.shouldShowHUD,
+                            send: ArchiveListVM.Action.shouldShowHUD
+                        ))
+                    }
+                }, alignment: .center
+            )
+            .pullToRefresh(isShowing: viewStore.binding(
+                get: \.shouldPullToRefresh,
+                send: ArchiveListVM.Action.shouldPullToRefresh
+            )) {
+                viewStore.send(.startRefresh)
+            }
+            .navigationBarTitle("", displayMode: .inline)
+            .onAppear {
+                viewStore.send(.startInitialize)
             }
         }
-        .pullToRefresh(isShowing: $isRefreshing) {
-            isRefreshing = true
-            workIntractor.initialize(isRefresh: true) {
-                self.isRefreshing = false
-            }
-        }
-        .overlay(
+    }
+
+    private var bottom: some View {
+        WithViewStore(store) { viewStore in
             Group {
-                if workIntractor.isInitializing {
-                    HUD(isLoading: $workIntractor.isInitializing)
+                if viewStore.state.hasNext && !viewStore.state.shouldShowNextLoading {
+                    Button(action: {
+                        viewStore.send(.startNext)
+                    }) {
+                        HStack {
+                            Spacer()
+                            Text("Next")
+                            Spacer()
+                        }
+                    }
+                    .frame(height: 60)
+                    .foregroundColor(Color.blue)
                 }
-            }, alignment: .center
-        )
-        .navigationBarTitle("", displayMode: .inline)
-        .onAppear {
-            workIntractor.initialize {
-                self.isRefreshing = false
+
+                if viewStore.state.hasNext && viewStore.state.shouldShowNextLoading {
+                    HStack {
+                        Spacer()
+                        ProgressView()
+                        Spacer()
+                    }
+                    .frame(height: 60)
+                }
             }
         }
     }

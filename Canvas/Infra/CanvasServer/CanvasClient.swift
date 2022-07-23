@@ -3,10 +3,20 @@ import Combine
 import Firebase
 import UIKit
 
-extension CanvasAPI.WorkFragment: Identifiable {}
-extension CanvasAPI.WorkFragment.Thumbnail: Identifiable {}
+extension CanvasAPI.WorkFragment: Identifiable, Equatable {
+    public static func == (lhs: CanvasAPI.WorkFragment, rhs: CanvasAPI.WorkFragment) -> Bool {
+        return lhs.id == rhs.id
+    }
+}
+
+extension CanvasAPI.WorkFragment.Thumbnail: Identifiable, Equatable {
+    public static func == (lhs: CanvasAPI.WorkFragment.Thumbnail, rhs: CanvasAPI.WorkFragment.Thumbnail) -> Bool {
+            return lhs.id == rhs.id
+        }
+}
+
 extension CanvasAPI.ThumbnailFragment: Identifiable, Equatable {
-    static public func == (lhs: CanvasAPI.ThumbnailFragment, rhs: CanvasAPI.ThumbnailFragment) -> Bool {
+    public static func == (lhs: CanvasAPI.ThumbnailFragment, rhs: CanvasAPI.ThumbnailFragment) -> Bool {
         return lhs.id == rhs.id
     }
 }

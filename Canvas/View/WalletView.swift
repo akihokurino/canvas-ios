@@ -16,7 +16,10 @@ struct WalletView: View {
                             .font(.title3)
                             .lineLimit(nil)
                     }
+                    .foregroundColor(Color.blue)
+                    
                     Spacer().frame(height: 20)
+                    
                     Text("\(viewStore.balance) Ether")
                         .frame(
                             minWidth: 0,

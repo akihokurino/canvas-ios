@@ -26,7 +26,13 @@ struct RootView: View {
                     }.tag(1)
 
                     NavigationView {
-                        ArchiveListView()
+                        IfLetStore(
+                            store.scope(
+                                state: { $0.archiveListView },
+                                action: RootVM.Action.archiveListView
+                            ),
+                            then: ArchiveListView.init(store:)
+                        )
                     }
                     .tabItem {
                         VStack {

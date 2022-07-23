@@ -73,8 +73,8 @@
 		02E20E2E27CE46F300AED50C /* NftAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02E20E2D27CE46F300AED50C /* NftAPI.swift */; };
 		02E31FAB270F475100B94A81 /* LineArt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02E31FAA270F475100B94A81 /* LineArt.swift */; };
 		02F05F4F2824F08100A36AD4 /* WalletView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F05F4E2824F08100A36AD4 /* WalletView.swift */; };
-		02F06B57273036F7006B671C /* WorkIntractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F06B56273036F7006B671C /* WorkIntractor.swift */; };
 		02F06B5C273045A6006B671C /* SwiftUIRefresh in Frameworks */ = {isa = PBXBuildFile; productRef = 02F06B5B273045A6006B671C /* SwiftUIRefresh */; };
+		02F297A7288C1B3F00A50E60 /* ArchiveListVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F297A6288C1B3F00A50E60 /* ArchiveListVM.swift */; };
 		02F2EF0D27143FF800415B9A /* StreamDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F2EF0C27143FF800415B9A /* StreamDesign.swift */; };
 		02F4C30B27CCF99F00746255 /* AWSCognitoAuthPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 02F4C30A27CCF99F00746255 /* AWSCognitoAuthPlugin */; };
 		02F4C30D27CCF99F00746255 /* Amplify in Frameworks */ = {isa = PBXBuildFile; productRef = 02F4C30C27CCF99F00746255 /* Amplify */; };
@@ -148,7 +148,7 @@
 		02E20E2D27CE46F300AED50C /* NftAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NftAPI.swift; sourceTree = "<group>"; };
 		02E31FAA270F475100B94A81 /* LineArt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineArt.swift; sourceTree = "<group>"; };
 		02F05F4E2824F08100A36AD4 /* WalletView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletView.swift; sourceTree = "<group>"; };
-		02F06B56273036F7006B671C /* WorkIntractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkIntractor.swift; sourceTree = "<group>"; };
+		02F297A6288C1B3F00A50E60 /* ArchiveListVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveListVM.swift; sourceTree = "<group>"; };
 		02F2EF0C27143FF800415B9A /* StreamDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamDesign.swift; sourceTree = "<group>"; };
 		02F6CC412714775E002C22B7 /* ParticleRotate3D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleRotate3D.swift; sourceTree = "<group>"; };
 		02F944B6272DA321002A9B2B /* ArchiveListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveListView.swift; sourceTree = "<group>"; };
@@ -289,7 +289,6 @@
 		029B300A2722F11F008BC3F3 /* Intractor */ = {
 			isa = PBXGroup;
 			children = (
-				02F06B56273036F7006B671C /* WorkIntractor.swift */,
 				024C0AB827CE5066009741C6 /* NftIntractor.swift */,
 			);
 			path = Intractor;
@@ -301,6 +300,7 @@
 				029DDF0C2889BAC800118174 /* Extension */,
 				029DDF0F2889BB3600118174 /* RootVM.swift */,
 				0211F961288AB59E002A797E /* WorkListVM.swift */,
+				02F297A6288C1B3F00A50E60 /* ArchiveListVM.swift */,
 				02988E82288BDA5300B6A540 /* ThumbnailListVM.swift */,
 				02E188F4288ABC30001F24F5 /* WalletVM.swift */,
 			);
@@ -464,7 +464,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				02F06B57273036F7006B671C /* WorkIntractor.swift in Sources */,
 				029E6A87271EA64F00F6A8EF /* ColorRain.swift in Sources */,
 				02392F1F271C502600D8931F /* RectangleGetter.swift in Sources */,
 				02495FDD2711A3E30023230B /* BoidsMajic.swift in Sources */,
@@ -511,6 +510,7 @@
 				028DC777271F0B9D00B7AF1B /* Work.swift in Sources */,
 				021B2882270CB3790093B0C9 /* Functions.swift in Sources */,
 				02D26CCB273183E500678F6F /* VideoView.swift in Sources */,
+				02F297A7288C1B3F00A50E60 /* ArchiveListVM.swift in Sources */,
 				02BFA0F3272A7969002997F8 /* CanvasClient.swift in Sources */,
 				02D2A1122715CE5B00CF5AD1 /* Splash.swift in Sources */,
 				02F944B7272DA321002A9B2B /* ArchiveListView.swift in Sources */,

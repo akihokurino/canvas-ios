@@ -39,10 +39,12 @@ enum RootVM {
                     .catchToEffect()
                     .map(RootVM.Action.endInitialize)
             case .endInitialize(.success(_)):
+                state.shouldShowHUD = false
+
                 state.workListView = WorkListVM.State()
+                state.archiveListView = ArchiveListVM.State()
                 state.thumbnailListView = ThumbnailListVM.State()
                 state.walletView = WalletVM.State()
-                state.shouldShowHUD = false
 
                 state.initialized = true
 
@@ -56,6 +58,8 @@ enum RootVM {
 
             case .workListView(let action):
                 return .none
+            case .archiveListView(let action):
+                return .none
             case .thumbnailListView(let action):
                 return .none
             case .walletView(let action):
@@ -68,6 +72,17 @@ enum RootVM {
         action: /RootVM.Action.workListView,
         environment: { _environment in
             WorkListVM.Environment(
+                mainQueue: _environment.mainQueue,
+                backgroundQueue: _environment.backgroundQueue
+            )
+        }
+    )
+    .connect(
+        ArchiveListVM.reducer,
+        state: \.archiveListView,
+        action: /RootVM.Action.archiveListView,
+        environment: { _environment in
+            ArchiveListVM.Environment(
                 mainQueue: _environment.mainQueue,
                 backgroundQueue: _environment.backgroundQueue
             )
@@ -104,6 +119,7 @@ extension RootVM {
         case shouldShowHUD(Bool)
 
         case workListView(WorkListVM.Action)
+        case archiveListView(ArchiveListVM.Action)
         case thumbnailListView(ThumbnailListVM.Action)
         case walletView(WalletVM.Action)
     }
@@ -113,6 +129,7 @@ extension RootVM {
         var shouldShowHUD = false
 
         var workListView: WorkListVM.State?
+        var archiveListView: ArchiveListVM.State?
         var thumbnailListView: ThumbnailListVM.State?
         var walletView: WalletVM.State?
     }
