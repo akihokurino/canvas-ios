@@ -5,7 +5,11 @@ import UIKit
 
 extension CanvasAPI.WorkFragment: Identifiable {}
 extension CanvasAPI.WorkFragment.Thumbnail: Identifiable {}
-extension CanvasAPI.ThumbnailFragment: Identifiable {}
+extension CanvasAPI.ThumbnailFragment: Identifiable, Equatable {
+    static public func == (lhs: CanvasAPI.ThumbnailFragment, rhs: CanvasAPI.ThumbnailFragment) -> Bool {
+        return lhs.id == rhs.id
+    }
+}
 
 struct CanvasClient {
     static let shared = CanvasClient()

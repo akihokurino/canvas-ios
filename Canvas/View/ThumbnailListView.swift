@@ -1,20 +1,9 @@
 import Combine
+import ComposableArchitecture
 import SwiftUI
 
-class ThumbnailListViewState: ObservableObject {
-    @Published var selectedThumbnail: CanvasAPI.ThumbnailFragment?
-    @Published var isPresentDetailView = false
-    @Published var isRefreshing = false
-
-    func select(thumbnail: CanvasAPI.ThumbnailFragment) {
-        self.selectedThumbnail = thumbnail
-        self.isPresentDetailView = true
-    }
-}
-
 struct ThumbnailListView: View {
-    @ObservedObject var thumbnailIntractor = ThumbnailIntractor()
-    @ObservedObject var viewState = ThumbnailListViewState()
+    let store: Store<ThumbnailListVM.State, ThumbnailListVM.Action>
 
     private let thumbnailSize = UIScreen.main.bounds.size.width / 3
     private let gridItemLayout = [
@@ -24,69 +13,79 @@ struct ThumbnailListView: View {
     ]
 
     var body: some View {
-        ScrollView {
-            RefreshControl(isRefreshing: $viewState.isRefreshing, coordinateSpaceName: RefreshControlKey, onRefresh: {
-                viewState.isRefreshing = true
-                thumbnailIntractor.initialize(isRefresh: true) {
-                    self.viewState.isRefreshing = false
-                }
-            })
-
-            LazyVGrid(columns: gridItemLayout, alignment: HorizontalAlignment.leading, spacing: 3) {
-                ForEach(thumbnailIntractor.thumbnails) { data in
-                    Button(action: {
-                        viewState.select(thumbnail: data)
-                    }) {
-                        RemoteImageView(url: data.imageUrl)
-                            .scaledToFit()
-                            .frame(width: thumbnailSize)
+        WithViewStore(store) { viewStore in
+            List {
+                LazyVGrid(columns: gridItemLayout, alignment: HorizontalAlignment.leading, spacing: 3) {
+                    ForEach(viewStore.state.thumbnails) { data in
+                        Button(action: {
+                            viewStore.send(.presentDetailView(data))
+                        }) {
+                            RemoteImageView(url: data.imageUrl)
+                                .scaledToFit()
+                                .frame(width: thumbnailSize)
+                        }
                     }
                 }
-            }
+                .listRowSeparator(.hidden)
+                .listRowInsets(EdgeInsets())
+                .buttonStyle(PlainButtonStyle())
 
-            bottom
-        }
-        .coordinateSpace(name: RefreshControlKey)
-        .navigationBarTitle("", displayMode: .inline)
-        .sheet(isPresented: $viewState.isPresentDetailView) {
-            ThumbnailDetailView(url: viewState.selectedThumbnail?.imageUrl)
-        }
-        .overlay(
-            Group {
-                if thumbnailIntractor.isInitializing {
-                    HUD(isLoading: $thumbnailIntractor.isInitializing)
-                }
-            }, alignment: .center
-        )
-        .onAppear {
-            thumbnailIntractor.initialize {
-                self.viewState.isRefreshing = false
+                bottom
+            }
+            .listStyle(PlainListStyle())
+            .overlay(
+                Group {
+                    if viewStore.state.shouldShowHUD {
+                        HUD(isLoading: viewStore.binding(
+                            get: \.shouldShowHUD,
+                            send: ThumbnailListVM.Action.shouldShowHUD
+                        ))
+                    }
+                }, alignment: .center
+            )
+            .pullToRefresh(isShowing: viewStore.binding(
+                get: \.shouldPullToRefresh,
+                send: ThumbnailListVM.Action.shouldPullToRefresh
+            )) {
+                viewStore.send(.startRefresh)
+            }
+            .navigationBarTitle("", displayMode: .inline)
+            .sheet(isPresented: viewStore.binding(
+                get: \.isPresentedDetailView,
+                send: ThumbnailListVM.Action.isPresentedDetailView
+            )) {
+                ThumbnailDetailView(url: viewStore.selectThumbnail?.imageUrl)
+            }
+            .onAppear {
+                viewStore.send(.startInitialize)
             }
         }
     }
 
     private var bottom: some View {
-        Group {
-            if thumbnailIntractor.hasNext && !thumbnailIntractor.isFetching {
-                Button(action: {
-                    thumbnailIntractor.next {}
-                }) {
+        WithViewStore(store) { viewStore in
+            Group {
+                if viewStore.state.hasNext && !viewStore.state.shouldShowNextLoading {
+                    Button(action: {
+                        viewStore.send(.startNext)
+                    }) {
+                        HStack {
+                            Spacer()
+                            Text("Next")
+                            Spacer()
+                        }
+                    }
+                    .frame(height: 60)
+                }
+
+                if viewStore.state.hasNext && viewStore.state.shouldShowNextLoading {
                     HStack {
                         Spacer()
-                        Text("Next...")
+                        ProgressView()
                         Spacer()
                     }
+                    .frame(height: 60)
                 }
-                .frame(height: 60)
-            }
-
-            if thumbnailIntractor.hasNext && thumbnailIntractor.isFetching {
-                HStack {
-                    Spacer()
-                    ProgressView()
-                    Spacer()
-                }
-                .frame(height: 60)
             }
         }
     }

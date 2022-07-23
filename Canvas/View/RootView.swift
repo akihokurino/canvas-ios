@@ -37,7 +37,13 @@ struct RootView: View {
                     }.tag(2)
 
                     NavigationView {
-                        ThumbnailListView()
+                        IfLetStore(
+                            store.scope(
+                                state: { $0.thumbnailListView },
+                                action: RootVM.Action.thumbnailListView
+                            ),
+                            then: ThumbnailListView.init(store:)
+                        )
                     }
                     .tabItem {
                         VStack {

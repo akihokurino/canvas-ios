@@ -3,7 +3,6 @@ import SwiftUI
 struct ThumbnailDetailView: View {
     let url: String?
 
-    @Environment(\.presentationMode) private var presentationMode
     @State private var scaleValue: CGFloat = 1.0
     @State private var lastValue: CGFloat = 1.0
 

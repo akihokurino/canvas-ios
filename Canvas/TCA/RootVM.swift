@@ -40,9 +40,12 @@ enum RootVM {
                     .map(RootVM.Action.endInitialize)
             case .endInitialize(.success(_)):
                 state.workListView = WorkListVM.State()
+                state.thumbnailListView = ThumbnailListVM.State()
                 state.walletView = WalletVM.State()
-                state.initialized = true
                 state.shouldShowHUD = false
+
+                state.initialized = true
+
                 return .none
             case .endInitialize(.failure(_)):
                 state.shouldShowHUD = false
@@ -50,7 +53,10 @@ enum RootVM {
             case .shouldShowHUD(let val):
                 state.shouldShowHUD = val
                 return .none
+
             case .workListView(let action):
+                return .none
+            case .thumbnailListView(let action):
                 return .none
             case .walletView(let action):
                 return .none
@@ -62,6 +68,17 @@ enum RootVM {
         action: /RootVM.Action.workListView,
         environment: { _environment in
             WorkListVM.Environment(
+                mainQueue: _environment.mainQueue,
+                backgroundQueue: _environment.backgroundQueue
+            )
+        }
+    )
+    .connect(
+        ThumbnailListVM.reducer,
+        state: \.thumbnailListView,
+        action: /RootVM.Action.thumbnailListView,
+        environment: { _environment in
+            ThumbnailListVM.Environment(
                 mainQueue: _environment.mainQueue,
                 backgroundQueue: _environment.backgroundQueue
             )
@@ -87,6 +104,7 @@ extension RootVM {
         case shouldShowHUD(Bool)
 
         case workListView(WorkListVM.Action)
+        case thumbnailListView(ThumbnailListVM.Action)
         case walletView(WalletVM.Action)
     }
 
@@ -95,6 +113,7 @@ extension RootVM {
         var shouldShowHUD = false
 
         var workListView: WorkListVM.State?
+        var thumbnailListView: ThumbnailListVM.State?
         var walletView: WalletVM.State?
     }
 

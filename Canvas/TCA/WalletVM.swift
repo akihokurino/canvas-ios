@@ -2,11 +2,6 @@ import Combine
 import ComposableArchitecture
 import Foundation
 
-struct Wallet: Equatable {
-    let address: String
-    let balance: Double
-}
-
 enum WalletVM {
     static let reducer = Reducer<State, Action, Environment> { state, action, environment in
         switch action {
@@ -24,11 +19,13 @@ enum WalletVM {
                 .receive(on: environment.mainQueue)
                 .catchToEffect()
                 .map(WalletVM.Action.endInitialize)
-        case .endInitialize(.success(let wallet)):
-            state.address = wallet.address
-            state.balance = wallet.balance
-            state.initialized = true
+        case .endInitialize(.success(let result)):
+            state.address = result.address
+            state.balance = result.balance
             state.shouldShowHUD = false
+            
+            state.initialized = true
+            
             return .none
         case .endInitialize(.failure(_)):
             state.shouldShowHUD = false
@@ -43,9 +40,9 @@ enum WalletVM {
                 .receive(on: environment.mainQueue)
                 .catchToEffect()
                 .map(WalletVM.Action.endRefresh)
-        case .endRefresh(.success(let wallet)):
-            state.address = wallet.address
-            state.balance = wallet.balance
+        case .endRefresh(.success(let result)):
+            state.address = result.address
+            state.balance = result.balance
             state.shouldPullToRefresh = false
             return .none
         case .endRefresh(.failure(_)):
@@ -84,4 +81,9 @@ extension WalletVM {
         let mainQueue: AnySchedulerOf<DispatchQueue>
         let backgroundQueue: AnySchedulerOf<DispatchQueue>
     }
+}
+
+struct Wallet: Equatable {
+    let address: String
+    let balance: Double
 }
