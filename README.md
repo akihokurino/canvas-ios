@@ -2,20 +2,20 @@
 
 - swiftui
 - combine
+- the composable architecture（ https://github.com/pointfreeco/swift-composable-architecture ）
 - graphql
 - apollo-ios（ https://github.com/apollographql/apollo-ios ）
 - firebase auth
 - firebase cloud storage
 - firebase messaging
 - aws cognito
+- aws amplify
 - opensea
 
 ## Related
 
 - https://github.com/akihokurino/canvas-nft-server
 - https://github.com/akihokurino/canvas-server
-- https://github.com/akihokurino/ethereum-erc721-nft
-- https://github.com/akihokurino/ethereum-erc1155-nft
 
 ## Architecture
 

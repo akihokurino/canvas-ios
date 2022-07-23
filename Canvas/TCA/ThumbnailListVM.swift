@@ -89,6 +89,10 @@ enum ThumbnailListVM {
             state.shouldPullToRefresh = val
             return .none
         case .presentDetailView(let data):
+            guard state.initialized else {
+                return .none
+            }
+            
             state.selectThumbnail = data
             state.isPresentedDetailView = true
             return .none

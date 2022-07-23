@@ -704,7 +704,7 @@ public enum NftAPI {
     public let operationDefinition: String =
       """
       mutation SellERC1155($workId: String!, $ether: Float!) {
-        sellErc1155(input: {workId: $workId, ether: $ether})
+        sellErc1155(input: {workId: $workId, ether: $ether, amount: 1})
       }
       """
 
@@ -727,7 +727,7 @@ public enum NftAPI {
 
       public static var selections: [GraphQLSelection] {
         return [
-          GraphQLField("sellErc1155", arguments: ["input": ["workId": GraphQLVariable("workId"), "ether": GraphQLVariable("ether")]], type: .nonNull(.scalar(Bool.self))),
+          GraphQLField("sellErc1155", arguments: ["input": ["workId": GraphQLVariable("workId"), "ether": GraphQLVariable("ether"), "amount": 1]], type: .nonNull(.scalar(Bool.self))),
         ]
       }
 
@@ -810,7 +810,7 @@ public enum NftAPI {
     public let operationDefinition: String =
       """
       mutation TransferERC1155($workId: String!, $toAddress: String!) {
-        transferErc1155(input: {workId: $workId, toAddress: $toAddress})
+        transferErc1155(input: {workId: $workId, toAddress: $toAddress, amount: 1})
       }
       """
 
@@ -833,7 +833,7 @@ public enum NftAPI {
 
       public static var selections: [GraphQLSelection] {
         return [
-          GraphQLField("transferErc1155", arguments: ["input": ["workId": GraphQLVariable("workId"), "toAddress": GraphQLVariable("toAddress")]], type: .nonNull(.scalar(Bool.self))),
+          GraphQLField("transferErc1155", arguments: ["input": ["workId": GraphQLVariable("workId"), "toAddress": GraphQLVariable("toAddress"), "amount": 1]], type: .nonNull(.scalar(Bool.self))),
         ]
       }
 

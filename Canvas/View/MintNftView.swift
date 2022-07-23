@@ -1,12 +1,11 @@
 import SwiftUI
 
-struct CreateNftView: View {
+struct MintNftView: View {
     let data: CanvasAPI.WorkFragment.Thumbnail
     let hasERC721: Bool
     let hasERC1155: Bool
     let callback: (NftType, Int?) -> Void
 
-    @Environment(\.presentationMode) private var presentationMode
     @State var amount: String = ""
 
     var body: some View {

@@ -62,6 +62,7 @@ mutation SellERC1155($workId: String!, $ether: Float!) {
   sellErc1155(input: {
     workId: $workId,
     ether: $ether,
+    amount: 1,
   })
 }
 
@@ -76,5 +77,6 @@ mutation TransferERC1155($workId: String!, $toAddress: String!) {
   transferErc1155(input: {
     workId: $workId,
     toAddress: $toAddress,
+    amount: 1,
   })
 }

@@ -862,6 +862,7 @@ public enum CanvasAPI {
         thumbnails {
           __typename
           id
+          workId
           imageUrl
           imageGsPath
         }
@@ -932,6 +933,7 @@ public enum CanvasAPI {
         return [
           GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
           GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
+          GraphQLField("workId", type: .nonNull(.scalar(GraphQLID.self))),
           GraphQLField("imageUrl", type: .nonNull(.scalar(String.self))),
           GraphQLField("imageGsPath", type: .nonNull(.scalar(String.self))),
         ]
@@ -943,8 +945,8 @@ public enum CanvasAPI {
         self.resultMap = unsafeResultMap
       }
 
-      public init(id: GraphQLID, imageUrl: String, imageGsPath: String) {
-        self.init(unsafeResultMap: ["__typename": "Thumbnail", "id": id, "imageUrl": imageUrl, "imageGsPath": imageGsPath])
+      public init(id: GraphQLID, workId: GraphQLID, imageUrl: String, imageGsPath: String) {
+        self.init(unsafeResultMap: ["__typename": "Thumbnail", "id": id, "workId": workId, "imageUrl": imageUrl, "imageGsPath": imageGsPath])
       }
 
       public var __typename: String {
@@ -962,6 +964,15 @@ public enum CanvasAPI {
         }
         set {
           resultMap.updateValue(newValue, forKey: "id")
+        }
+      }
+
+      public var workId: GraphQLID {
+        get {
+          return resultMap["workId"]! as! GraphQLID
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "workId")
         }
       }
 

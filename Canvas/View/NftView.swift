@@ -1,13 +1,12 @@
 import SwiftUI
 
-struct SellNftView: View {
+struct NftView: View {
     let nftType: NftType
     let asset: Asset
     let isOwn: Bool
     let sell: (Double) -> Void
     let transfer: (String) -> Void
 
-    @Environment(\.presentationMode) private var presentationMode
     @State var ether: String = ""
     @State var address: String = ""
 
