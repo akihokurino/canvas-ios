@@ -4,7 +4,7 @@ struct MintNftView: View {
     let data: CanvasAPI.WorkFragment.Thumbnail
     let hasERC721: Bool
     let hasERC1155: Bool
-    let callback: (NftType, Int?) -> Void
+    let callback: (Schema, Int?) -> Void
 
     @State var amount: String = ""
 
@@ -19,12 +19,12 @@ struct MintNftView: View {
             Spacer()
             HStack {
                 ActionButton(text: "Mint ERC721", background: hasERC721 ? .disable : .primary) {
-                    callback(NftType.ERC721, nil)
+                    callback(Schema.ERC721, nil)
                 }
                 Spacer()
                 ActionButton(text: "Mint ERC1155", background: hasERC1155 ? .disable : .primary) {
                     if !amount.isEmpty {
-                        callback(NftType.ERC1155, Int(amount)!)
+                        callback(Schema.ERC1155, Int(amount)!)
                     }
                 }
             }

@@ -20,7 +20,7 @@ struct NftClient {
                     let cognitoTokenProvider = session as! AuthCognitoTokensProvider
                     let tokens = try cognitoTokenProvider.getCognitoTokens().get()
                     let token = tokens.idToken
-
+                
                     let cache = InMemoryNormalizedCache()
                     let store = ApolloStore(cache: cache)
                     let configuration = URLSessionConfiguration.default
@@ -28,7 +28,7 @@ struct NftClient {
                     configuration.timeoutIntervalForResource = 60.0
                     let client = URLSessionClient(sessionConfiguration: configuration)
                     let provider = NetworkInterceptorProvider(store: store, client: client)
-
+                    
                     let transport = RequestChainNetworkTransport(
                         interceptorProvider: provider,
                         endpointURL: URL(string: "https://ji1t807ur2.execute-api.ap-northeast-1.amazonaws.com/default/graphql")!,
@@ -76,9 +76,9 @@ struct NftCaller {
         }
     }
 
-    func getNftAssets(workId: String) -> Future<(erc721: Asset?, erc1155: Asset?), AppError> {
-        return Future<(erc721: Asset?, erc1155: Asset?), AppError> { promise in
-            cli.fetch(query: NftAPI.GetWorkQuery(workId: workId)) { result in
+    func getMintedToken(workId: String) -> Future<(erc721: Token?, erc1155: Token?), AppError> {
+        return Future<(erc721: Token?, erc1155: Token?), AppError> { promise in
+            cli.fetch(query: NftAPI.GetMintedTokenQuery(workId: workId)) { result in
                 switch result {
                 case .success(let graphQLResult):
                     if let errors = graphQLResult.errors {
@@ -95,8 +95,14 @@ struct NftCaller {
                     }
 
                     promise(.success((
-                        erc721: data.work.asset721 != nil ? Asset(address: data.work.asset721!.address, tokenId: data.work.asset721!.tokenId, imageUrl: data.work.asset721!.imageUrl) : nil,
-                        erc1155: data.work.asset1155 != nil ? Asset(address: data.work.asset1155!.address, tokenId: data.work.asset1155!.tokenId, imageUrl: data.work.asset1155!.imageUrl) : nil
+                        erc721: data.mintedToken.erc721 != nil ?
+                            Token(address: data.mintedToken.erc721!.address,
+                                  tokenId: data.mintedToken.erc721!.tokenId ?? "",
+                                  imageUrl: data.mintedToken.erc721!.imageUrl ?? "") : nil,
+                        erc1155: data.mintedToken.erc1155 != nil ?
+                            Token(address: data.mintedToken.erc1155!.address,
+                                  tokenId: data.mintedToken.erc1155!.tokenId ?? "",
+                                  imageUrl: data.mintedToken.erc1155!.imageUrl ?? "") : nil
                     )))
                 case .failure(let error):
                     promise(.failure(.plain(error.localizedDescription)))
@@ -134,9 +140,9 @@ struct NftCaller {
         }
     }
 
-    func createERC721(workId: String, gsPath: String) -> Future<Void, AppError> {
+    func mintERC721(workId: String, gsPath: String) -> Future<Void, AppError> {
         return Future<Void, AppError> { promise in
-            cli.perform(mutation: NftAPI.CreateErc721Mutation(workId: workId, gsPath: gsPath)) { result in
+            cli.perform(mutation: NftAPI.MintErc721Mutation(workId: workId, gsPath: gsPath)) { result in
                 switch result {
                 case .success(let graphQLResult):
                     if let errors = graphQLResult.errors {
@@ -155,9 +161,9 @@ struct NftCaller {
         }
     }
 
-    func createERC1155(workId: String, gsPath: String, amount: Int) -> Future<Void, AppError> {
+    func mintERC1155(workId: String, gsPath: String, amount: Int) -> Future<Void, AppError> {
         return Future<Void, AppError> { promise in
-            cli.perform(mutation: NftAPI.CreateErc1155Mutation(workId: workId, gsPath: gsPath, amount: amount)) { result in
+            cli.perform(mutation: NftAPI.MintErc1155Mutation(workId: workId, gsPath: gsPath, amount: amount)) { result in
                 switch result {
                 case .success(let graphQLResult):
                     if let errors = graphQLResult.errors {

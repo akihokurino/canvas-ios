@@ -89,9 +89,9 @@ struct ArchiveDetailView: View {
 
                     switch nftType {
                     case .ERC721:
-                        viewStore.send(.createERC721(CreateERC721Input()))
+                        viewStore.send(.mintERC721(MintERC721Input()))
                     case .ERC1155:
-                        viewStore.send(.createERC1155(CreateERC1155Input(amount: amount!)))
+                        viewStore.send(.mintERC1155(MintERC1155Input(amount: amount!)))
                     }
                 }
             }

@@ -3,23 +3,22 @@ query GetMe {
     id
     walletAddress
     balance
-    nft721Num
-    nft1155Num {
-      workId
+    erc721Balance
+    erc1155Balance {
+      tokenName
       balance
     }
   }
 }
 
-query GetWork($workId: String!) {
-  work(id: $workId) {
-    id
-    asset721 {
+query GetMintedToken($workId: String!) {
+  mintedToken(workId: $workId) {
+    erc721 {
       address
       tokenId
       imageUrl
     }
-    asset1155 {
+    erc1155 {
       address
       tokenId
       imageUrl
@@ -34,20 +33,22 @@ query IsOwnNft($workId: String!) {
   }
 }
 
-mutation CreateERC721($workId: String!, $gsPath: String!) {
-  createErc721(input: {
+mutation MintERC721($workId: String!, $gsPath: String!) {
+  mintErc721(input: {
     workId: $workId,
     gsPath: $gsPath,
     useIpfs: true,
+    isAsync: true
   })
 }
 
-mutation CreateERC1155($workId: String!, $gsPath: String!, $amount: Int!) {
-  createErc1155(input: {
+mutation MintERC1155($workId: String!, $gsPath: String!, $amount: Int!) {
+  mintErc1155(input: {
     workId: $workId,
     gsPath: $gsPath,
     amount: $amount,
     useIpfs: true,
+    isAsync: true
   })
 }
 

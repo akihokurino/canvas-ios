@@ -16,10 +16,10 @@ public enum NftAPI {
           id
           walletAddress
           balance
-          nft721Num
-          nft1155Num {
+          erc721Balance
+          erc1155Balance {
             __typename
-            workId
+            tokenName
             balance
           }
         }
@@ -60,7 +60,7 @@ public enum NftAPI {
       }
 
       public struct Me: GraphQLSelectionSet {
-        public static let possibleTypes: [String] = ["User"]
+        public static let possibleTypes: [String] = ["Publisher"]
 
         public static var selections: [GraphQLSelection] {
           return [
@@ -68,8 +68,8 @@ public enum NftAPI {
             GraphQLField("id", type: .nonNull(.scalar(String.self))),
             GraphQLField("walletAddress", type: .nonNull(.scalar(String.self))),
             GraphQLField("balance", type: .nonNull(.scalar(Double.self))),
-            GraphQLField("nft721Num", type: .nonNull(.scalar(Int.self))),
-            GraphQLField("nft1155Num", type: .nonNull(.list(.nonNull(.object(Nft1155Num.selections))))),
+            GraphQLField("erc721Balance", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("erc1155Balance", type: .nonNull(.list(.nonNull(.object(Erc1155Balance.selections))))),
           ]
         }
 
@@ -79,8 +79,8 @@ public enum NftAPI {
           self.resultMap = unsafeResultMap
         }
 
-        public init(id: String, walletAddress: String, balance: Double, nft721Num: Int, nft1155Num: [Nft1155Num]) {
-          self.init(unsafeResultMap: ["__typename": "User", "id": id, "walletAddress": walletAddress, "balance": balance, "nft721Num": nft721Num, "nft1155Num": nft1155Num.map { (value: Nft1155Num) -> ResultMap in value.resultMap }])
+        public init(id: String, walletAddress: String, balance: Double, erc721Balance: Int, erc1155Balance: [Erc1155Balance]) {
+          self.init(unsafeResultMap: ["__typename": "Publisher", "id": id, "walletAddress": walletAddress, "balance": balance, "erc721Balance": erc721Balance, "erc1155Balance": erc1155Balance.map { (value: Erc1155Balance) -> ResultMap in value.resultMap }])
         }
 
         public var __typename: String {
@@ -119,31 +119,31 @@ public enum NftAPI {
           }
         }
 
-        public var nft721Num: Int {
+        public var erc721Balance: Int {
           get {
-            return resultMap["nft721Num"]! as! Int
+            return resultMap["erc721Balance"]! as! Int
           }
           set {
-            resultMap.updateValue(newValue, forKey: "nft721Num")
+            resultMap.updateValue(newValue, forKey: "erc721Balance")
           }
         }
 
-        public var nft1155Num: [Nft1155Num] {
+        public var erc1155Balance: [Erc1155Balance] {
           get {
-            return (resultMap["nft1155Num"] as! [ResultMap]).map { (value: ResultMap) -> Nft1155Num in Nft1155Num(unsafeResultMap: value) }
+            return (resultMap["erc1155Balance"] as! [ResultMap]).map { (value: ResultMap) -> Erc1155Balance in Erc1155Balance(unsafeResultMap: value) }
           }
           set {
-            resultMap.updateValue(newValue.map { (value: Nft1155Num) -> ResultMap in value.resultMap }, forKey: "nft1155Num")
+            resultMap.updateValue(newValue.map { (value: Erc1155Balance) -> ResultMap in value.resultMap }, forKey: "erc1155Balance")
           }
         }
 
-        public struct Nft1155Num: GraphQLSelectionSet {
+        public struct Erc1155Balance: GraphQLSelectionSet {
           public static let possibleTypes: [String] = ["Nft1155Balance"]
 
           public static var selections: [GraphQLSelection] {
             return [
               GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
-              GraphQLField("workId", type: .nonNull(.scalar(String.self))),
+              GraphQLField("tokenName", type: .nonNull(.scalar(String.self))),
               GraphQLField("balance", type: .nonNull(.scalar(Int.self))),
             ]
           }
@@ -154,8 +154,8 @@ public enum NftAPI {
             self.resultMap = unsafeResultMap
           }
 
-          public init(workId: String, balance: Int) {
-            self.init(unsafeResultMap: ["__typename": "Nft1155Balance", "workId": workId, "balance": balance])
+          public init(tokenName: String, balance: Int) {
+            self.init(unsafeResultMap: ["__typename": "Nft1155Balance", "tokenName": tokenName, "balance": balance])
           }
 
           public var __typename: String {
@@ -167,12 +167,12 @@ public enum NftAPI {
             }
           }
 
-          public var workId: String {
+          public var tokenName: String {
             get {
-              return resultMap["workId"]! as! String
+              return resultMap["tokenName"]! as! String
             }
             set {
-              resultMap.updateValue(newValue, forKey: "workId")
+              resultMap.updateValue(newValue, forKey: "tokenName")
             }
           }
 
@@ -189,21 +189,20 @@ public enum NftAPI {
     }
   }
 
-  public final class GetWorkQuery: GraphQLQuery {
+  public final class GetMintedTokenQuery: GraphQLQuery {
     /// The raw GraphQL definition of this operation.
     public let operationDefinition: String =
       """
-      query GetWork($workId: String!) {
-        work(id: $workId) {
+      query GetMintedToken($workId: String!) {
+        mintedToken(workId: $workId) {
           __typename
-          id
-          asset721 {
+          erc721 {
             __typename
             address
             tokenId
             imageUrl
           }
-          asset1155 {
+          erc1155 {
             __typename
             address
             tokenId
@@ -213,7 +212,7 @@ public enum NftAPI {
       }
       """
 
-    public let operationName: String = "GetWork"
+    public let operationName: String = "GetMintedToken"
 
     public var workId: String
 
@@ -230,7 +229,7 @@ public enum NftAPI {
 
       public static var selections: [GraphQLSelection] {
         return [
-          GraphQLField("work", arguments: ["id": GraphQLVariable("workId")], type: .nonNull(.object(Work.selections))),
+          GraphQLField("mintedToken", arguments: ["workId": GraphQLVariable("workId")], type: .nonNull(.object(MintedToken.selections))),
         ]
       }
 
@@ -240,28 +239,27 @@ public enum NftAPI {
         self.resultMap = unsafeResultMap
       }
 
-      public init(work: Work) {
-        self.init(unsafeResultMap: ["__typename": "QueryRoot", "work": work.resultMap])
+      public init(mintedToken: MintedToken) {
+        self.init(unsafeResultMap: ["__typename": "QueryRoot", "mintedToken": mintedToken.resultMap])
       }
 
-      public var work: Work {
+      public var mintedToken: MintedToken {
         get {
-          return Work(unsafeResultMap: resultMap["work"]! as! ResultMap)
+          return MintedToken(unsafeResultMap: resultMap["mintedToken"]! as! ResultMap)
         }
         set {
-          resultMap.updateValue(newValue.resultMap, forKey: "work")
+          resultMap.updateValue(newValue.resultMap, forKey: "mintedToken")
         }
       }
 
-      public struct Work: GraphQLSelectionSet {
-        public static let possibleTypes: [String] = ["Work"]
+      public struct MintedToken: GraphQLSelectionSet {
+        public static let possibleTypes: [String] = ["MintedToken"]
 
         public static var selections: [GraphQLSelection] {
           return [
             GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
-            GraphQLField("id", type: .nonNull(.scalar(String.self))),
-            GraphQLField("asset721", type: .object(Asset721.selections)),
-            GraphQLField("asset1155", type: .object(Asset1155.selections)),
+            GraphQLField("erc721", type: .object(Erc721.selections)),
+            GraphQLField("erc1155", type: .object(Erc1155.selections)),
           ]
         }
 
@@ -271,8 +269,8 @@ public enum NftAPI {
           self.resultMap = unsafeResultMap
         }
 
-        public init(id: String, asset721: Asset721? = nil, asset1155: Asset1155? = nil) {
-          self.init(unsafeResultMap: ["__typename": "Work", "id": id, "asset721": asset721.flatMap { (value: Asset721) -> ResultMap in value.resultMap }, "asset1155": asset1155.flatMap { (value: Asset1155) -> ResultMap in value.resultMap }])
+        public init(erc721: Erc721? = nil, erc1155: Erc1155? = nil) {
+          self.init(unsafeResultMap: ["__typename": "MintedToken", "erc721": erc721.flatMap { (value: Erc721) -> ResultMap in value.resultMap }, "erc1155": erc1155.flatMap { (value: Erc1155) -> ResultMap in value.resultMap }])
         }
 
         public var __typename: String {
@@ -284,42 +282,33 @@ public enum NftAPI {
           }
         }
 
-        public var id: String {
+        public var erc721: Erc721? {
           get {
-            return resultMap["id"]! as! String
+            return (resultMap["erc721"] as? ResultMap).flatMap { Erc721(unsafeResultMap: $0) }
           }
           set {
-            resultMap.updateValue(newValue, forKey: "id")
+            resultMap.updateValue(newValue?.resultMap, forKey: "erc721")
           }
         }
 
-        public var asset721: Asset721? {
+        public var erc1155: Erc1155? {
           get {
-            return (resultMap["asset721"] as? ResultMap).flatMap { Asset721(unsafeResultMap: $0) }
+            return (resultMap["erc1155"] as? ResultMap).flatMap { Erc1155(unsafeResultMap: $0) }
           }
           set {
-            resultMap.updateValue(newValue?.resultMap, forKey: "asset721")
+            resultMap.updateValue(newValue?.resultMap, forKey: "erc1155")
           }
         }
 
-        public var asset1155: Asset1155? {
-          get {
-            return (resultMap["asset1155"] as? ResultMap).flatMap { Asset1155(unsafeResultMap: $0) }
-          }
-          set {
-            resultMap.updateValue(newValue?.resultMap, forKey: "asset1155")
-          }
-        }
-
-        public struct Asset721: GraphQLSelectionSet {
-          public static let possibleTypes: [String] = ["Asset721"]
+        public struct Erc721: GraphQLSelectionSet {
+          public static let possibleTypes: [String] = ["Token"]
 
           public static var selections: [GraphQLSelection] {
             return [
               GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
               GraphQLField("address", type: .nonNull(.scalar(String.self))),
-              GraphQLField("tokenId", type: .nonNull(.scalar(String.self))),
-              GraphQLField("imageUrl", type: .nonNull(.scalar(String.self))),
+              GraphQLField("tokenId", type: .scalar(String.self)),
+              GraphQLField("imageUrl", type: .scalar(String.self)),
             ]
           }
 
@@ -329,8 +318,8 @@ public enum NftAPI {
             self.resultMap = unsafeResultMap
           }
 
-          public init(address: String, tokenId: String, imageUrl: String) {
-            self.init(unsafeResultMap: ["__typename": "Asset721", "address": address, "tokenId": tokenId, "imageUrl": imageUrl])
+          public init(address: String, tokenId: String? = nil, imageUrl: String? = nil) {
+            self.init(unsafeResultMap: ["__typename": "Token", "address": address, "tokenId": tokenId, "imageUrl": imageUrl])
           }
 
           public var __typename: String {
@@ -351,18 +340,18 @@ public enum NftAPI {
             }
           }
 
-          public var tokenId: String {
+          public var tokenId: String? {
             get {
-              return resultMap["tokenId"]! as! String
+              return resultMap["tokenId"] as? String
             }
             set {
               resultMap.updateValue(newValue, forKey: "tokenId")
             }
           }
 
-          public var imageUrl: String {
+          public var imageUrl: String? {
             get {
-              return resultMap["imageUrl"]! as! String
+              return resultMap["imageUrl"] as? String
             }
             set {
               resultMap.updateValue(newValue, forKey: "imageUrl")
@@ -370,15 +359,15 @@ public enum NftAPI {
           }
         }
 
-        public struct Asset1155: GraphQLSelectionSet {
-          public static let possibleTypes: [String] = ["Asset1155"]
+        public struct Erc1155: GraphQLSelectionSet {
+          public static let possibleTypes: [String] = ["Token"]
 
           public static var selections: [GraphQLSelection] {
             return [
               GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
               GraphQLField("address", type: .nonNull(.scalar(String.self))),
-              GraphQLField("tokenId", type: .nonNull(.scalar(String.self))),
-              GraphQLField("imageUrl", type: .nonNull(.scalar(String.self))),
+              GraphQLField("tokenId", type: .scalar(String.self)),
+              GraphQLField("imageUrl", type: .scalar(String.self)),
             ]
           }
 
@@ -388,8 +377,8 @@ public enum NftAPI {
             self.resultMap = unsafeResultMap
           }
 
-          public init(address: String, tokenId: String, imageUrl: String) {
-            self.init(unsafeResultMap: ["__typename": "Asset1155", "address": address, "tokenId": tokenId, "imageUrl": imageUrl])
+          public init(address: String, tokenId: String? = nil, imageUrl: String? = nil) {
+            self.init(unsafeResultMap: ["__typename": "Token", "address": address, "tokenId": tokenId, "imageUrl": imageUrl])
           }
 
           public var __typename: String {
@@ -410,18 +399,18 @@ public enum NftAPI {
             }
           }
 
-          public var tokenId: String {
+          public var tokenId: String? {
             get {
-              return resultMap["tokenId"]! as! String
+              return resultMap["tokenId"] as? String
             }
             set {
               resultMap.updateValue(newValue, forKey: "tokenId")
             }
           }
 
-          public var imageUrl: String {
+          public var imageUrl: String? {
             get {
-              return resultMap["imageUrl"]! as! String
+              return resultMap["imageUrl"] as? String
             }
             set {
               resultMap.updateValue(newValue, forKey: "imageUrl")
@@ -486,7 +475,7 @@ public enum NftAPI {
       }
 
       public struct IsOwnNft: GraphQLSelectionSet {
-        public static let possibleTypes: [String] = ["OwnNft"]
+        public static let possibleTypes: [String] = ["IsOwn"]
 
         public static var selections: [GraphQLSelection] {
           return [
@@ -503,7 +492,7 @@ public enum NftAPI {
         }
 
         public init(erc721: Bool, erc1155: Bool) {
-          self.init(unsafeResultMap: ["__typename": "OwnNft", "erc721": erc721, "erc1155": erc1155])
+          self.init(unsafeResultMap: ["__typename": "IsOwn", "erc721": erc721, "erc1155": erc1155])
         }
 
         public var __typename: String {
@@ -536,16 +525,18 @@ public enum NftAPI {
     }
   }
 
-  public final class CreateErc721Mutation: GraphQLMutation {
+  public final class MintErc721Mutation: GraphQLMutation {
     /// The raw GraphQL definition of this operation.
     public let operationDefinition: String =
       """
-      mutation CreateERC721($workId: String!, $gsPath: String!) {
-        createErc721(input: {workId: $workId, gsPath: $gsPath, useIpfs: true})
+      mutation MintERC721($workId: String!, $gsPath: String!) {
+        mintErc721(
+          input: {workId: $workId, gsPath: $gsPath, useIpfs: true, isAsync: true}
+        )
       }
       """
 
-    public let operationName: String = "CreateERC721"
+    public let operationName: String = "MintERC721"
 
     public var workId: String
     public var gsPath: String
@@ -564,7 +555,7 @@ public enum NftAPI {
 
       public static var selections: [GraphQLSelection] {
         return [
-          GraphQLField("createErc721", arguments: ["input": ["workId": GraphQLVariable("workId"), "gsPath": GraphQLVariable("gsPath"), "useIpfs": true]], type: .nonNull(.scalar(Bool.self))),
+          GraphQLField("mintErc721", arguments: ["input": ["workId": GraphQLVariable("workId"), "gsPath": GraphQLVariable("gsPath"), "useIpfs": true, "isAsync": true]], type: .nonNull(.scalar(Bool.self))),
         ]
       }
 
@@ -574,33 +565,33 @@ public enum NftAPI {
         self.resultMap = unsafeResultMap
       }
 
-      public init(createErc721: Bool) {
-        self.init(unsafeResultMap: ["__typename": "MutationRoot", "createErc721": createErc721])
+      public init(mintErc721: Bool) {
+        self.init(unsafeResultMap: ["__typename": "MutationRoot", "mintErc721": mintErc721])
       }
 
-      public var createErc721: Bool {
+      public var mintErc721: Bool {
         get {
-          return resultMap["createErc721"]! as! Bool
+          return resultMap["mintErc721"]! as! Bool
         }
         set {
-          resultMap.updateValue(newValue, forKey: "createErc721")
+          resultMap.updateValue(newValue, forKey: "mintErc721")
         }
       }
     }
   }
 
-  public final class CreateErc1155Mutation: GraphQLMutation {
+  public final class MintErc1155Mutation: GraphQLMutation {
     /// The raw GraphQL definition of this operation.
     public let operationDefinition: String =
       """
-      mutation CreateERC1155($workId: String!, $gsPath: String!, $amount: Int!) {
-        createErc1155(
-          input: {workId: $workId, gsPath: $gsPath, amount: $amount, useIpfs: true}
+      mutation MintERC1155($workId: String!, $gsPath: String!, $amount: Int!) {
+        mintErc1155(
+          input: {workId: $workId, gsPath: $gsPath, amount: $amount, useIpfs: true, isAsync: true}
         )
       }
       """
 
-    public let operationName: String = "CreateERC1155"
+    public let operationName: String = "MintERC1155"
 
     public var workId: String
     public var gsPath: String
@@ -621,7 +612,7 @@ public enum NftAPI {
 
       public static var selections: [GraphQLSelection] {
         return [
-          GraphQLField("createErc1155", arguments: ["input": ["workId": GraphQLVariable("workId"), "gsPath": GraphQLVariable("gsPath"), "amount": GraphQLVariable("amount"), "useIpfs": true]], type: .nonNull(.scalar(Bool.self))),
+          GraphQLField("mintErc1155", arguments: ["input": ["workId": GraphQLVariable("workId"), "gsPath": GraphQLVariable("gsPath"), "amount": GraphQLVariable("amount"), "useIpfs": true, "isAsync": true]], type: .nonNull(.scalar(Bool.self))),
         ]
       }
 
@@ -631,16 +622,16 @@ public enum NftAPI {
         self.resultMap = unsafeResultMap
       }
 
-      public init(createErc1155: Bool) {
-        self.init(unsafeResultMap: ["__typename": "MutationRoot", "createErc1155": createErc1155])
+      public init(mintErc1155: Bool) {
+        self.init(unsafeResultMap: ["__typename": "MutationRoot", "mintErc1155": mintErc1155])
       }
 
-      public var createErc1155: Bool {
+      public var mintErc1155: Bool {
         get {
-          return resultMap["createErc1155"]! as! Bool
+          return resultMap["mintErc1155"]! as! Bool
         }
         set {
-          resultMap.updateValue(newValue, forKey: "createErc1155")
+          resultMap.updateValue(newValue, forKey: "mintErc1155")
         }
       }
     }

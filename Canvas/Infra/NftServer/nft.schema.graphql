@@ -3,23 +3,24 @@ schema {
   mutation: MutationRoot
 }
 
-type Asset721 {
-  workId: String!
-  address: String!
-  tokenId: String!
-  name: String!
-  description: String!
-  imageUrl: String!
-  imagePreviewUrl: String!
-  permalink: String!
-  usdPrice: Float!
-  ethPrice: Float!
+type Publisher {
+  id: String!
+  walletAddress: String!
+  balance: Float!
+  erc721Balance: Int!
+  erc1155Balance: [Nft1155Balance!]!
 }
 
 input TransferERC1155Input {
   workId: String!
   toAddress: String!
   amount: Int!
+}
+
+type ContractConnection {
+  edges: [ContractEdge!]!
+  nextKey: String
+  totalCount: Int
 }
 
 input SellERC721Input {
@@ -29,61 +30,70 @@ input SellERC721Input {
 
 type Thumbnail {
   id: String!
+  workId: String!
   imagePath: String!
   signedImageUrl: String!
-  order: Int!
+  work: Work!
+}
+
+type TokenConnection {
+  edges: [TokenEdge!]!
+  nextKey: String
+  totalCount: Int
 }
 
 type MutationRoot {
-  registerUser(input: RegisterUserInput!): String!
+  registerPublisher(input: RegisterPublisherInput!): String!
+  syncCsv: Boolean!
   importWork(input: ImportWorkInput!): Boolean!
   importThumbnail(input: ImportThumbnailInput!): Boolean!
   preSignUploadWork: PreSignUploadUrl!
   preSignUploadThumbnail: PreSignUploadUrl!
   deleteWork(id: String!): Boolean!
-  createErc721(input: CreateERC721Input!): Boolean!
-  createErc1155(input: CreateERC1155Input!): Boolean!
+  registerContract(input: RegisterContractInput!): Contract!
+  mintErc721(input: MintERC721Input!): Boolean!
+  mintErc1155(input: MintERC1155Input!): Boolean!
   sellErc721(input: SellERC721Input!): Boolean!
   sellErc1155(input: SellERC1155Input!): Boolean!
   transferErc721(input: TransferERC721Input!): Boolean!
   transferErc1155(input: TransferERC1155Input!): Boolean!
+  syncAllTokens: Boolean!
 }
 
-input CreateERC721Input {
-  workId: String!
-  gsPath: String!
-  useIpfs: Boolean!
-}
-
-type Asset1155 {
-  workId: String!
+input RegisterContractInput {
   address: String!
-  tokenId: String!
-  name: String!
-  description: String!
-  imageUrl: String!
-  imagePreviewUrl: String!
-  permalink: String!
-  usdPrice: Float!
-  ethPrice: Float!
+  schema: Schema!
+  abi: String!
+}
+
+type IsOwn {
+  erc721: Boolean!
+  erc1155: Boolean!
+}
+
+type Token {
+  address: String!
+  workId: String!
+  tokenId: String
+  name: String
+  description: String
+  imageUrl: String
+  imagePreviewUrl: String
+  imagePermalink: String
+  usdPrice: String
+  ethPrice: String
+  contract: Contract!
 }
 
 input ImportWorkInput {
-  fileName: String!
+  isAsync: Boolean!
 }
 
-input RegisterUserInput {
-  email: String!
-  password: String!
-  walletAddress: String!
-  walletSecret: String!
-}
-
-input CreateERC1155Input {
+input MintERC721Input {
   workId: String!
   gsPath: String!
-  amount: Int!
   useIpfs: Boolean!
+  isAsync: Boolean!
 }
 
 input TransferERC721Input {
@@ -92,21 +102,31 @@ input TransferERC721Input {
 }
 
 type QueryRoot {
-  me: User!
-  allWorks(status: WorkStatus, nextKey: String, limit: Int): WorkConnection!
+  me: Publisher!
+  works(nextKey: String, limit: Int): WorkConnection!
   worksByIds(ids: [String!]!): [Work!]!
   work(id: String!): Work!
-  isOwnNft(workId: String!): OwnNft!
+  thumbnails(workId: String!, nextKey: String, limit: Int): ThumbnailConnection!
+  contracts(nextKey: String, limit: Int): ContractConnection!
+  contractsByAddresses(addresses: [String!]!): [Contract!]!
+  contract(address: String!): Contract!
+  tokens(address: String!, nextKey: String, limit: Int): TokenConnection!
+  mintedToken(workId: String!): MintedToken!
+  isOwnNft(workId: String!): IsOwn!
+}
+
+type ThumbnailConnection {
+  edges: [ThumbnailEdge!]!
+  nextKey: String
+  totalCount: Int
+}
+
+type ContractEdge {
+  node: Contract!
 }
 
 input ImportThumbnailInput {
-  fileName: String!
-}
-
-input SellERC1155Input {
-  workId: String!
-  ether: Float!
-  amount: Int!
+  isAsync: Boolean!
 }
 
 type WorkConnection {
@@ -116,42 +136,64 @@ type WorkConnection {
 }
 
 type Nft1155Balance {
-  workId: String!
+  tokenName: String!
   balance: Int!
 }
 
-enum WorkStatus {
-  PREPARE
-  PUBLISH_NFT
-  SELL_ORDER
+type ThumbnailEdge {
+  node: Thumbnail!
 }
 
-type OwnNft {
-  erc721: Boolean!
-  erc1155: Boolean!
+input SellERC1155Input {
+  workId: String!
+  ether: Float!
+  amount: Int!
+}
+
+enum Schema {
+  ERC721
+  ERC1155
 }
 
 type Work {
   id: String!
   videoPath: String!
   signedVideoUrl: String!
-  status: WorkStatus!
   thumbnails: [Thumbnail!]!
-  asset721: Asset721
-  asset1155: Asset1155
 }
 
-type User {
-  id: String!
-  walletAddress: String!
-  balance: Float!
-  nft721Num: Int!
-  nft1155Num: [Nft1155Balance!]!
+type MintedToken {
+  erc721: Token
+  erc1155: Token
+}
+
+type Contract {
+  address: String!
+  schema: Schema!
+  tokens: [Token!]!
+}
+
+input MintERC1155Input {
+  workId: String!
+  gsPath: String!
+  amount: Int!
+  useIpfs: Boolean!
+  isAsync: Boolean!
 }
 
 type PreSignUploadUrl {
   url: String!
-  fileName: String!
+}
+
+input RegisterPublisherInput {
+  email: String!
+  password: String!
+  walletAddress: String!
+  walletSecret: String!
+}
+
+type TokenEdge {
+  node: Token!
 }
 
 type WorkEdge {

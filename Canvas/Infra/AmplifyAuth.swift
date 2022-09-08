@@ -17,6 +17,8 @@ class AmplifyAuthManager {
                 promise(.success(()))
             }
             
+            let _ = Amplify.Auth.signOut()
+            
             Amplify.Auth.signIn(username: "aki030402@gmail.com", password: "Test1234") { result in
                 switch result {
                 case .success:

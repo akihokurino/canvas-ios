@@ -1,8 +1,8 @@
 import SwiftUI
 
 struct NftView: View {
-    let nftType: NftType
-    let asset: Asset
+    let nftType: Schema
+    let asset: Token
     let isOwn: Bool
     let sell: (Double) -> Void
     let transfer: (String) -> Void
