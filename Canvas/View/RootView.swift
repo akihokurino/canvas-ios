@@ -58,6 +58,23 @@ struct RootView: View {
                                 .frame(width: 50, height: 50, alignment: .center)
                         }
                     }.tag(3)
+                    
+                    NavigationView {
+                        IfLetStore(
+                            store.scope(
+                                state: { $0.contractListView },
+                                action: RootVM.Action.contractListView
+                            ),
+                            then: ContractListView.init(store:)
+                        )
+                    }
+                    .tabItem {
+                        VStack {
+                            Image(systemName: "square.fill.on.square.fill")
+                                .resizable()
+                                .frame(width: 50, height: 50, alignment: .center)
+                        }
+                    }.tag(4)
 
                     NavigationView {
                         IfLetStore(
@@ -74,7 +91,7 @@ struct RootView: View {
                                 .resizable()
                                 .frame(width: 50, height: 50, alignment: .center)
                         }
-                    }.tag(4)
+                    }.tag(5)
                 }
             }
             .overlay(

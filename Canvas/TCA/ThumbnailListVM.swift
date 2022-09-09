@@ -134,8 +134,3 @@ extension ThumbnailListVM {
         let backgroundQueue: AnySchedulerOf<DispatchQueue>
     }
 }
-
-struct ThumbnailsWithHasNext: Equatable {
-    let thumbnails: [CanvasAPI.ThumbnailFragment]
-    let hasNext: Bool
-}

@@ -14,7 +14,7 @@ struct WalletView: View {
                         Text(viewStore.address)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .multilineTextAlignment(.leading)
-                            .font(.title3)
+                            .font(.headline)
                             .lineLimit(nil)
                     }
                     .foregroundColor(Color.blue)

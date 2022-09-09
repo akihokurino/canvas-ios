@@ -1,83 +1,125 @@
 query GetMe {
-  me {
-    id
-    walletAddress
-    balance
-    erc721Balance
-    erc1155Balance {
-      tokenName
-      balance
+    me {
+        id
+        walletAddress
+        balance
+        erc721Balance
+        erc1155Balance {
+            tokenName
+            balance
+        }
     }
-  }
 }
 
 query GetMintedToken($workId: String!) {
-  mintedToken(workId: $workId) {
-    erc721 {
-      address
-      tokenId
-      imageUrl
+    mintedToken(workId: $workId) {
+        erc721 {
+            address
+            tokenId
+            imageUrl
+        }
+        erc1155 {
+            address
+            tokenId
+            imageUrl
+        }
     }
-    erc1155 {
-      address
-      tokenId
-      imageUrl
-    }
-  }
 }
 
 query IsOwnNft($workId: String!) {
-  isOwnNft(workId: $workId) {
-    erc721
-    erc1155
-  }
+    isOwnNft(workId: $workId) {
+        erc721
+        erc1155
+    }
+}
+
+query GetContracts($cursor: String) {
+    contracts(nextKey: $cursor, limit: 20) {
+        edges {
+            node {
+                ...ContractFragment
+            }
+        }
+        nextKey
+    }
+}
+
+query GetTokens($address: String!, $cursor: String) {
+    tokens(address: $address, nextKey: $cursor, limit: 20) {
+        edges {
+            node {
+                ...TokenFragment
+            }
+        }
+        nextKey
+    }
+}
+
+
+fragment ContractFragment on Contract {
+    address
+    schema
+    tokens {
+        address
+        workId
+        imageUrl
+    }
+}
+
+fragment TokenFragment on Token {
+    address
+    workId
+    tokenId
+    name
+    description
+    imageUrl
 }
 
 mutation MintERC721($workId: String!, $gsPath: String!) {
-  mintErc721(input: {
-    workId: $workId,
-    gsPath: $gsPath,
-    useIpfs: true,
-    isAsync: true
-  })
+    mintErc721(input: {
+        workId: $workId,
+        gsPath: $gsPath,
+        useIpfs: true,
+        isAsync: true
+    })
 }
 
 mutation MintERC1155($workId: String!, $gsPath: String!, $amount: Int!) {
-  mintErc1155(input: {
-    workId: $workId,
-    gsPath: $gsPath,
-    amount: $amount,
-    useIpfs: true,
-    isAsync: true
-  })
+    mintErc1155(input: {
+        workId: $workId,
+        gsPath: $gsPath,
+        amount: $amount,
+        useIpfs: true,
+        isAsync: true
+    })
 }
 
 mutation SellERC721($workId: String!, $ether: Float!) {
-  sellErc721(input: {
-    workId: $workId,
-    ether: $ether,
-  })
+    sellErc721(input: {
+        workId: $workId,
+        ether: $ether,
+    })
 }
 
 mutation SellERC1155($workId: String!, $ether: Float!) {
-  sellErc1155(input: {
-    workId: $workId,
-    ether: $ether,
-    amount: 1,
-  })
+    sellErc1155(input: {
+        workId: $workId,
+        ether: $ether,
+        amount: 1,
+    })
 }
 
 mutation TransferERC721($workId: String!, $toAddress: String!) {
-  transferErc721(input: {
-    workId: $workId,
-    toAddress: $toAddress,
-  })
+    transferErc721(input: {
+        workId: $workId,
+        toAddress: $toAddress,
+    })
 }
 
 mutation TransferERC1155($workId: String!, $toAddress: String!) {
-  transferErc1155(input: {
-    workId: $workId,
-    toAddress: $toAddress,
-    amount: 1,
-  })
+    transferErc1155(input: {
+        workId: $workId,
+        toAddress: $toAddress,
+        amount: 1,
+    })
 }

@@ -44,6 +44,7 @@ enum RootVM {
                 state.workListView = WorkListVM.State()
                 state.archiveListView = ArchiveListVM.State()
                 state.thumbnailListView = ThumbnailListVM.State()
+                state.contractListView = ContractListVM.State()
                 state.walletView = WalletVM.State()
 
                 state.initialized = true
@@ -61,6 +62,8 @@ enum RootVM {
             case .archiveListView(let action):
                 return .none
             case .thumbnailListView(let action):
+                return .none
+            case .contractListView(let action):
                 return .none
             case .walletView(let action):
                 return .none
@@ -100,6 +103,17 @@ enum RootVM {
         }
     )
     .connect(
+        ContractListVM.reducer,
+        state: \.contractListView,
+        action: /RootVM.Action.contractListView,
+        environment: { _environment in
+            ContractListVM.Environment(
+                mainQueue: _environment.mainQueue,
+                backgroundQueue: _environment.backgroundQueue
+            )
+        }
+    )
+    .connect(
         WalletVM.reducer,
         state: \.walletView,
         action: /RootVM.Action.walletView,
@@ -121,6 +135,7 @@ extension RootVM {
         case workListView(WorkListVM.Action)
         case archiveListView(ArchiveListVM.Action)
         case thumbnailListView(ThumbnailListVM.Action)
+        case contractListView(ContractListVM.Action)
         case walletView(WalletVM.Action)
     }
 
@@ -131,6 +146,7 @@ extension RootVM {
         var workListView: WorkListVM.State?
         var archiveListView: ArchiveListVM.State?
         var thumbnailListView: ThumbnailListVM.State?
+        var contractListView: ContractListVM.State?
         var walletView: WalletVM.State?
     }
 

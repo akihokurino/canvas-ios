@@ -14,7 +14,7 @@ enum ArchiveDetailVM {
             state.shouldShowHUD = true
 
             return NftClient.shared.caller()
-                .flatMap { caller in caller.getMintedToken(workId: archive.id).combineLatest(caller.isOwnNft(workId: archive.id)) }
+                .flatMap { caller in caller.mintedToken(workId: archive.id).combineLatest(caller.isOwnNft(workId: archive.id)) }
                 .map { TokenBundle(erc721: $0.0.erc721, ownERC721: $0.1.erc721, erc1155: $0.0.erc1155, ownERC1155: $0.1.erc1155) }
                 .subscribe(on: environment.backgroundQueue)
                 .receive(on: environment.mainQueue)
@@ -38,7 +38,7 @@ enum ArchiveDetailVM {
             state.shouldPullToRefresh = true
 
             return NftClient.shared.caller()
-                .flatMap { caller in caller.getMintedToken(workId: archive.id).combineLatest(caller.isOwnNft(workId: archive.id)) }
+                .flatMap { caller in caller.mintedToken(workId: archive.id).combineLatest(caller.isOwnNft(workId: archive.id)) }
                 .map { TokenBundle(erc721: $0.0.erc721, ownERC721: $0.1.erc721, erc1155: $0.0.erc1155, ownERC1155: $0.1.erc1155) }
                 .subscribe(on: environment.backgroundQueue)
                 .receive(on: environment.mainQueue)
@@ -77,7 +77,7 @@ enum ArchiveDetailVM {
             
             return NftClient.shared.caller()
                 .flatMap { caller in caller.mintERC721(workId: archive.id, gsPath: data.imageGsPath).map { caller } }
-                .flatMap { caller in caller.getMintedToken(workId: archive.id).combineLatest(caller.isOwnNft(workId: archive.id)) }
+                .flatMap { caller in caller.mintedToken(workId: archive.id).combineLatest(caller.isOwnNft(workId: archive.id)) }
                 .map { TokenBundle(erc721: $0.0.erc721, ownERC721: $0.1.erc721, erc1155: $0.0.erc1155, ownERC1155: $0.1.erc1155) }
                 .subscribe(on: environment.backgroundQueue)
                 .receive(on: environment.mainQueue)
@@ -93,7 +93,7 @@ enum ArchiveDetailVM {
 
             return NftClient.shared.caller()
                 .flatMap { caller in caller.mintERC1155(workId: archive.id, gsPath: data.imageGsPath, amount: input.amount).map { caller } }
-                .flatMap { caller in caller.getMintedToken(workId: archive.id).combineLatest(caller.isOwnNft(workId: archive.id)) }
+                .flatMap { caller in caller.mintedToken(workId: archive.id).combineLatest(caller.isOwnNft(workId: archive.id)) }
                 .map { TokenBundle(erc721: $0.0.erc721, ownERC721: $0.1.erc721, erc1155: $0.0.erc1155, ownERC1155: $0.1.erc1155) }
                 .subscribe(on: environment.backgroundQueue)
                 .receive(on: environment.mainQueue)
@@ -109,20 +109,21 @@ enum ArchiveDetailVM {
         case .minted(.failure(_)):
             state.shouldShowHUD = false
             return .none
-        case .presentNftView(let type):
-            state.selectNftType = type
-            switch type {
-            case .ERC721:
-                state.isPresentedERC721NftView = true
-            case .ERC1155:
-                state.isPresentedERC1155NftView = true
+        case .presentSellNftView(let schema):
+            switch schema {
+            case .erc721:
+                state.isPresentedERC721SellNftView = true
+            case .erc1155:
+                state.isPresentedERC1155SellNftView = true
+            default:
+                break
             }
             return .none
-        case .isPresentedERC721NftView(let val):
-            state.isPresentedERC721NftView = val
+        case .isPresentedERC721SellNftView(let val):
+            state.isPresentedERC721SellNftView = val
             return .none
-        case .isPresentedERC1155NftView(let val):
-            state.isPresentedERC1155NftView = val
+        case .isPresentedERC1155SellNftView(let val):
+            state.isPresentedERC1155SellNftView = val
             return .none
         case .sellERC721(let input):
             let archive = state.archive
@@ -197,9 +198,9 @@ extension ArchiveDetailVM {
         case mintERC721(MintERC721Input)
         case mintERC1155(MintERC1155Input)
         case minted(Result<TokenBundle, AppError>)
-        case presentNftView(Schema)
-        case isPresentedERC721NftView(Bool)
-        case isPresentedERC1155NftView(Bool)
+        case presentSellNftView(NftAPI.Schema)
+        case isPresentedERC721SellNftView(Bool)
+        case isPresentedERC1155SellNftView(Bool)
         case sellERC721(SellInput)
         case sellERC1155(SellInput)
         case selled(Result<Bool, AppError>)
@@ -220,33 +221,14 @@ extension ArchiveDetailVM {
         var erc1155: Token?
         var isPresentedMintNftView = false
         var selectThumbnail: CanvasAPI.WorkFragment.Thumbnail? = nil
-        var isPresentedERC721NftView = false
-        var isPresentedERC1155NftView = false
-        var selectNftType: Schema? = nil
+        var isPresentedERC721SellNftView = false
+        var isPresentedERC1155SellNftView = false
     }
 
     struct Environment {
         let mainQueue: AnySchedulerOf<DispatchQueue>
         let backgroundQueue: AnySchedulerOf<DispatchQueue>
     }
-}
-
-enum Schema {
-    case ERC721
-    case ERC1155
-}
-
-struct Token: Equatable {
-    let address: String
-    let tokenId: String
-    let imageUrl: String
-}
-
-struct TokenBundle: Equatable {
-    let erc721: Token?
-    let ownERC721: Bool
-    let erc1155: Token?
-    let ownERC1155: Bool
 }
 
 struct MintERC721Input: Equatable {}

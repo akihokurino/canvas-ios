@@ -19,7 +19,7 @@ input TransferERC1155Input {
 
 type ContractConnection {
   edges: [ContractEdge!]!
-  nextKey: String
+  nextKey: String!
   totalCount: Int
 }
 
@@ -38,7 +38,7 @@ type Thumbnail {
 
 type TokenConnection {
   edges: [TokenEdge!]!
-  nextKey: String
+  nextKey: String!
   totalCount: Int
 }
 
@@ -117,7 +117,7 @@ type QueryRoot {
 
 type ThumbnailConnection {
   edges: [ThumbnailEdge!]!
-  nextKey: String
+  nextKey: String!
   totalCount: Int
 }
 
@@ -131,7 +131,7 @@ input ImportThumbnailInput {
 
 type WorkConnection {
   edges: [WorkEdge!]!
-  nextKey: String
+  nextKey: String!
   totalCount: Int
 }
 

@@ -4,6 +4,36 @@ import AWSPluginsCore
 import Combine
 import Foundation
 
+extension NftAPI.ContractFragment: Identifiable, Equatable {
+    public var id: String {
+        return address
+    }
+
+    public static func == (lhs: NftAPI.ContractFragment, rhs: NftAPI.ContractFragment) -> Bool {
+        return lhs.id == rhs.id
+    }
+}
+
+extension NftAPI.ContractFragment.Token: Identifiable, Equatable {
+    public var id: String {
+        return "\(address)#\(workId)"
+    }
+    
+    public static func == (lhs: NftAPI.ContractFragment.Token, rhs: NftAPI.ContractFragment.Token) -> Bool {
+        return lhs.id == rhs.id
+    }
+}
+
+extension NftAPI.TokenFragment: Identifiable, Equatable {
+    public var id: String {
+        return "\(address)#\(workId)"
+    }
+
+    public static func == (lhs: NftAPI.TokenFragment, rhs: NftAPI.TokenFragment) -> Bool {
+        return lhs.id == rhs.id
+    }
+}
+
 struct NftClient {
     static let shared = NftClient()
 
@@ -20,7 +50,7 @@ struct NftClient {
                     let cognitoTokenProvider = session as! AuthCognitoTokensProvider
                     let tokens = try cognitoTokenProvider.getCognitoTokens().get()
                     let token = tokens.idToken
-                
+
                     let cache = InMemoryNormalizedCache()
                     let store = ApolloStore(cache: cache)
                     let configuration = URLSessionConfiguration.default
@@ -28,7 +58,7 @@ struct NftClient {
                     configuration.timeoutIntervalForResource = 60.0
                     let client = URLSessionClient(sessionConfiguration: configuration)
                     let provider = NetworkInterceptorProvider(store: store, client: client)
-                    
+
                     let transport = RequestChainNetworkTransport(
                         interceptorProvider: provider,
                         endpointURL: URL(string: "https://ji1t807ur2.execute-api.ap-northeast-1.amazonaws.com/default/graphql")!,
@@ -50,7 +80,7 @@ struct NftClient {
 struct NftCaller {
     let cli: ApolloClient
 
-    func getWallet() -> Future<(address: String, balance: Double), AppError> {
+    func wallet() -> Future<(address: String, balance: Double), AppError> {
         return Future<(address: String, balance: Double), AppError> { promise in
             cli.fetch(query: NftAPI.GetMeQuery()) { result in
                 switch result {
@@ -76,7 +106,7 @@ struct NftCaller {
         }
     }
 
-    func getMintedToken(workId: String) -> Future<(erc721: Token?, erc1155: Token?), AppError> {
+    func mintedToken(workId: String) -> Future<(erc721: Token?, erc1155: Token?), AppError> {
         return Future<(erc721: Token?, erc1155: Token?), AppError> { promise in
             cli.fetch(query: NftAPI.GetMintedTokenQuery(workId: workId)) { result in
                 switch result {
@@ -133,6 +163,58 @@ struct NftCaller {
                         erc721: data.isOwnNft.erc721,
                         erc1155: data.isOwnNft.erc1155
                     )))
+                case .failure(let error):
+                    promise(.failure(.plain(error.localizedDescription)))
+                }
+            }
+        }
+    }
+
+    func contracts(cursor: String?) -> Future<([NftAPI.ContractFragment], String?), AppError> {
+        return Future<([NftAPI.ContractFragment], String?), AppError> { promise in
+            cli.fetch(query: NftAPI.GetContractsQuery(cursor: cursor)) { result in
+                switch result {
+                case .success(let graphQLResult):
+                    if let errors = graphQLResult.errors {
+                        if !errors.filter({ $0.message != nil }).isEmpty {
+                            let messages = errors.filter { $0.message != nil }.map { $0.message! }
+                            promise(.failure(.plain(messages.joined(separator: "\n"))))
+                            return
+                        }
+                    }
+
+                    guard let data = graphQLResult.data else {
+                        promise(.failure(AppError.defaultError()))
+                        return
+                    }
+
+                    promise(.success((data.contracts.edges.map { $0.node.fragments.contractFragment }, data.contracts.nextKey)))
+                case .failure(let error):
+                    promise(.failure(.plain(error.localizedDescription)))
+                }
+            }
+        }
+    }
+
+    func tokens(address: String, cursor: String?) -> Future<([NftAPI.TokenFragment], String?), AppError> {
+        return Future<([NftAPI.TokenFragment], String?), AppError> { promise in
+            cli.fetch(query: NftAPI.GetTokensQuery(address: address, cursor: cursor)) { result in
+                switch result {
+                case .success(let graphQLResult):
+                    if let errors = graphQLResult.errors {
+                        if !errors.filter({ $0.message != nil }).isEmpty {
+                            let messages = errors.filter { $0.message != nil }.map { $0.message! }
+                            promise(.failure(.plain(messages.joined(separator: "\n"))))
+                            return
+                        }
+                    }
+
+                    guard let data = graphQLResult.data else {
+                        promise(.failure(AppError.defaultError()))
+                        return
+                    }
+
+                    promise(.success((data.tokens.edges.map { $0.node.fragments.tokenFragment }, data.tokens.nextKey)))
                 case .failure(let error):
                     promise(.failure(.plain(error.localizedDescription)))
                 }

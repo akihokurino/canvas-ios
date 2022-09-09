@@ -19,11 +19,11 @@ struct ArchiveDetailView: View {
                 VStack {
                     HStack {
                         ActionButton(text: "ERC721", background: !(viewStore.state.erc721?.tokenId.isEmpty ?? true) ? .primary : .disable) {
-                            viewStore.send(.presentNftView(.ERC721))
+                            viewStore.send(.presentSellNftView(.erc721))
                         }
                         Spacer()
                         ActionButton(text: "ERC1155", background: !(viewStore.state.erc1155?.tokenId.isEmpty ?? true) ? .primary : .disable) {
-                            viewStore.send(.presentNftView(.ERC1155))
+                            viewStore.send(.presentSellNftView(.erc1155))
                         }
                     }
                     .padding(.top, 20)
@@ -84,38 +84,40 @@ struct ArchiveDetailView: View {
                 get: \.isPresentedMintNftView,
                 send: ArchiveDetailVM.Action.isPresentedMintNftView
             )) {
-                MintNftView(data: viewStore.state.selectThumbnail!, hasERC721: viewStore.state.erc721 != nil, hasERC1155: viewStore.state.erc1155 != nil) { nftType, amount in
+                MintNftView(data: viewStore.state.selectThumbnail!, hasERC721: viewStore.state.erc721 != nil, hasERC1155: viewStore.state.erc1155 != nil) { schema, amount in
                     viewStore.send(.isPresentedMintNftView(false))
 
-                    switch nftType {
-                    case .ERC721:
+                    switch schema {
+                    case .erc721:
                         viewStore.send(.mintERC721(MintERC721Input()))
-                    case .ERC1155:
+                    case .erc1155:
                         viewStore.send(.mintERC1155(MintERC1155Input(amount: amount!)))
+                    default:
+                        break
                     }
                 }
             }
             .sheet(isPresented: viewStore.binding(
-                get: \.isPresentedERC721NftView,
-                send: ArchiveDetailVM.Action.isPresentedERC721NftView
+                get: \.isPresentedERC721SellNftView,
+                send: ArchiveDetailVM.Action.isPresentedERC721SellNftView
             )) {
-                NftView(nftType: .ERC721, asset: viewStore.state.erc721!, isOwn: viewStore.state.ownERC721, sell: { ether in
-                    viewStore.send(.isPresentedERC721NftView(false))
+                SellNftView(schema: .erc721, token: viewStore.state.erc721!, isOwn: viewStore.state.ownERC721, sell: { ether in
+                    viewStore.send(.isPresentedERC721SellNftView(false))
                     viewStore.send(.sellERC721(SellInput(ether: ether)))
                 }, transfer: { address in
-                    viewStore.send(.isPresentedERC721NftView(false))
+                    viewStore.send(.isPresentedERC721SellNftView(false))
                     viewStore.send(.transferERC721(TransferInput(toAddress: address)))
                 })
             }
             .sheet(isPresented: viewStore.binding(
-                get: \.isPresentedERC1155NftView,
-                send: ArchiveDetailVM.Action.isPresentedERC1155NftView
+                get: \.isPresentedERC1155SellNftView,
+                send: ArchiveDetailVM.Action.isPresentedERC1155SellNftView
             )) {
-                NftView(nftType: .ERC1155, asset: viewStore.state.erc1155!, isOwn: viewStore.state.ownERC1155, sell: { ether in
-                    viewStore.send(.isPresentedERC1155NftView(false))
+                SellNftView(schema: .erc1155, token: viewStore.state.erc1155!, isOwn: viewStore.state.ownERC1155, sell: { ether in
+                    viewStore.send(.isPresentedERC1155SellNftView(false))
                     viewStore.send(.sellERC1155(SellInput(ether: ether)))
                 }, transfer: { address in
-                    viewStore.send(.isPresentedERC1155NftView(false))
+                    viewStore.send(.isPresentedERC1155SellNftView(false))
                     viewStore.send(.transferERC1155(TransferInput(toAddress: address)))
                 })
             }

@@ -21,7 +21,9 @@ struct ArchiveListView: View {
                 .listRowSeparator(.hidden)
                 .buttonStyle(PlainButtonStyle())
 
-                bottom
+                if viewStore.state.initialized {
+                    bottom
+                }
             }
             .overlay(
                 Group {
@@ -97,7 +99,7 @@ struct ArchiveRow: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            Text(data.id)
+            Text(data.id).font(.headline)
 
             HStack {
                 ForEach(data.thumbnails.shuffled().prefix(3)) { thumbnail in

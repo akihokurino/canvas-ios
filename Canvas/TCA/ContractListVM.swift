@@ -2,7 +2,7 @@ import Combine
 import ComposableArchitecture
 import Foundation
 
-enum ArchiveListVM {
+enum ContractListVM {
     static let reducer = Reducer<State, Action, Environment> { state, action, environment in
         switch action {
         case .startInitialize:
@@ -11,21 +11,21 @@ enum ArchiveListVM {
             }
 
             state.shouldShowHUD = true
-            state.page = 1
-            state.hasNext = false
+            state.cursor = nil
 
-            let page = state.page
+            let cursor = state.cursor
 
-            return CanvasClient.shared.caller()
-                .flatMap { caller in caller.works(page: page) }
-                .map { ArchivesWithHasNext(archives: $0.0, hasNext: $0.1) }
+            return NftClient.shared.caller()
+                .flatMap { caller in caller.contracts(cursor: cursor) }
+                .map { ContractsWithCursor(contracts: $0.0, cursor: $0.1) }
                 .subscribe(on: environment.backgroundQueue)
                 .receive(on: environment.mainQueue)
                 .catchToEffect()
-                .map(ArchiveListVM.Action.endInitialize)
+                .map(ContractListVM.Action.endInitialize)
         case .endInitialize(.success(let result)):
-            state.archives = result.archives
-            state.hasNext = result.hasNext
+            state.contracts = result.contracts
+            print("test \(result.cursor)")
+            state.cursor = result.cursor
             state.shouldShowHUD = false
 
             state.initialized = true
@@ -36,21 +36,20 @@ enum ArchiveListVM {
             return .none
         case .startRefresh:
             state.shouldPullToRefresh = true
-            state.page = 1
-            state.hasNext = false
+            state.cursor = nil
 
-            let page = state.page
+            let cursor = state.cursor
 
-            return CanvasClient.shared.caller()
-                .flatMap { caller in caller.works(page: page) }
-                .map { ArchivesWithHasNext(archives: $0.0, hasNext: $0.1) }
+            return NftClient.shared.caller()
+                .flatMap { caller in caller.contracts(cursor: cursor) }
+                .map { ContractsWithCursor(contracts: $0.0, cursor: $0.1) }
                 .subscribe(on: environment.backgroundQueue)
                 .receive(on: environment.mainQueue)
                 .catchToEffect()
-                .map(ArchiveListVM.Action.endRefresh)
+                .map(ContractListVM.Action.endRefresh)
         case .endRefresh(.success(let result)):
-            state.archives = result.archives
-            state.hasNext = result.hasNext
+            state.contracts = result.contracts
+            state.cursor = result.cursor
             state.shouldPullToRefresh = false
             return .none
         case .endRefresh(.failure(_)):
@@ -62,21 +61,19 @@ enum ArchiveListVM {
             }
 
             state.shouldShowNextLoading = true
-            state.hasNext = false
-            state.page += 1
 
-            let page = state.page
+            let cursor = state.cursor
 
-            return CanvasClient.shared.caller()
-                .flatMap { caller in caller.works(page: page) }
-                .map { ArchivesWithHasNext(archives: $0.0, hasNext: $0.1) }
+            return NftClient.shared.caller()
+                .flatMap { caller in caller.contracts(cursor: cursor) }
+                .map { ContractsWithCursor(contracts: $0.0, cursor: $0.1) }
                 .subscribe(on: environment.backgroundQueue)
                 .receive(on: environment.mainQueue)
                 .catchToEffect()
-                .map(ArchiveListVM.Action.endNext)
+                .map(ContractListVM.Action.endNext)
         case .endNext(.success(let result)):
-            state.archives.append(contentsOf: result.archives)
-            state.hasNext = result.hasNext
+            state.contracts.append(contentsOf: result.contracts)
+            state.cursor = result.cursor
             state.shouldShowNextLoading = false
             return .none
         case .endNext(.failure(_)):
@@ -89,22 +86,22 @@ enum ArchiveListVM {
             state.shouldPullToRefresh = val
             return .none
         case .presentDetailView(let data):
-            state.archiveDetailView = ArchiveDetailVM.State(archive: data)
+            state.contractDetailView = ContractDetailVM.State(contract: data)
             return .none
         case .popDetailView:
-            state.archiveDetailView = nil
+            state.contractDetailView = nil
             return .none
 
-        case .archiveDetailView(let action):
+        case .contractDetailView(let action):
             return .none
         }
     }
     .connect(
-        ArchiveDetailVM.reducer,
-        state: \.archiveDetailView,
-        action: /ArchiveListVM.Action.archiveDetailView,
+        ContractDetailVM.reducer,
+        state: \.contractDetailView,
+        action: /ContractListVM.Action.contractDetailView,
         environment: { _environment in
-            ArchiveDetailVM.Environment(
+            ContractDetailVM.Environment(
                 mainQueue: _environment.mainQueue,
                 backgroundQueue: _environment.backgroundQueue
             )
@@ -112,20 +109,20 @@ enum ArchiveListVM {
     )
 }
 
-extension ArchiveListVM {
+extension ContractListVM {
     enum Action: Equatable {
         case startInitialize
-        case endInitialize(Result<ArchivesWithHasNext, AppError>)
+        case endInitialize(Result<ContractsWithCursor, AppError>)
         case startRefresh
-        case endRefresh(Result<ArchivesWithHasNext, AppError>)
+        case endRefresh(Result<ContractsWithCursor, AppError>)
         case startNext
-        case endNext(Result<ArchivesWithHasNext, AppError>)
+        case endNext(Result<ContractsWithCursor, AppError>)
         case shouldShowHUD(Bool)
         case shouldPullToRefresh(Bool)
-        case presentDetailView(CanvasAPI.WorkFragment)
+        case presentDetailView(NftAPI.ContractFragment)
         case popDetailView
 
-        case archiveDetailView(ArchiveDetailVM.Action)
+        case contractDetailView(ContractDetailVM.Action)
     }
 
     struct State: Equatable {
@@ -133,11 +130,13 @@ extension ArchiveListVM {
         var shouldShowHUD = false
         var shouldPullToRefresh = false
         var shouldShowNextLoading = false
-        var page = 1
-        var hasNext = false
-        var archives: [CanvasAPI.WorkFragment] = []
+        var cursor: String? = nil
+        var contracts: [NftAPI.ContractFragment] = []
+        var hasNext: Bool {
+            cursor != ""
+        }
 
-        var archiveDetailView: ArchiveDetailVM.State?
+        var contractDetailView: ContractDetailVM.State?
     }
 
     struct Environment {

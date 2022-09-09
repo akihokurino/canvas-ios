@@ -1,8 +1,8 @@
 import SwiftUI
 
-struct NftView: View {
-    let nftType: Schema
-    let asset: Token
+struct SellNftView: View {
+    let schema: NftAPI.Schema
+    let token: Token
     let isOwn: Bool
     let sell: (Double) -> Void
     let transfer: (String) -> Void
@@ -12,7 +12,7 @@ struct NftView: View {
 
     var body: some View {
         VStack {
-            RemoteImageView(url: asset.imageUrl)
+            RemoteImageView(url: token.imageUrl)
                 .frame(width: 200)
                 .clipped()
 
@@ -35,7 +35,7 @@ struct NftView: View {
                 }
                 Spacer()
                 ActionButton(text: "Web", background: isOwn ? .primary : .disable) {
-                    UIApplication.shared.open(URL(string: "https://testnets.opensea.io/assets/\(asset.address)/\(asset.tokenId)")!)
+                    UIApplication.shared.open(URL(string: "https://testnets.opensea.io/assets/\(token.address)/\(token.tokenId)")!)
                 }
             }
         }
