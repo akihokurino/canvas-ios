@@ -42,6 +42,9 @@ class RemoteImageModel: ObservableObject {
         guard let url = imageUrl else {
             return
         }
+        guard !url.isEmpty else {
+            return
+        }
         
         let imageURL = URL(string: url)!
 
