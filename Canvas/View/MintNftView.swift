@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct MintNftView: View {
-    let data: CanvasAPI.WorkFragment.Thumbnail
+    let data: CanvasAPI.ThumbnailFragment
     let hasERC721: Bool
     let hasERC1155: Bool
     let callback: (NftAPI.Schema, Int?) -> Void

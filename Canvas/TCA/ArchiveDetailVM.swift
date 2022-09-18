@@ -74,7 +74,7 @@ enum ArchiveDetailVM {
 
             let archive = state.archive
             state.shouldShowHUD = true
-            
+
             return NftClient.shared.caller()
                 .flatMap { caller in caller.mintERC721(workId: archive.id, gsPath: data.imageGsPath).map { caller } }
                 .flatMap { caller in caller.mintedToken(workId: archive.id).combineLatest(caller.isOwnNft(workId: archive.id)) }
@@ -181,6 +181,19 @@ enum ArchiveDetailVM {
         case .transfered(.failure(_)):
             state.shouldShowHUD = false
             return .none
+        case .fetchThumbnails:
+            let workId = state.archive.id
+            return CanvasClient.shared.caller()
+                .flatMap { caller in caller.thumbnailsByWork(workId: workId) }
+                .subscribe(on: environment.backgroundQueue)
+                .receive(on: environment.mainQueue)
+                .catchToEffect()
+                .map(ArchiveDetailVM.Action.thumbnails)
+        case .thumbnails(.success(let thumbnails)):
+            state.thumbnails = thumbnails
+            return .none
+        case .thumbnails(.failure(_)):
+            return .none
         }
     }
 }
@@ -193,7 +206,7 @@ extension ArchiveDetailVM {
         case endRefresh(Result<TokenBundle, AppError>)
         case shouldShowHUD(Bool)
         case shouldPullToRefresh(Bool)
-        case presentMintNftView(CanvasAPI.WorkFragment.Thumbnail)
+        case presentMintNftView(CanvasAPI.ThumbnailFragment)
         case isPresentedMintNftView(Bool)
         case mintERC721(MintERC721Input)
         case mintERC1155(MintERC1155Input)
@@ -207,11 +220,14 @@ extension ArchiveDetailVM {
         case transferERC721(TransferInput)
         case transferERC1155(TransferInput)
         case transfered(Result<Bool, AppError>)
+        case fetchThumbnails
+        case thumbnails(Result<[CanvasAPI.ThumbnailFragment], AppError>)
     }
 
     struct State: Equatable {
         let archive: CanvasAPI.WorkFragment
 
+        var thumbnails: [CanvasAPI.ThumbnailFragment] = []
         var initialized = false
         var shouldShowHUD = false
         var shouldPullToRefresh = false
@@ -220,7 +236,7 @@ extension ArchiveDetailVM {
         var ownERC1155: Bool = false
         var erc1155: Token?
         var isPresentedMintNftView = false
-        var selectThumbnail: CanvasAPI.WorkFragment.Thumbnail? = nil
+        var selectThumbnail: CanvasAPI.ThumbnailFragment? = nil
         var isPresentedERC721SellNftView = false
         var isPresentedERC1155SellNftView = false
     }

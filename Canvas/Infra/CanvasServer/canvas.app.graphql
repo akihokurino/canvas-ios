@@ -1,17 +1,3 @@
-query ListThumbnail($page: Int!, $limit: Int!) {
-    thumbnails(page: $page, limit: $limit) {
-        edges {
-            node {
-                ...ThumbnailFragment
-            }
-        }
-        pageInfo {
-            totalCount
-            hasNextPage
-        }
-    }
-}
-
 query ListWork($page: Int!, $limit: Int!) {
     works(page: $page, limit: $limit) {
         edges {
@@ -26,15 +12,25 @@ query ListWork($page: Int!, $limit: Int!) {
     }
 }
 
-fragment ThumbnailFragment on Thumbnail {
-    id
-    workId
-    imageUrl
-    imageGsPath
-    work {
-        id
-        videoUrl
-        videoGsPath
+query ListThumbnailByWork($workId: ID!) {
+    work(id: $workId) {
+        thumbnails {
+            ...ThumbnailFragment
+        }
+    }
+}
+
+query ListThumbnail($page: Int!, $limit: Int!) {
+    thumbnails(page: $page, limit: $limit) {
+        edges {
+            node {
+                ...ThumbnailFragment
+            }
+        }
+        pageInfo {
+            totalCount
+            hasNextPage
+        }
     }
 }
 
@@ -47,6 +43,13 @@ fragment WorkFragment on Work {
         imageUrl
         imageGsPath
     }
+}
+
+fragment ThumbnailFragment on Thumbnail {
+    id
+    workId
+    imageUrl
+    imageGsPath
 }
 
 mutation RegisterFMCToken($token: String!, $device: String!) {

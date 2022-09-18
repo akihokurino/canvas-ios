@@ -44,7 +44,7 @@ struct ArchiveDetailView: View {
                         .background(Color(UIColor.systemBackground)), alignment: .bottom)
 
                     LazyVGrid(columns: gridItemLayout, alignment: HorizontalAlignment.leading, spacing: 3) {
-                        ForEach(viewStore.state.archive.thumbnails) { data in
+                        ForEach(viewStore.state.thumbnails) { data in
                             Button(action: {
                                 viewStore.send(.presentMintNftView(data))
                             }) {
@@ -78,6 +78,7 @@ struct ArchiveDetailView: View {
             }
             .onAppear {
                 viewStore.send(.startInitialize)
+                viewStore.send(.fetchThumbnails)
             }
             .navigationBarTitle("", displayMode: .inline)
             .sheet(isPresented: viewStore.binding(
