@@ -5,68 +5,88 @@ import Foundation
 enum RootVM {
     static let reducer = Reducer<State, Action, Environment> { state, action, environment in
         switch action {
-            case .startInitialize:
-                guard !state.initialized else {
-                    return .none
+        case .startInitialize:
+            guard !state.initialized else {
+                return .none
+            }
+
+            state.shouldShowHUD = true
+
+            let firebaseAuthFlow = { () -> AnyPublisher<Void, AppError> in
+                if FirebaseAuthManager.shared.isLogin() {
+                    return FirebaseMessageManager.shared.token()
+                        .flatMap { token in CanvasClient.shared.caller().map { ($0, token) } }
+                        .flatMap { tp in tp.0.registerFCMToken(token: tp.1) }
+                        .eraseToAnyPublisher()
+                } else {
+                    return FirebaseAuthManager.shared.signInAnonymously()
+                        .flatMap { _ in FirebaseMessageManager.shared.token() }
+                        .flatMap { token in CanvasClient.shared.caller().map { ($0, token) } }
+                        .flatMap { tp in tp.0.registerFCMToken(token: tp.1) }
+                        .eraseToAnyPublisher()
                 }
+            }
 
-                state.shouldShowHUD = true
+            let amplifyAuthFlow = { () -> AnyPublisher<Void, AppError> in
+                AmplifyAuthManager.shared.signIn().eraseToAnyPublisher()
+            }
 
-                let firebaseAuthFlow = { () -> AnyPublisher<Void, AppError> in
-                    if FirebaseAuthManager.shared.isLogin() {
-                        return FirebaseMessageManager.shared.token()
-                            .flatMap { token in CanvasClient.shared.caller().map { ($0, token) } }
-                            .flatMap { tp in tp.0.registerFCMToken(token: tp.1) }
-                            .eraseToAnyPublisher()
-                    } else {
-                        return FirebaseAuthManager.shared.signInAnonymously()
-                            .flatMap { _ in FirebaseMessageManager.shared.token() }
-                            .flatMap { token in CanvasClient.shared.caller().map { ($0, token) } }
-                            .flatMap { tp in tp.0.registerFCMToken(token: tp.1) }
-                            .eraseToAnyPublisher()
-                    }
-                }
+            return firebaseAuthFlow()
+                .flatMap { _ in amplifyAuthFlow() }
+                .map { _ in true }
+                .subscribe(on: environment.backgroundQueue)
+                .receive(on: environment.mainQueue)
+                .catchToEffect()
+                .map(RootVM.Action.endInitialize)
+        case .endInitialize(.success(_)):
+            state.shouldShowHUD = false
 
-                let amplifyAuthFlow = { () -> AnyPublisher<Void, AppError> in
-                    AmplifyAuthManager.shared.signIn().eraseToAnyPublisher()
-                }
+            state.workListView = WorkListVM.State()
+            state.archivePageView = ArchivePageVM.State(
+                archiveListView: ArchiveListVM.State(),
+                thumbnailListView: ThumbnailListVM.State()
+            )
+            state.contractListView = ContractListVM.State()
+            state.walletView = WalletVM.State()
 
-                return firebaseAuthFlow()
-                    .flatMap { _ in amplifyAuthFlow() }
-                    .map { _ in true }
-                    .subscribe(on: environment.backgroundQueue)
-                    .receive(on: environment.mainQueue)
-                    .catchToEffect()
-                    .map(RootVM.Action.endInitialize)
-            case .endInitialize(.success(_)):
-                state.shouldShowHUD = false
+            state.initialized = true
 
-                state.workListView = WorkListVM.State()
-                state.archiveListView = ArchiveListVM.State()
-                state.thumbnailListView = ThumbnailListVM.State()
-                state.contractListView = ContractListVM.State()
-                state.walletView = WalletVM.State()
+            return .none
+        case .endInitialize(.failure(_)):
+            state.shouldShowHUD = false
+            return .none
+        case .shouldShowHUD(let val):
+            state.shouldShowHUD = val
+            return .none
+        case .presentAlert(let val):
+            state.isPresentedAlert = val
+            return .none
 
-                state.initialized = true
-
-                return .none
-            case .endInitialize(.failure(_)):
-                state.shouldShowHUD = false
-                return .none
-            case .shouldShowHUD(let val):
-                state.shouldShowHUD = val
-                return .none
-
-            case .workListView(let action):
-                return .none
+        case .workListView(let action):
+            return .none
+        case .archivePageView(let action):
+            switch action {
             case .archiveListView(let action):
-                return .none
-            case .thumbnailListView(let action):
-                return .none
-            case .contractListView(let action):
-                return .none
-            case .walletView(let action):
-                return .none
+                switch action {
+                case .archiveDetailView(let action):
+                    switch action {
+                    case .minted(.failure(_)):
+                        state.alertText = "Mintに失敗しました\nWalletの残高とIPFSサーバーの起動を確認してください"
+                        state.isPresentedAlert = true
+                    default:
+                        break
+                    }
+                default:
+                    break
+                }
+            default:
+                break
+            }
+            return .none
+        case .contractListView(let action):
+            return .none
+        case .walletView(let action):
+            return .none
         }
     }
     .connect(
@@ -81,22 +101,11 @@ enum RootVM {
         }
     )
     .connect(
-        ArchiveListVM.reducer,
-        state: \.archiveListView,
-        action: /RootVM.Action.archiveListView,
+        ArchivePageVM.reducer,
+        state: \.archivePageView,
+        action: /RootVM.Action.archivePageView,
         environment: { _environment in
-            ArchiveListVM.Environment(
-                mainQueue: _environment.mainQueue,
-                backgroundQueue: _environment.backgroundQueue
-            )
-        }
-    )
-    .connect(
-        ThumbnailListVM.reducer,
-        state: \.thumbnailListView,
-        action: /RootVM.Action.thumbnailListView,
-        environment: { _environment in
-            ThumbnailListVM.Environment(
+            ArchivePageVM.Environment(
                 mainQueue: _environment.mainQueue,
                 backgroundQueue: _environment.backgroundQueue
             )
@@ -131,10 +140,10 @@ extension RootVM {
         case startInitialize
         case endInitialize(Result<Bool, AppError>)
         case shouldShowHUD(Bool)
+        case presentAlert(Bool)
 
         case workListView(WorkListVM.Action)
-        case archiveListView(ArchiveListVM.Action)
-        case thumbnailListView(ThumbnailListVM.Action)
+        case archivePageView(ArchivePageVM.Action)
         case contractListView(ContractListVM.Action)
         case walletView(WalletVM.Action)
     }
@@ -142,10 +151,11 @@ extension RootVM {
     struct State: Equatable {
         var initialized = false
         var shouldShowHUD = false
+        var isPresentedAlert = false
+        var alertText = ""
 
         var workListView: WorkListVM.State?
-        var archiveListView: ArchiveListVM.State?
-        var thumbnailListView: ThumbnailListVM.State?
+        var archivePageView: ArchivePageVM.State?
         var contractListView: ContractListVM.State?
         var walletView: WalletVM.State?
     }

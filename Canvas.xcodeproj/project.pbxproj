@@ -24,6 +24,9 @@
 		022691B6271DABEA00C0D209 /* LineArt2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 022691B5271DABEA00C0D209 /* LineArt2.swift */; };
 		022C17CB2712C26200D2FD62 /* Lightning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 022C17CA2712C26200D2FD62 /* Lightning.swift */; };
 		022C17CD2712FE6700D2FD62 /* ParticleStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 022C17CC2712FE6700D2FD62 /* ParticleStream.swift */; };
+		0231698228D72A470027FAF8 /* SwiftUIPager in Frameworks */ = {isa = PBXBuildFile; productRef = 0231698128D72A470027FAF8 /* SwiftUIPager */; };
+		0231698428D72B2F0027FAF8 /* ArchivePageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0231698328D72B2F0027FAF8 /* ArchivePageView.swift */; };
+		0231698628D7406D0027FAF8 /* ArchivePageVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0231698528D7406D0027FAF8 /* ArchivePageVM.swift */; };
 		02388F8A28CB12F400E2AAC0 /* ContractListVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02388F8928CB12F400E2AAC0 /* ContractListVM.swift */; };
 		02388F8C28CB130B00E2AAC0 /* ContractDetailVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02388F8B28CB130B00E2AAC0 /* ContractDetailVM.swift */; };
 		02388F8E28CB13A500E2AAC0 /* ContractListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02388F8D28CB13A500E2AAC0 /* ContractListView.swift */; };
@@ -104,6 +107,8 @@
 		022691B5271DABEA00C0D209 /* LineArt2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineArt2.swift; sourceTree = "<group>"; };
 		022C17CA2712C26200D2FD62 /* Lightning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lightning.swift; sourceTree = "<group>"; };
 		022C17CC2712FE6700D2FD62 /* ParticleStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleStream.swift; sourceTree = "<group>"; };
+		0231698328D72B2F0027FAF8 /* ArchivePageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchivePageView.swift; sourceTree = "<group>"; };
+		0231698528D7406D0027FAF8 /* ArchivePageVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchivePageVM.swift; sourceTree = "<group>"; };
 		02388F8928CB12F400E2AAC0 /* ContractListVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractListVM.swift; sourceTree = "<group>"; };
 		02388F8B28CB130B00E2AAC0 /* ContractDetailVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractDetailVM.swift; sourceTree = "<group>"; };
 		02388F8D28CB13A500E2AAC0 /* ContractListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractListView.swift; sourceTree = "<group>"; };
@@ -174,6 +179,7 @@
 			files = (
 				0205F1652823FCF2008B8FF8 /* FirebaseMessaging in Frameworks */,
 				02AB3C3327D28470008043A6 /* ActivityIndicatorView in Frameworks */,
+				0231698228D72A470027FAF8 /* SwiftUIPager in Frameworks */,
 				029DDF0A2889BAA800118174 /* ComposableArchitecture in Frameworks */,
 				0205F15F2823FCF2008B8FF8 /* FirebaseAuth in Frameworks */,
 				0205F1672823FCF2008B8FF8 /* FirebaseStorage in Frameworks */,
@@ -310,6 +316,7 @@
 				029DDF0C2889BAC800118174 /* Extension */,
 				029DDF0F2889BB3600118174 /* RootVM.swift */,
 				0211F961288AB59E002A797E /* WorkListVM.swift */,
+				0231698528D7406D0027FAF8 /* ArchivePageVM.swift */,
 				02F297A6288C1B3F00A50E60 /* ArchiveListVM.swift */,
 				02F297A8288C235B00A50E60 /* ArchiveDetailVM.swift */,
 				02988E82288BDA5300B6A540 /* ThumbnailListVM.swift */,
@@ -335,6 +342,7 @@
 				02AB3C2C27D280F8008043A6 /* Component */,
 				021B2870270CB08C0093B0C9 /* RootView.swift */,
 				02A19D44272C517D00DBFA24 /* WorkListView.swift */,
+				0231698328D72B2F0027FAF8 /* ArchivePageView.swift */,
 				02F944B6272DA321002A9B2B /* ArchiveListView.swift */,
 				02D26CCC2731848500678F6F /* ArchiveDetailView.swift */,
 				02AB3C2A27D27C84008043A6 /* MintNftView.swift */,
@@ -409,6 +417,7 @@
 				0205F1642823FCF2008B8FF8 /* FirebaseMessaging */,
 				0205F1662823FCF2008B8FF8 /* FirebaseStorage */,
 				029DDF092889BAA800118174 /* ComposableArchitecture */,
+				0231698128D72A470027FAF8 /* SwiftUIPager */,
 			);
 			productName = Canvas;
 			productReference = 021B286B270CB08C0093B0C9 /* Canvas.app */;
@@ -445,6 +454,7 @@
 				02AB3C3127D28470008043A6 /* XCRemoteSwiftPackageReference "ActivityIndicatorView" */,
 				0205F15D2823FCF2008B8FF8 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				029DDF082889BAA800118174 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
+				0231698028D72A470027FAF8 /* XCRemoteSwiftPackageReference "SwiftUIPager" */,
 			);
 			productRefGroup = 021B286C270CB08C0093B0C9 /* Products */;
 			projectDirPath = "";
@@ -518,6 +528,7 @@
 				02E20E2727CE3FAC00AED50C /* NftClient.swift in Sources */,
 				02C696962718467A00C65CDC /* SplashReturn.swift in Sources */,
 				02543C7F271D665E009AE283 /* CircleDesign.swift in Sources */,
+				0231698428D72B2F0027FAF8 /* ArchivePageView.swift in Sources */,
 				02E20E2327CDFD1700AED50C /* NetworkInterceptor.swift in Sources */,
 				02449DA827231D93000A011A /* Error.swift in Sources */,
 				026C5E6D2729BA8C00995BCB /* CanvasAPI.swift in Sources */,
@@ -532,6 +543,7 @@
 				02388F8A28CB12F400E2AAC0 /* ContractListVM.swift in Sources */,
 				02F297A7288C1B3F00A50E60 /* ArchiveListVM.swift in Sources */,
 				02BFA0F3272A7969002997F8 /* CanvasClient.swift in Sources */,
+				0231698628D7406D0027FAF8 /* ArchivePageVM.swift in Sources */,
 				02D2A1122715CE5B00CF5AD1 /* Splash.swift in Sources */,
 				02F944B7272DA321002A9B2B /* ArchiveListView.swift in Sources */,
 				0211F95E288AB3C3002A797E /* UIView+Image.swift in Sources */,
@@ -766,6 +778,14 @@
 				kind = branch;
 			};
 		};
+		0231698028D72A470027FAF8 /* XCRemoteSwiftPackageReference "SwiftUIPager" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/fermoya/SwiftUIPager.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
 		026C5E6E2729BB0400995BCB /* XCRemoteSwiftPackageReference "apollo-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apollographql/apollo-ios.git";
@@ -833,6 +853,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 0205F15D2823FCF2008B8FF8 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseStorage;
+		};
+		0231698128D72A470027FAF8 /* SwiftUIPager */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0231698028D72A470027FAF8 /* XCRemoteSwiftPackageReference "SwiftUIPager" */;
+			productName = SwiftUIPager;
 		};
 		026C5E6F2729BB0400995BCB /* Apollo */ = {
 			isa = XCSwiftPackageProductDependency;

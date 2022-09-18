@@ -22,16 +22,17 @@ struct RootView: View {
                             Image(systemName: "scribble.variable")
                                 .resizable()
                                 .frame(width: 50, height: 50, alignment: .center)
+                            Text("サンプル")
                         }
                     }.tag(1)
 
                     NavigationView {
                         IfLetStore(
                             store.scope(
-                                state: { $0.archiveListView },
-                                action: RootVM.Action.archiveListView
+                                state: { $0.archivePageView },
+                                action: RootVM.Action.archivePageView
                             ),
-                            then: ArchiveListView.init(store:)
+                            then: ArchivePageView.init(store:)
                         )
                     }
                     .tabItem {
@@ -39,26 +40,10 @@ struct RootView: View {
                             Image(systemName: "archivebox")
                                 .resizable()
                                 .frame(width: 50, height: 50, alignment: .center)
+                            Text("アーカイブ")
                         }
                     }.tag(2)
 
-                    NavigationView {
-                        IfLetStore(
-                            store.scope(
-                                state: { $0.thumbnailListView },
-                                action: RootVM.Action.thumbnailListView
-                            ),
-                            then: ThumbnailListView.init(store:)
-                        )
-                    }
-                    .tabItem {
-                        VStack {
-                            Image(systemName: "square.grid.2x2")
-                                .resizable()
-                                .frame(width: 50, height: 50, alignment: .center)
-                        }
-                    }.tag(3)
-                    
                     NavigationView {
                         IfLetStore(
                             store.scope(
@@ -73,8 +58,9 @@ struct RootView: View {
                             Image(systemName: "square.fill.on.square.fill")
                                 .resizable()
                                 .frame(width: 50, height: 50, alignment: .center)
+                            Text("NFT")
                         }
-                    }.tag(4)
+                    }.tag(3)
 
                     NavigationView {
                         IfLetStore(
@@ -90,8 +76,9 @@ struct RootView: View {
                             Image(systemName: "wallet.pass")
                                 .resizable()
                                 .frame(width: 50, height: 50, alignment: .center)
+                            Text("ウォレット")
                         }
-                    }.tag(5)
+                    }.tag(4)
                 }
             }
             .overlay(
@@ -106,6 +93,12 @@ struct RootView: View {
             )
             .onAppear {
                 viewStore.send(.startInitialize)
+            }
+            .alert(isPresented: viewStore.binding(
+                get: \.isPresentedAlert,
+                send: RootVM.Action.presentAlert
+            )) {
+                Alert(title: Text(viewStore.alertText))
             }
         }
     }

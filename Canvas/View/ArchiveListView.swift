@@ -5,7 +5,7 @@ import SwiftUIRefresh
 
 struct ArchiveListView: View {
     let store: Store<ArchiveListVM.State, ArchiveListVM.Action>
-
+    
     var body: some View {
         WithViewStore(store) { viewStore in
             List {
