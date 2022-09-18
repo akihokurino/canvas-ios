@@ -1,98 +1,56 @@
+# GraphQL schema example
 #
-type Mutation {
-  #
-  registerFCMToken(input: RegisterFCMToken!): Boolean!
-}
+# https://gqlgen.com/getting-started/
 
-#
-type PageInfo {
-  #
-  totalCount: Int!
-
-  #
-  hasNextPage: Boolean!
-}
-
-#
 type Query {
-  #
-  works(page: Int!, limit: Int!): WorkConnection!
-
-  #
-  work(id: ID!): Work!
-
-  #
-  thumbnails(page: Int!, limit: Int!): ThumbnailConnection!
+    works(page: Int!, limit: Int!): WorkConnection!
+    work(id: ID!): Work!
+    thumbnails(page: Int!, limit: Int!): ThumbnailConnection!
 }
 
-#
-input RegisterFCMToken {
-  #
-  token: String!
-
-  #
-  device: String!
+type Mutation {
+    registerFCMToken(input: RegisterFCMToken!): Boolean!
 }
 
-#
-type Thumbnail {
-  #
-  id: ID!
-
-  #
-  workId: ID!
-
-  #
-  imageUrl: String!
-
-  #
-  imageGsPath: String!
-
-  #
-  work: Work!
-}
-
-#
-type ThumbnailConnection {
-  #
-  edges: [ThumbnailEdge!]!
-
-  #
-  pageInfo: PageInfo!
-}
-
-#
-type ThumbnailEdge {
-  #
-  node: Thumbnail!
-}
-
-#
 type Work {
-  #
-  id: ID!
-
-  #
-  videoUrl: String!
-
-  #
-  videoGsPath: String!
-
-  #
-  thumbnails: [Thumbnail!]!
+    id: ID!
+    videoUrl: String!
+    videoGsPath: String!
+    thumbnails(limit: Int): [Thumbnail!]!
 }
 
-#
-type WorkConnection {
-  #
-  edges: [WorkEdge!]!
-
-  #
-  pageInfo: PageInfo!
-}
-
-#
 type WorkEdge {
-  #
-  node: Work!
+    node: Work!
+}
+
+type WorkConnection {
+    edges: [WorkEdge!]!
+    pageInfo: PageInfo!
+}
+
+type Thumbnail {
+    id: ID!
+    workId: ID!
+    imageUrl: String!
+    imageGsPath: String!
+    work: Work!
+}
+
+type ThumbnailEdge {
+    node: Thumbnail!
+}
+
+type ThumbnailConnection {
+    edges: [ThumbnailEdge!]!
+    pageInfo: PageInfo!
+}
+
+type PageInfo {
+    totalCount: Int!
+    hasNextPage: Boolean!
+}
+
+input RegisterFCMToken {
+    token: String!
+    device: String!
 }

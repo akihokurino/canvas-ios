@@ -26,12 +26,6 @@ query ListWork($page: Int!, $limit: Int!) {
     }
 }
 
-query GetWork($id: ID!) {
-    work(id: $id) {
-        ...WorkFragment
-    }
-}
-
 fragment ThumbnailFragment on Thumbnail {
     id
     workId
@@ -47,7 +41,7 @@ fragment ThumbnailFragment on Thumbnail {
 fragment WorkFragment on Work {
     id
     videoUrl
-    thumbnails {
+    thumbnails(limit: 3) {
         id
         workId
         imageUrl

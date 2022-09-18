@@ -530,118 +530,6 @@ public enum CanvasAPI {
     }
   }
 
-  public final class GetWorkQuery: GraphQLQuery {
-    /// The raw GraphQL definition of this operation.
-    public let operationDefinition: String =
-      """
-      query GetWork($id: ID!) {
-        work(id: $id) {
-          __typename
-          ...WorkFragment
-        }
-      }
-      """
-
-    public let operationName: String = "GetWork"
-
-    public var queryDocument: String {
-      var document: String = operationDefinition
-      document.append("\n" + WorkFragment.fragmentDefinition)
-      return document
-    }
-
-    public var id: GraphQLID
-
-    public init(id: GraphQLID) {
-      self.id = id
-    }
-
-    public var variables: GraphQLMap? {
-      return ["id": id]
-    }
-
-    public struct Data: GraphQLSelectionSet {
-      public static let possibleTypes: [String] = ["Query"]
-
-      public static var selections: [GraphQLSelection] {
-        return [
-          GraphQLField("work", arguments: ["id": GraphQLVariable("id")], type: .nonNull(.object(Work.selections))),
-        ]
-      }
-
-      public private(set) var resultMap: ResultMap
-
-      public init(unsafeResultMap: ResultMap) {
-        self.resultMap = unsafeResultMap
-      }
-
-      public init(work: Work) {
-        self.init(unsafeResultMap: ["__typename": "Query", "work": work.resultMap])
-      }
-
-      public var work: Work {
-        get {
-          return Work(unsafeResultMap: resultMap["work"]! as! ResultMap)
-        }
-        set {
-          resultMap.updateValue(newValue.resultMap, forKey: "work")
-        }
-      }
-
-      public struct Work: GraphQLSelectionSet {
-        public static let possibleTypes: [String] = ["Work"]
-
-        public static var selections: [GraphQLSelection] {
-          return [
-            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
-            GraphQLFragmentSpread(WorkFragment.self),
-          ]
-        }
-
-        public private(set) var resultMap: ResultMap
-
-        public init(unsafeResultMap: ResultMap) {
-          self.resultMap = unsafeResultMap
-        }
-
-        public var __typename: String {
-          get {
-            return resultMap["__typename"]! as! String
-          }
-          set {
-            resultMap.updateValue(newValue, forKey: "__typename")
-          }
-        }
-
-        public var fragments: Fragments {
-          get {
-            return Fragments(unsafeResultMap: resultMap)
-          }
-          set {
-            resultMap += newValue.resultMap
-          }
-        }
-
-        public struct Fragments {
-          public private(set) var resultMap: ResultMap
-
-          public init(unsafeResultMap: ResultMap) {
-            self.resultMap = unsafeResultMap
-          }
-
-          public var workFragment: WorkFragment {
-            get {
-              return WorkFragment(unsafeResultMap: resultMap)
-            }
-            set {
-              resultMap += newValue.resultMap
-            }
-          }
-        }
-      }
-    }
-  }
-
   public final class RegisterFmcTokenMutation: GraphQLMutation {
     /// The raw GraphQL definition of this operation.
     public let operationDefinition: String =
@@ -859,7 +747,7 @@ public enum CanvasAPI {
         __typename
         id
         videoUrl
-        thumbnails {
+        thumbnails(limit: 3) {
           __typename
           id
           workId
@@ -876,7 +764,7 @@ public enum CanvasAPI {
         GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
         GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
         GraphQLField("videoUrl", type: .nonNull(.scalar(String.self))),
-        GraphQLField("thumbnails", type: .nonNull(.list(.nonNull(.object(Thumbnail.selections))))),
+        GraphQLField("thumbnails", arguments: ["limit": 3], type: .nonNull(.list(.nonNull(.object(Thumbnail.selections))))),
       ]
     }
 
