@@ -10,7 +10,9 @@ struct WalletView: View {
         WithViewStore(store) { viewStore in
             List {
                 VStack(alignment: .leading) {
-                    Button(action: {}) {
+                    Button(action: {
+                        UIPasteboard.general.string = viewStore.address
+                    }) {
                         Text(viewStore.address)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .multilineTextAlignment(.leading)
@@ -37,7 +39,7 @@ struct WalletView: View {
                     Spacer().frame(height: 20)
                     
                     ActionButton(text: "Faucets", background: .primary) {
-                        UIApplication.shared.open(URL(string: "https://faucets.chain.link/")!)
+                        UIApplication.shared.open(URL(string: "https://goerlifaucet.com/")!)
                     }
                 }
                 .padding()
