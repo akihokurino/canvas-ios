@@ -33,6 +33,12 @@ struct WalletView: View {
                         .foregroundColor(Color.white)
                         .cornerRadius(5.0)
                         .font(.largeTitle)
+
+                    Spacer().frame(height: 20)
+                    
+                    ActionButton(text: "Faucets", background: .primary) {
+                        UIApplication.shared.open(URL(string: "https://faucets.chain.link/")!)
+                    }
                 }
                 .padding()
                 .listRowSeparator(.hidden)

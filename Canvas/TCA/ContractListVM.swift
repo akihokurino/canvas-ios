@@ -24,7 +24,6 @@ enum ContractListVM {
                 .map(ContractListVM.Action.endInitialize)
         case .endInitialize(.success(let result)):
             state.contracts = result.contracts
-            print("test \(result.cursor)")
             state.cursor = result.cursor
             state.shouldShowHUD = false
 
