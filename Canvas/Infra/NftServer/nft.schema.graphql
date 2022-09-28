@@ -28,12 +28,10 @@ input SellERC721Input {
   ether: Float!
 }
 
-type Thumbnail {
-  id: String!
-  workId: String!
-  imagePath: String!
-  signedImageUrl: String!
-  work: Work!
+type FrameConnection {
+  edges: [FrameEdge!]!
+  nextKey: String!
+  totalCount: Int
 }
 
 type TokenConnection {
@@ -46,9 +44,9 @@ type MutationRoot {
   registerPublisher(input: RegisterPublisherInput!): String!
   syncCsv: Boolean!
   importWork(input: ImportWorkInput!): Boolean!
-  importThumbnail(input: ImportThumbnailInput!): Boolean!
+  importFrame(input: ImportFrameInput!): Boolean!
   preSignUploadWork: PreSignUploadUrl!
-  preSignUploadThumbnail: PreSignUploadUrl!
+  preSignUploadFrame: PreSignUploadUrl!
   deleteWork(id: String!): Boolean!
   registerContract(input: RegisterContractInput!): Contract!
   mintErc721(input: MintERC721Input!): Boolean!
@@ -96,6 +94,14 @@ input MintERC721Input {
   isAsync: Boolean!
 }
 
+type Frame {
+  id: String!
+  workId: String!
+  imagePath: String!
+  signedImageUrl: String!
+  work: Work!
+}
+
 input TransferERC721Input {
   workId: String!
   toAddress: String!
@@ -106,7 +112,7 @@ type QueryRoot {
   works(nextKey: String, limit: Int): WorkConnection!
   worksByIds(ids: [String!]!): [Work!]!
   work(id: String!): Work!
-  thumbnails(workId: String!, nextKey: String, limit: Int): ThumbnailConnection!
+  frames(workId: String!, nextKey: String, limit: Int): FrameConnection!
   contracts(nextKey: String, limit: Int): ContractConnection!
   contractsByAddresses(addresses: [String!]!): [Contract!]!
   contract(address: String!): Contract!
@@ -115,18 +121,18 @@ type QueryRoot {
   isOwnNft(workId: String!): IsOwn!
 }
 
-type ThumbnailConnection {
-  edges: [ThumbnailEdge!]!
-  nextKey: String!
-  totalCount: Int
+type FrameEdge {
+  node: Frame!
 }
 
 type ContractEdge {
   node: Contract!
 }
 
-input ImportThumbnailInput {
-  isAsync: Boolean!
+input SellERC1155Input {
+  workId: String!
+  ether: Float!
+  amount: Int!
 }
 
 type WorkConnection {
@@ -140,14 +146,8 @@ type Nft1155Balance {
   balance: Int!
 }
 
-type ThumbnailEdge {
-  node: Thumbnail!
-}
-
-input SellERC1155Input {
-  workId: String!
-  ether: Float!
-  amount: Int!
+input ImportFrameInput {
+  isAsync: Boolean!
 }
 
 enum Schema {
@@ -159,7 +159,12 @@ type Work {
   id: String!
   videoPath: String!
   signedVideoUrl: String!
-  thumbnails: [Thumbnail!]!
+  frames: [Frame!]!
+}
+
+enum Network {
+  RINKEBY
+  GOERLI
 }
 
 type MintedToken {
@@ -170,6 +175,7 @@ type MintedToken {
 type Contract {
   address: String!
   schema: Schema!
+  network: Network!
   tokens: [Token!]!
 }
 

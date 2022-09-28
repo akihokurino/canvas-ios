@@ -9,14 +9,14 @@ extension CanvasAPI.WorkFragment: Identifiable, Equatable {
     }
 }
 
-extension CanvasAPI.WorkFragment.Thumbnail: Identifiable, Equatable {
-    public static func == (lhs: CanvasAPI.WorkFragment.Thumbnail, rhs: CanvasAPI.WorkFragment.Thumbnail) -> Bool {
+extension CanvasAPI.WorkFragment.Frame: Identifiable, Equatable {
+    public static func == (lhs: CanvasAPI.WorkFragment.Frame, rhs: CanvasAPI.WorkFragment.Frame) -> Bool {
         return lhs.id == rhs.id
     }
 }
 
-extension CanvasAPI.ThumbnailFragment: Identifiable, Equatable {
-    public static func == (lhs: CanvasAPI.ThumbnailFragment, rhs: CanvasAPI.ThumbnailFragment) -> Bool {
+extension CanvasAPI.FrameFragment: Identifiable, Equatable {
+    public static func == (lhs: CanvasAPI.FrameFragment, rhs: CanvasAPI.FrameFragment) -> Bool {
         return lhs.id == rhs.id
     }
 }
@@ -93,9 +93,9 @@ struct CanvasCaller {
         }
     }
     
-    func thumbnailsByWork(workId: String) -> Future<[CanvasAPI.ThumbnailFragment], AppError> {
-        return Future<[CanvasAPI.ThumbnailFragment], AppError> { promise in
-            cli.fetch(query: CanvasAPI.ListThumbnailByWorkQuery(workId: workId)) { result in
+    func framesByWork(workId: String) -> Future<[CanvasAPI.FrameFragment], AppError> {
+        return Future<[CanvasAPI.FrameFragment], AppError> { promise in
+            cli.fetch(query: CanvasAPI.ListFrameByWorkQuery(workId: workId)) { result in
                 switch result {
                 case .success(let graphQLResult):
                     if let errors = graphQLResult.errors {
@@ -111,7 +111,7 @@ struct CanvasCaller {
                         return
                     }
 
-                    let items = data.work.thumbnails.map { $0.fragments.thumbnailFragment }
+                    let items = data.work.frames.map { $0.fragments.frameFragment }
                     
                     promise(.success(items))
                 case .failure(let error):
@@ -121,9 +121,9 @@ struct CanvasCaller {
         }
     }
 
-    func thumbnails(page: Int) -> Future<([CanvasAPI.ThumbnailFragment], Bool), AppError> {
-        return Future<([CanvasAPI.ThumbnailFragment], Bool), AppError> { promise in
-            cli.fetch(query: CanvasAPI.ListThumbnailQuery(page: page, limit: 105)) { result in
+    func frames(page: Int) -> Future<([CanvasAPI.FrameFragment], Bool), AppError> {
+        return Future<([CanvasAPI.FrameFragment], Bool), AppError> { promise in
+            cli.fetch(query: CanvasAPI.ListFrameQuery(page: page, limit: 105)) { result in
                 switch result {
                 case .success(let graphQLResult):
                     if let errors = graphQLResult.errors {
@@ -139,8 +139,8 @@ struct CanvasCaller {
                         return
                     }
 
-                    let items = data.thumbnails.edges.map { $0.node.fragments.thumbnailFragment }
-                    let hasNext = data.thumbnails.pageInfo.hasNextPage
+                    let items = data.frames.edges.map { $0.node.fragments.frameFragment }
+                    let hasNext = data.frames.pageInfo.hasNextPage
 
                     promise(.success((items, hasNext)))
                 case .failure(let error):

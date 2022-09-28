@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct MintNftView: View {
-    let data: CanvasAPI.ThumbnailFragment
+    let data: CanvasAPI.FrameFragment
     let hasERC721: Bool
     let hasERC1155: Bool
     let callback: (NftAPI.Schema, Int?) -> Void
@@ -10,7 +10,7 @@ struct MintNftView: View {
 
     var body: some View {
         VStack {
-            RemoteImageView(url: data.imageUrl)
+            RemoteImageView(url: data.orgImageUrl)
                 .frame(width: 200)
                 .clipped()
 

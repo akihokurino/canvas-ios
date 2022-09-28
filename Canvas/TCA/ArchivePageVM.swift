@@ -20,7 +20,7 @@ enum ArchivePageVM {
                 break
             }
             return .none
-        case .thumbnailListView(let action):
+        case .frameListView(let action):
             switch action {
             case .startInitialize:
                 state.currentPage = .withIndex(1)
@@ -45,11 +45,11 @@ enum ArchivePageVM {
         }
     )
     .connect(
-        ThumbnailListVM.reducer,
-        state: \.thumbnailListView,
-        action: /ArchivePageVM.Action.thumbnailListView,
+        FrameListVM.reducer,
+        state: \.frameListView,
+        action: /ArchivePageVM.Action.frameListView,
         environment: { _environment in
-            ThumbnailListVM.Environment(
+            FrameListVM.Environment(
                 mainQueue: _environment.mainQueue,
                 backgroundQueue: _environment.backgroundQueue
             )
@@ -62,7 +62,7 @@ extension ArchivePageVM {
         case changePage(Page)
 
         case archiveListView(ArchiveListVM.Action)
-        case thumbnailListView(ThumbnailListVM.Action)
+        case frameListView(FrameListVM.Action)
     }
 
     struct State: Equatable {
@@ -70,7 +70,7 @@ extension ArchivePageVM {
         var currentPage: Page = .first()
 
         var archiveListView: ArchiveListVM.State?
-        var thumbnailListView: ThumbnailListVM.State?
+        var frameListView: FrameListVM.State?
     }
 
     struct Environment {

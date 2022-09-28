@@ -102,8 +102,8 @@ struct ArchiveRow: View {
             Text(data.id).font(.headline)
 
             HStack {
-                ForEach(data.thumbnails.shuffled().prefix(3)) { thumbnail in
-                    RemoteImageView(url: thumbnail.imageUrl)
+                ForEach(data.frames.shuffled().prefix(3)) { frame in
+                    RemoteImageView(url: frame.resizedImageUrl)
                         .aspectRatio(contentMode: .fit)
                         .frame(maxWidth: .infinity)
                         .cornerRadius(4)

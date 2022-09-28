@@ -268,26 +268,26 @@ public enum CanvasAPI {
     }
   }
 
-  public final class ListThumbnailByWorkQuery: GraphQLQuery {
+  public final class ListFrameByWorkQuery: GraphQLQuery {
     /// The raw GraphQL definition of this operation.
     public let operationDefinition: String =
       """
-      query ListThumbnailByWork($workId: ID!) {
+      query ListFrameByWork($workId: ID!) {
         work(id: $workId) {
           __typename
-          thumbnails {
+          frames {
             __typename
-            ...ThumbnailFragment
+            ...FrameFragment
           }
         }
       }
       """
 
-    public let operationName: String = "ListThumbnailByWork"
+    public let operationName: String = "ListFrameByWork"
 
     public var queryDocument: String {
       var document: String = operationDefinition
-      document.append("\n" + ThumbnailFragment.fragmentDefinition)
+      document.append("\n" + FrameFragment.fragmentDefinition)
       return document
     }
 
@@ -335,7 +335,7 @@ public enum CanvasAPI {
         public static var selections: [GraphQLSelection] {
           return [
             GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
-            GraphQLField("thumbnails", type: .nonNull(.list(.nonNull(.object(Thumbnail.selections))))),
+            GraphQLField("frames", type: .nonNull(.list(.nonNull(.object(Frame.selections))))),
           ]
         }
 
@@ -345,8 +345,8 @@ public enum CanvasAPI {
           self.resultMap = unsafeResultMap
         }
 
-        public init(thumbnails: [Thumbnail]) {
-          self.init(unsafeResultMap: ["__typename": "Work", "thumbnails": thumbnails.map { (value: Thumbnail) -> ResultMap in value.resultMap }])
+        public init(frames: [Frame]) {
+          self.init(unsafeResultMap: ["__typename": "Work", "frames": frames.map { (value: Frame) -> ResultMap in value.resultMap }])
         }
 
         public var __typename: String {
@@ -358,22 +358,22 @@ public enum CanvasAPI {
           }
         }
 
-        public var thumbnails: [Thumbnail] {
+        public var frames: [Frame] {
           get {
-            return (resultMap["thumbnails"] as! [ResultMap]).map { (value: ResultMap) -> Thumbnail in Thumbnail(unsafeResultMap: value) }
+            return (resultMap["frames"] as! [ResultMap]).map { (value: ResultMap) -> Frame in Frame(unsafeResultMap: value) }
           }
           set {
-            resultMap.updateValue(newValue.map { (value: Thumbnail) -> ResultMap in value.resultMap }, forKey: "thumbnails")
+            resultMap.updateValue(newValue.map { (value: Frame) -> ResultMap in value.resultMap }, forKey: "frames")
           }
         }
 
-        public struct Thumbnail: GraphQLSelectionSet {
-          public static let possibleTypes: [String] = ["Thumbnail"]
+        public struct Frame: GraphQLSelectionSet {
+          public static let possibleTypes: [String] = ["Frame"]
 
           public static var selections: [GraphQLSelection] {
             return [
               GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
-              GraphQLFragmentSpread(ThumbnailFragment.self),
+              GraphQLFragmentSpread(FrameFragment.self),
             ]
           }
 
@@ -383,8 +383,8 @@ public enum CanvasAPI {
             self.resultMap = unsafeResultMap
           }
 
-          public init(id: GraphQLID, workId: GraphQLID, imageUrl: String, imageGsPath: String) {
-            self.init(unsafeResultMap: ["__typename": "Thumbnail", "id": id, "workId": workId, "imageUrl": imageUrl, "imageGsPath": imageGsPath])
+          public init(id: GraphQLID, workId: GraphQLID, orgImageUrl: String, resizedImageUrl: String, imageGsPath: String) {
+            self.init(unsafeResultMap: ["__typename": "Frame", "id": id, "workId": workId, "orgImageUrl": orgImageUrl, "resizedImageUrl": resizedImageUrl, "imageGsPath": imageGsPath])
           }
 
           public var __typename: String {
@@ -412,9 +412,9 @@ public enum CanvasAPI {
               self.resultMap = unsafeResultMap
             }
 
-            public var thumbnailFragment: ThumbnailFragment {
+            public var frameFragment: FrameFragment {
               get {
-                return ThumbnailFragment(unsafeResultMap: resultMap)
+                return FrameFragment(unsafeResultMap: resultMap)
               }
               set {
                 resultMap += newValue.resultMap
@@ -426,18 +426,18 @@ public enum CanvasAPI {
     }
   }
 
-  public final class ListThumbnailQuery: GraphQLQuery {
+  public final class ListFrameQuery: GraphQLQuery {
     /// The raw GraphQL definition of this operation.
     public let operationDefinition: String =
       """
-      query ListThumbnail($page: Int!, $limit: Int!) {
-        thumbnails(page: $page, limit: $limit) {
+      query ListFrame($page: Int!, $limit: Int!) {
+        frames(page: $page, limit: $limit) {
           __typename
           edges {
             __typename
             node {
               __typename
-              ...ThumbnailFragment
+              ...FrameFragment
             }
           }
           pageInfo {
@@ -449,11 +449,11 @@ public enum CanvasAPI {
       }
       """
 
-    public let operationName: String = "ListThumbnail"
+    public let operationName: String = "ListFrame"
 
     public var queryDocument: String {
       var document: String = operationDefinition
-      document.append("\n" + ThumbnailFragment.fragmentDefinition)
+      document.append("\n" + FrameFragment.fragmentDefinition)
       return document
     }
 
@@ -474,7 +474,7 @@ public enum CanvasAPI {
 
       public static var selections: [GraphQLSelection] {
         return [
-          GraphQLField("thumbnails", arguments: ["page": GraphQLVariable("page"), "limit": GraphQLVariable("limit")], type: .nonNull(.object(Thumbnail.selections))),
+          GraphQLField("frames", arguments: ["page": GraphQLVariable("page"), "limit": GraphQLVariable("limit")], type: .nonNull(.object(Frame.selections))),
         ]
       }
 
@@ -484,21 +484,21 @@ public enum CanvasAPI {
         self.resultMap = unsafeResultMap
       }
 
-      public init(thumbnails: Thumbnail) {
-        self.init(unsafeResultMap: ["__typename": "Query", "thumbnails": thumbnails.resultMap])
+      public init(frames: Frame) {
+        self.init(unsafeResultMap: ["__typename": "Query", "frames": frames.resultMap])
       }
 
-      public var thumbnails: Thumbnail {
+      public var frames: Frame {
         get {
-          return Thumbnail(unsafeResultMap: resultMap["thumbnails"]! as! ResultMap)
+          return Frame(unsafeResultMap: resultMap["frames"]! as! ResultMap)
         }
         set {
-          resultMap.updateValue(newValue.resultMap, forKey: "thumbnails")
+          resultMap.updateValue(newValue.resultMap, forKey: "frames")
         }
       }
 
-      public struct Thumbnail: GraphQLSelectionSet {
-        public static let possibleTypes: [String] = ["ThumbnailConnection"]
+      public struct Frame: GraphQLSelectionSet {
+        public static let possibleTypes: [String] = ["FrameConnection"]
 
         public static var selections: [GraphQLSelection] {
           return [
@@ -515,7 +515,7 @@ public enum CanvasAPI {
         }
 
         public init(edges: [Edge], pageInfo: PageInfo) {
-          self.init(unsafeResultMap: ["__typename": "ThumbnailConnection", "edges": edges.map { (value: Edge) -> ResultMap in value.resultMap }, "pageInfo": pageInfo.resultMap])
+          self.init(unsafeResultMap: ["__typename": "FrameConnection", "edges": edges.map { (value: Edge) -> ResultMap in value.resultMap }, "pageInfo": pageInfo.resultMap])
         }
 
         public var __typename: String {
@@ -546,7 +546,7 @@ public enum CanvasAPI {
         }
 
         public struct Edge: GraphQLSelectionSet {
-          public static let possibleTypes: [String] = ["ThumbnailEdge"]
+          public static let possibleTypes: [String] = ["FrameEdge"]
 
           public static var selections: [GraphQLSelection] {
             return [
@@ -562,7 +562,7 @@ public enum CanvasAPI {
           }
 
           public init(node: Node) {
-            self.init(unsafeResultMap: ["__typename": "ThumbnailEdge", "node": node.resultMap])
+            self.init(unsafeResultMap: ["__typename": "FrameEdge", "node": node.resultMap])
           }
 
           public var __typename: String {
@@ -584,12 +584,12 @@ public enum CanvasAPI {
           }
 
           public struct Node: GraphQLSelectionSet {
-            public static let possibleTypes: [String] = ["Thumbnail"]
+            public static let possibleTypes: [String] = ["Frame"]
 
             public static var selections: [GraphQLSelection] {
               return [
                 GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
-                GraphQLFragmentSpread(ThumbnailFragment.self),
+                GraphQLFragmentSpread(FrameFragment.self),
               ]
             }
 
@@ -599,8 +599,8 @@ public enum CanvasAPI {
               self.resultMap = unsafeResultMap
             }
 
-            public init(id: GraphQLID, workId: GraphQLID, imageUrl: String, imageGsPath: String) {
-              self.init(unsafeResultMap: ["__typename": "Thumbnail", "id": id, "workId": workId, "imageUrl": imageUrl, "imageGsPath": imageGsPath])
+            public init(id: GraphQLID, workId: GraphQLID, orgImageUrl: String, resizedImageUrl: String, imageGsPath: String) {
+              self.init(unsafeResultMap: ["__typename": "Frame", "id": id, "workId": workId, "orgImageUrl": orgImageUrl, "resizedImageUrl": resizedImageUrl, "imageGsPath": imageGsPath])
             }
 
             public var __typename: String {
@@ -628,9 +628,9 @@ public enum CanvasAPI {
                 self.resultMap = unsafeResultMap
               }
 
-              public var thumbnailFragment: ThumbnailFragment {
+              public var frameFragment: FrameFragment {
                 get {
-                  return ThumbnailFragment(unsafeResultMap: resultMap)
+                  return FrameFragment(unsafeResultMap: resultMap)
                 }
                 set {
                   resultMap += newValue.resultMap
@@ -753,11 +753,12 @@ public enum CanvasAPI {
         __typename
         id
         videoUrl
-        thumbnails(limit: 3) {
+        frames(limit: 3) {
           __typename
           id
           workId
-          imageUrl
+          orgImageUrl
+          resizedImageUrl
           imageGsPath
         }
       }
@@ -770,7 +771,7 @@ public enum CanvasAPI {
         GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
         GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
         GraphQLField("videoUrl", type: .nonNull(.scalar(String.self))),
-        GraphQLField("thumbnails", arguments: ["limit": 3], type: .nonNull(.list(.nonNull(.object(Thumbnail.selections))))),
+        GraphQLField("frames", arguments: ["limit": 3], type: .nonNull(.list(.nonNull(.object(Frame.selections))))),
       ]
     }
 
@@ -780,8 +781,8 @@ public enum CanvasAPI {
       self.resultMap = unsafeResultMap
     }
 
-    public init(id: GraphQLID, videoUrl: String, thumbnails: [Thumbnail]) {
-      self.init(unsafeResultMap: ["__typename": "Work", "id": id, "videoUrl": videoUrl, "thumbnails": thumbnails.map { (value: Thumbnail) -> ResultMap in value.resultMap }])
+    public init(id: GraphQLID, videoUrl: String, frames: [Frame]) {
+      self.init(unsafeResultMap: ["__typename": "Work", "id": id, "videoUrl": videoUrl, "frames": frames.map { (value: Frame) -> ResultMap in value.resultMap }])
     }
 
     public var __typename: String {
@@ -811,24 +812,25 @@ public enum CanvasAPI {
       }
     }
 
-    public var thumbnails: [Thumbnail] {
+    public var frames: [Frame] {
       get {
-        return (resultMap["thumbnails"] as! [ResultMap]).map { (value: ResultMap) -> Thumbnail in Thumbnail(unsafeResultMap: value) }
+        return (resultMap["frames"] as! [ResultMap]).map { (value: ResultMap) -> Frame in Frame(unsafeResultMap: value) }
       }
       set {
-        resultMap.updateValue(newValue.map { (value: Thumbnail) -> ResultMap in value.resultMap }, forKey: "thumbnails")
+        resultMap.updateValue(newValue.map { (value: Frame) -> ResultMap in value.resultMap }, forKey: "frames")
       }
     }
 
-    public struct Thumbnail: GraphQLSelectionSet {
-      public static let possibleTypes: [String] = ["Thumbnail"]
+    public struct Frame: GraphQLSelectionSet {
+      public static let possibleTypes: [String] = ["Frame"]
 
       public static var selections: [GraphQLSelection] {
         return [
           GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
           GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
           GraphQLField("workId", type: .nonNull(.scalar(GraphQLID.self))),
-          GraphQLField("imageUrl", type: .nonNull(.scalar(String.self))),
+          GraphQLField("orgImageUrl", type: .nonNull(.scalar(String.self))),
+          GraphQLField("resizedImageUrl", type: .nonNull(.scalar(String.self))),
           GraphQLField("imageGsPath", type: .nonNull(.scalar(String.self))),
         ]
       }
@@ -839,8 +841,8 @@ public enum CanvasAPI {
         self.resultMap = unsafeResultMap
       }
 
-      public init(id: GraphQLID, workId: GraphQLID, imageUrl: String, imageGsPath: String) {
-        self.init(unsafeResultMap: ["__typename": "Thumbnail", "id": id, "workId": workId, "imageUrl": imageUrl, "imageGsPath": imageGsPath])
+      public init(id: GraphQLID, workId: GraphQLID, orgImageUrl: String, resizedImageUrl: String, imageGsPath: String) {
+        self.init(unsafeResultMap: ["__typename": "Frame", "id": id, "workId": workId, "orgImageUrl": orgImageUrl, "resizedImageUrl": resizedImageUrl, "imageGsPath": imageGsPath])
       }
 
       public var __typename: String {
@@ -870,12 +872,21 @@ public enum CanvasAPI {
         }
       }
 
-      public var imageUrl: String {
+      public var orgImageUrl: String {
         get {
-          return resultMap["imageUrl"]! as! String
+          return resultMap["orgImageUrl"]! as! String
         }
         set {
-          resultMap.updateValue(newValue, forKey: "imageUrl")
+          resultMap.updateValue(newValue, forKey: "orgImageUrl")
+        }
+      }
+
+      public var resizedImageUrl: String {
+        get {
+          return resultMap["resizedImageUrl"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "resizedImageUrl")
         }
       }
 
@@ -890,27 +901,29 @@ public enum CanvasAPI {
     }
   }
 
-  public struct ThumbnailFragment: GraphQLFragment {
+  public struct FrameFragment: GraphQLFragment {
     /// The raw GraphQL definition of this fragment.
     public static let fragmentDefinition: String =
       """
-      fragment ThumbnailFragment on Thumbnail {
+      fragment FrameFragment on Frame {
         __typename
         id
         workId
-        imageUrl
+        orgImageUrl
+        resizedImageUrl
         imageGsPath
       }
       """
 
-    public static let possibleTypes: [String] = ["Thumbnail"]
+    public static let possibleTypes: [String] = ["Frame"]
 
     public static var selections: [GraphQLSelection] {
       return [
         GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
         GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
         GraphQLField("workId", type: .nonNull(.scalar(GraphQLID.self))),
-        GraphQLField("imageUrl", type: .nonNull(.scalar(String.self))),
+        GraphQLField("orgImageUrl", type: .nonNull(.scalar(String.self))),
+        GraphQLField("resizedImageUrl", type: .nonNull(.scalar(String.self))),
         GraphQLField("imageGsPath", type: .nonNull(.scalar(String.self))),
       ]
     }
@@ -921,8 +934,8 @@ public enum CanvasAPI {
       self.resultMap = unsafeResultMap
     }
 
-    public init(id: GraphQLID, workId: GraphQLID, imageUrl: String, imageGsPath: String) {
-      self.init(unsafeResultMap: ["__typename": "Thumbnail", "id": id, "workId": workId, "imageUrl": imageUrl, "imageGsPath": imageGsPath])
+    public init(id: GraphQLID, workId: GraphQLID, orgImageUrl: String, resizedImageUrl: String, imageGsPath: String) {
+      self.init(unsafeResultMap: ["__typename": "Frame", "id": id, "workId": workId, "orgImageUrl": orgImageUrl, "resizedImageUrl": resizedImageUrl, "imageGsPath": imageGsPath])
     }
 
     public var __typename: String {
@@ -952,12 +965,21 @@ public enum CanvasAPI {
       }
     }
 
-    public var imageUrl: String {
+    public var orgImageUrl: String {
       get {
-        return resultMap["imageUrl"]! as! String
+        return resultMap["orgImageUrl"]! as! String
       }
       set {
-        resultMap.updateValue(newValue, forKey: "imageUrl")
+        resultMap.updateValue(newValue, forKey: "orgImageUrl")
+      }
+    }
+
+    public var resizedImageUrl: String {
+      get {
+        return resultMap["resizedImageUrl"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "resizedImageUrl")
       }
     }
 

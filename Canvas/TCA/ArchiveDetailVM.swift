@@ -61,14 +61,14 @@ enum ArchiveDetailVM {
             state.shouldPullToRefresh = val
             return .none
         case .presentMintNftView(let data):
-            state.selectThumbnail = data
+            state.selectFrame = data
             state.isPresentedMintNftView = true
             return .none
         case .isPresentedMintNftView(let val):
             state.isPresentedMintNftView = val
             return .none
         case .mintERC721(let input):
-            guard let data = state.selectThumbnail else {
+            guard let data = state.selectFrame else {
                 return .none
             }
 
@@ -84,7 +84,7 @@ enum ArchiveDetailVM {
                 .catchToEffect()
                 .map(ArchiveDetailVM.Action.minted)
         case .mintERC1155(let input):
-            guard let data = state.selectThumbnail else {
+            guard let data = state.selectFrame else {
                 return .none
             }
 
@@ -181,18 +181,18 @@ enum ArchiveDetailVM {
         case .transfered(.failure(_)):
             state.shouldShowHUD = false
             return .none
-        case .fetchThumbnails:
+        case .fetchFrames:
             let workId = state.archive.id
             return CanvasClient.shared.caller()
-                .flatMap { caller in caller.thumbnailsByWork(workId: workId) }
+                .flatMap { caller in caller.framesByWork(workId: workId) }
                 .subscribe(on: environment.backgroundQueue)
                 .receive(on: environment.mainQueue)
                 .catchToEffect()
-                .map(ArchiveDetailVM.Action.thumbnails)
-        case .thumbnails(.success(let thumbnails)):
-            state.thumbnails = thumbnails
+                .map(ArchiveDetailVM.Action.frames)
+        case .frames(.success(let frames)):
+            state.frames = frames
             return .none
-        case .thumbnails(.failure(_)):
+        case .frames(.failure(_)):
             return .none
         }
     }
@@ -206,7 +206,7 @@ extension ArchiveDetailVM {
         case endRefresh(Result<TokenBundle, AppError>)
         case shouldShowHUD(Bool)
         case shouldPullToRefresh(Bool)
-        case presentMintNftView(CanvasAPI.ThumbnailFragment)
+        case presentMintNftView(CanvasAPI.FrameFragment)
         case isPresentedMintNftView(Bool)
         case mintERC721(MintERC721Input)
         case mintERC1155(MintERC1155Input)
@@ -220,14 +220,14 @@ extension ArchiveDetailVM {
         case transferERC721(TransferInput)
         case transferERC1155(TransferInput)
         case transfered(Result<Bool, AppError>)
-        case fetchThumbnails
-        case thumbnails(Result<[CanvasAPI.ThumbnailFragment], AppError>)
+        case fetchFrames
+        case frames(Result<[CanvasAPI.FrameFragment], AppError>)
     }
 
     struct State: Equatable {
         let archive: CanvasAPI.WorkFragment
 
-        var thumbnails: [CanvasAPI.ThumbnailFragment] = []
+        var frames: [CanvasAPI.FrameFragment] = []
         var initialized = false
         var shouldShowHUD = false
         var shouldPullToRefresh = false
@@ -236,7 +236,7 @@ extension ArchiveDetailVM {
         var ownERC1155: Bool = false
         var erc1155: Token?
         var isPresentedMintNftView = false
-        var selectThumbnail: CanvasAPI.ThumbnailFragment? = nil
+        var selectFrame: CanvasAPI.FrameFragment? = nil
         var isPresentedERC721SellNftView = false
         var isPresentedERC1155SellNftView = false
     }

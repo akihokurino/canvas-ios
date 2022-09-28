@@ -6,7 +6,7 @@ import SwiftUIRefresh
 struct ArchiveDetailView: View {
     let store: Store<ArchiveDetailVM.State, ArchiveDetailVM.Action>
 
-    private let thumbnailSize = UIScreen.main.bounds.size.width / 3
+    private let gridItemSize = UIScreen.main.bounds.size.width / 3
     private let gridItemLayout = [
         GridItem(.flexible()),
         GridItem(.flexible()),
@@ -44,13 +44,13 @@ struct ArchiveDetailView: View {
                         .background(Color(UIColor.systemBackground)), alignment: .bottom)
 
                     LazyVGrid(columns: gridItemLayout, alignment: HorizontalAlignment.leading, spacing: 3) {
-                        ForEach(viewStore.state.thumbnails) { data in
+                        ForEach(viewStore.state.frames) { data in
                             Button(action: {
                                 viewStore.send(.presentMintNftView(data))
                             }) {
-                                RemoteImageView(url: data.imageUrl)
+                                RemoteImageView(url: data.resizedImageUrl)
                                     .scaledToFit()
-                                    .frame(width: thumbnailSize)
+                                    .frame(width: gridItemSize)
                             }
                         }
                     }
@@ -78,14 +78,14 @@ struct ArchiveDetailView: View {
             }
             .onAppear {
                 viewStore.send(.startInitialize)
-                viewStore.send(.fetchThumbnails)
+                viewStore.send(.fetchFrames)
             }
             .navigationBarTitle("", displayMode: .inline)
             .sheet(isPresented: viewStore.binding(
                 get: \.isPresentedMintNftView,
                 send: ArchiveDetailVM.Action.isPresentedMintNftView
             )) {
-                MintNftView(data: viewStore.state.selectThumbnail!, hasERC721: viewStore.state.erc721 != nil, hasERC1155: viewStore.state.erc1155 != nil) { schema, amount in
+                MintNftView(data: viewStore.state.selectFrame!, hasERC721: viewStore.state.erc721 != nil, hasERC1155: viewStore.state.erc1155 != nil) { schema, amount in
                     viewStore.send(.isPresentedMintNftView(false))
 
                     switch schema {

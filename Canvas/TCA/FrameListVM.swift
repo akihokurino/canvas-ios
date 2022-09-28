@@ -2,7 +2,7 @@ import Combine
 import ComposableArchitecture
 import Foundation
 
-enum ThumbnailListVM {
+enum FrameListVM {
     static let reducer = Reducer<State, Action, Environment> { state, action, environment in
         switch action {
         case .startInitialize:
@@ -17,14 +17,14 @@ enum ThumbnailListVM {
             let page = state.page
 
             return CanvasClient.shared.caller()
-                .flatMap { caller in caller.thumbnails(page: page) }
-                .map { ThumbnailsWithHasNext(thumbnails: $0.0, hasNext: $0.1) }
+                .flatMap { caller in caller.frames(page: page) }
+                .map { FramesWithHasNext(frames: $0.0, hasNext: $0.1) }
                 .subscribe(on: environment.backgroundQueue)
                 .receive(on: environment.mainQueue)
                 .catchToEffect()
-                .map(ThumbnailListVM.Action.endInitialize)
+                .map(FrameListVM.Action.endInitialize)
         case .endInitialize(.success(let result)):
-            state.thumbnails = result.thumbnails
+            state.frames = result.frames
             state.hasNext = result.hasNext
             state.shouldShowHUD = false
 
@@ -42,14 +42,14 @@ enum ThumbnailListVM {
             let page = state.page
 
             return CanvasClient.shared.caller()
-                .flatMap { caller in caller.thumbnails(page: page) }
-                .map { ThumbnailsWithHasNext(thumbnails: $0.0, hasNext: $0.1) }
+                .flatMap { caller in caller.frames(page: page) }
+                .map { FramesWithHasNext(frames: $0.0, hasNext: $0.1) }
                 .subscribe(on: environment.backgroundQueue)
                 .receive(on: environment.mainQueue)
                 .catchToEffect()
-                .map(ThumbnailListVM.Action.endRefresh)
+                .map(FrameListVM.Action.endRefresh)
         case .endRefresh(.success(let result)):
-            state.thumbnails = result.thumbnails
+            state.frames = result.frames
             state.hasNext = result.hasNext
             state.shouldPullToRefresh = false
             return .none
@@ -68,14 +68,14 @@ enum ThumbnailListVM {
             let page = state.page
 
             return CanvasClient.shared.caller()
-                .flatMap { caller in caller.thumbnails(page: page) }
-                .map { ThumbnailsWithHasNext(thumbnails: $0.0, hasNext: $0.1) }
+                .flatMap { caller in caller.frames(page: page) }
+                .map { FramesWithHasNext(frames: $0.0, hasNext: $0.1) }
                 .subscribe(on: environment.backgroundQueue)
                 .receive(on: environment.mainQueue)
                 .catchToEffect()
-                .map(ThumbnailListVM.Action.endNext)
+                .map(FrameListVM.Action.endNext)
         case .endNext(.success(let result)):
-            state.thumbnails.append(contentsOf: result.thumbnails)
+            state.frames.append(contentsOf: result.frames)
             state.hasNext = result.hasNext
             state.shouldShowNextLoading = false
             return .none
@@ -93,7 +93,7 @@ enum ThumbnailListVM {
                 return .none
             }
             
-            state.selectThumbnail = data
+            state.selectFrame = data
             state.isPresentedDetailView = true
             return .none
         case .isPresentedDetailView(let val):
@@ -103,17 +103,17 @@ enum ThumbnailListVM {
     }
 }
 
-extension ThumbnailListVM {
+extension FrameListVM {
     enum Action: Equatable {
         case startInitialize
-        case endInitialize(Result<ThumbnailsWithHasNext, AppError>)
+        case endInitialize(Result<FramesWithHasNext, AppError>)
         case startRefresh
-        case endRefresh(Result<ThumbnailsWithHasNext, AppError>)
+        case endRefresh(Result<FramesWithHasNext, AppError>)
         case startNext
-        case endNext(Result<ThumbnailsWithHasNext, AppError>)
+        case endNext(Result<FramesWithHasNext, AppError>)
         case shouldShowHUD(Bool)
         case shouldPullToRefresh(Bool)
-        case presentDetailView(CanvasAPI.ThumbnailFragment)
+        case presentDetailView(CanvasAPI.FrameFragment)
         case isPresentedDetailView(Bool)
     }
 
@@ -125,8 +125,8 @@ extension ThumbnailListVM {
         var page = 1
         var hasNext = false
         var isPresentedDetailView = false
-        var thumbnails: [CanvasAPI.ThumbnailFragment] = []
-        var selectThumbnail: CanvasAPI.ThumbnailFragment? = nil
+        var frames: [CanvasAPI.FrameFragment] = []
+        var selectFrame: CanvasAPI.FrameFragment? = nil
     }
 
     struct Environment {

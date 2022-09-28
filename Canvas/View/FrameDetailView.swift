@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct ThumbnailDetailView: View {
+struct FrameDetailView: View {
     let url: String?
 
     @State private var scaleValue: CGFloat = 1.0

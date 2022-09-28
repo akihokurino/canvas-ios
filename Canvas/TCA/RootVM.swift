@@ -44,7 +44,7 @@ enum RootVM {
             state.workListView = WorkListVM.State()
             state.archivePageView = ArchivePageVM.State(
                 archiveListView: ArchiveListVM.State(),
-                thumbnailListView: ThumbnailListVM.State()
+                frameListView: FrameListVM.State()
             )
             state.contractListView = ContractListVM.State()
             state.walletView = WalletVM.State()

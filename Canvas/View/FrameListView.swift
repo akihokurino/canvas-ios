@@ -3,10 +3,10 @@ import ComposableArchitecture
 import SwiftUI
 import SwiftUIRefresh
 
-struct ThumbnailListView: View {
-    let store: Store<ThumbnailListVM.State, ThumbnailListVM.Action>
+struct FrameListView: View {
+    let store: Store<FrameListVM.State, FrameListVM.Action>
 
-    private let thumbnailSize = UIScreen.main.bounds.size.width / 3
+    private let gridItemSize = UIScreen.main.bounds.size.width / 3
     private let gridItemLayout = [
         GridItem(.flexible()),
         GridItem(.flexible()),
@@ -17,13 +17,13 @@ struct ThumbnailListView: View {
         WithViewStore(store) { viewStore in
             List {
                 LazyVGrid(columns: gridItemLayout, alignment: HorizontalAlignment.leading, spacing: 3) {
-                    ForEach(viewStore.state.thumbnails) { data in
+                    ForEach(viewStore.state.frames) { data in
                         Button(action: {
                             viewStore.send(.presentDetailView(data))
                         }) {
-                            RemoteImageView(url: data.imageUrl)
+                            RemoteImageView(url: data.resizedImageUrl)
                                 .scaledToFit()
-                                .frame(width: thumbnailSize)
+                                .frame(width: gridItemSize)
                         }
                     }
                 }
@@ -41,23 +41,23 @@ struct ThumbnailListView: View {
                     if viewStore.state.shouldShowHUD {
                         HUD(isLoading: viewStore.binding(
                             get: \.shouldShowHUD,
-                            send: ThumbnailListVM.Action.shouldShowHUD
+                            send: FrameListVM.Action.shouldShowHUD
                         ))
                     }
                 }, alignment: .center
             )
             .pullToRefresh(isShowing: viewStore.binding(
                 get: \.shouldPullToRefresh,
-                send: ThumbnailListVM.Action.shouldPullToRefresh
+                send: FrameListVM.Action.shouldPullToRefresh
             )) {
                 viewStore.send(.startRefresh)
             }
             .navigationBarTitle("", displayMode: .inline)
             .sheet(isPresented: viewStore.binding(
                 get: \.isPresentedDetailView,
-                send: ThumbnailListVM.Action.isPresentedDetailView
+                send: FrameListVM.Action.isPresentedDetailView
             )) {
-                ThumbnailDetailView(url: viewStore.selectThumbnail?.imageUrl)
+                FrameDetailView(url: viewStore.selectFrame?.orgImageUrl)
             }
             .onAppear {
                 viewStore.send(.startInitialize)

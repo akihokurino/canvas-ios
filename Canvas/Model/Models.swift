@@ -5,8 +5,8 @@ struct ArchivesWithHasNext: Equatable {
     let hasNext: Bool
 }
 
-struct ThumbnailsWithHasNext: Equatable {
-    let thumbnails: [CanvasAPI.ThumbnailFragment]
+struct FramesWithHasNext: Equatable {
+    let frames: [CanvasAPI.FrameFragment]
     let hasNext: Bool
 }
 

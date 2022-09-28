@@ -49,7 +49,7 @@
 		028DC773271EC45200B7AF1B /* Bound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 028DC772271EC45200B7AF1B /* Bound.swift */; };
 		028DC775271EED0C00B7AF1B /* Fish.swift in Sources */ = {isa = PBXBuildFile; fileRef = 028DC774271EED0C00B7AF1B /* Fish.swift */; };
 		028DC777271F0B9D00B7AF1B /* Work.swift in Sources */ = {isa = PBXBuildFile; fileRef = 028DC776271F0B9D00B7AF1B /* Work.swift */; };
-		02988E83288BDA5300B6A540 /* ThumbnailListVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02988E82288BDA5300B6A540 /* ThumbnailListVM.swift */; };
+		02988E83288BDA5300B6A540 /* FrameListVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02988E82288BDA5300B6A540 /* FrameListVM.swift */; };
 		0299D8152720684200483DE1 /* Recorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0299D8142720684200483DE1 /* Recorder.swift */; };
 		029B2FFC2722CAA5008BC3F3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 029B2FFB2722CAA5008BC3F3 /* GoogleService-Info.plist */; };
 		029B30072722E25F008BC3F3 /* FirebaseStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029B30062722E25F008BC3F3 /* FirebaseStorage.swift */; };
@@ -59,7 +59,7 @@
 		029DDF102889BB3600118174 /* RootVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029DDF0F2889BB3600118174 /* RootVM.swift */; };
 		029E6A87271EA64F00F6A8EF /* ColorRain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029E6A86271EA64F00F6A8EF /* ColorRain.swift */; };
 		02A19D45272C517D00DBFA24 /* WorkListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A19D44272C517D00DBFA24 /* WorkListView.swift */; };
-		02A19D47272C518C00DBFA24 /* ThumbnailListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A19D46272C518C00DBFA24 /* ThumbnailListView.swift */; };
+		02A19D47272C518C00DBFA24 /* FrameListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A19D46272C518C00DBFA24 /* FrameListView.swift */; };
 		02AB3C2B27D27C84008043A6 /* MintNftView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02AB3C2A27D27C84008043A6 /* MintNftView.swift */; };
 		02AB3C2E27D2810B008043A6 /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02AB3C2D27D2810B008043A6 /* TextField.swift */; };
 		02AB3C3027D281F2008043A6 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02AB3C2F27D281F2008043A6 /* Button.swift */; };
@@ -88,7 +88,7 @@
 		02F4C30D27CCF99F00746255 /* Amplify in Frameworks */ = {isa = PBXBuildFile; productRef = 02F4C30C27CCF99F00746255 /* Amplify */; };
 		02F6CC422714775E002C22B7 /* ParticleRotate3D.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F6CC412714775E002C22B7 /* ParticleRotate3D.swift */; };
 		02F944B7272DA321002A9B2B /* ArchiveListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F944B6272DA321002A9B2B /* ArchiveListView.swift */; };
-		02F944B9272DA539002A9B2B /* ThumbnailDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F944B8272DA539002A9B2B /* ThumbnailDetailView.swift */; };
+		02F944B9272DA539002A9B2B /* FrameDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F944B8272DA539002A9B2B /* FrameDetailView.swift */; };
 		40B02CB9A55727D506E7E49C /* amplifyconfiguration.json in Resources */ = {isa = PBXBuildFile; fileRef = 51BFA9E102289A317FC68E7F /* amplifyconfiguration.json */; };
 		F9CBD627AFC66549B3CA7FCE /* awsconfiguration.json in Resources */ = {isa = PBXBuildFile; fileRef = C1A4623953676213E54F0289 /* awsconfiguration.json */; };
 /* End PBXBuildFile section */
@@ -130,7 +130,7 @@
 		028DC772271EC45200B7AF1B /* Bound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bound.swift; sourceTree = "<group>"; };
 		028DC774271EED0C00B7AF1B /* Fish.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fish.swift; sourceTree = "<group>"; };
 		028DC776271F0B9D00B7AF1B /* Work.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Work.swift; sourceTree = "<group>"; };
-		02988E82288BDA5300B6A540 /* ThumbnailListVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailListVM.swift; sourceTree = "<group>"; };
+		02988E82288BDA5300B6A540 /* FrameListVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameListVM.swift; sourceTree = "<group>"; };
 		0299D8142720684200483DE1 /* Recorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recorder.swift; sourceTree = "<group>"; };
 		029B2FFB2722CAA5008BC3F3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		029B30062722E25F008BC3F3 /* FirebaseStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseStorage.swift; sourceTree = "<group>"; };
@@ -139,7 +139,7 @@
 		029DDF0F2889BB3600118174 /* RootVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootVM.swift; sourceTree = "<group>"; };
 		029E6A86271EA64F00F6A8EF /* ColorRain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorRain.swift; sourceTree = "<group>"; };
 		02A19D44272C517D00DBFA24 /* WorkListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkListView.swift; sourceTree = "<group>"; };
-		02A19D46272C518C00DBFA24 /* ThumbnailListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailListView.swift; sourceTree = "<group>"; };
+		02A19D46272C518C00DBFA24 /* FrameListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameListView.swift; sourceTree = "<group>"; };
 		02AB3C2A27D27C84008043A6 /* MintNftView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MintNftView.swift; sourceTree = "<group>"; };
 		02AB3C2D27D2810B008043A6 /* TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextField.swift; sourceTree = "<group>"; };
 		02AB3C2F27D281F2008043A6 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
@@ -167,7 +167,7 @@
 		02F2EF0C27143FF800415B9A /* StreamDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamDesign.swift; sourceTree = "<group>"; };
 		02F6CC412714775E002C22B7 /* ParticleRotate3D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleRotate3D.swift; sourceTree = "<group>"; };
 		02F944B6272DA321002A9B2B /* ArchiveListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveListView.swift; sourceTree = "<group>"; };
-		02F944B8272DA539002A9B2B /* ThumbnailDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailDetailView.swift; sourceTree = "<group>"; };
+		02F944B8272DA539002A9B2B /* FrameDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameDetailView.swift; sourceTree = "<group>"; };
 		51BFA9E102289A317FC68E7F /* amplifyconfiguration.json */ = {isa = PBXFileReference; explicitFileType = text.json; path = amplifyconfiguration.json; sourceTree = "<group>"; };
 		C1A4623953676213E54F0289 /* awsconfiguration.json */ = {isa = PBXFileReference; explicitFileType = text.json; path = awsconfiguration.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -319,7 +319,7 @@
 				0231698528D7406D0027FAF8 /* ArchivePageVM.swift */,
 				02F297A6288C1B3F00A50E60 /* ArchiveListVM.swift */,
 				02F297A8288C235B00A50E60 /* ArchiveDetailVM.swift */,
-				02988E82288BDA5300B6A540 /* ThumbnailListVM.swift */,
+				02988E82288BDA5300B6A540 /* FrameListVM.swift */,
 				02E188F4288ABC30001F24F5 /* WalletVM.swift */,
 				02388F8928CB12F400E2AAC0 /* ContractListVM.swift */,
 				02388F8B28CB130B00E2AAC0 /* ContractDetailVM.swift */,
@@ -347,8 +347,8 @@
 				02D26CCC2731848500678F6F /* ArchiveDetailView.swift */,
 				02AB3C2A27D27C84008043A6 /* MintNftView.swift */,
 				02780674282E0E9A00074144 /* SellNftView.swift */,
-				02A19D46272C518C00DBFA24 /* ThumbnailListView.swift */,
-				02F944B8272DA539002A9B2B /* ThumbnailDetailView.swift */,
+				02A19D46272C518C00DBFA24 /* FrameListView.swift */,
+				02F944B8272DA539002A9B2B /* FrameDetailView.swift */,
 				02F05F4E2824F08100A36AD4 /* WalletView.swift */,
 				02388F8D28CB13A500E2AAC0 /* ContractListView.swift */,
 				02388F8F28CB13C300E2AAC0 /* ContractDetailView.swift */,
@@ -504,11 +504,11 @@
 				02388F9028CB13C300E2AAC0 /* ContractDetailView.swift in Sources */,
 				029DDF0E2889BAE600118174 /* Navigation+TCA.swift in Sources */,
 				02F297A9288C235B00A50E60 /* ArchiveDetailVM.swift in Sources */,
-				02988E83288BDA5300B6A540 /* ThumbnailListVM.swift in Sources */,
+				02988E83288BDA5300B6A540 /* FrameListVM.swift in Sources */,
 				02B25ED92711361F0067A73D /* BoidsDesign.swift in Sources */,
 				02D26CCD2731848500678F6F /* ArchiveDetailView.swift in Sources */,
 				023AC5FE272C69A2005C858D /* RemoteImageView.swift in Sources */,
-				02F944B9272DA539002A9B2B /* ThumbnailDetailView.swift in Sources */,
+				02F944B9272DA539002A9B2B /* FrameDetailView.swift in Sources */,
 				02A19D45272C517D00DBFA24 /* WorkListView.swift in Sources */,
 				02AB3C3527D2848F008043A6 /* HUD.swift in Sources */,
 				02AB3C3027D281F2008043A6 /* Button.swift in Sources */,
@@ -532,7 +532,7 @@
 				02E20E2327CDFD1700AED50C /* NetworkInterceptor.swift in Sources */,
 				02449DA827231D93000A011A /* Error.swift in Sources */,
 				026C5E6D2729BA8C00995BCB /* CanvasAPI.swift in Sources */,
-				02A19D47272C518C00DBFA24 /* ThumbnailListView.swift in Sources */,
+				02A19D47272C518C00DBFA24 /* FrameListView.swift in Sources */,
 				02E20E2E27CE46F300AED50C /* NftAPI.swift in Sources */,
 				02F2EF0D27143FF800415B9A /* StreamDesign.swift in Sources */,
 				02AB3C2B27D27C84008043A6 /* MintNftView.swift in Sources */,

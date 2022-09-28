@@ -12,19 +12,19 @@ query ListWork($page: Int!, $limit: Int!) {
     }
 }
 
-query ListThumbnailByWork($workId: ID!) {
+query ListFrameByWork($workId: ID!) {
     work(id: $workId) {
-        thumbnails {
-            ...ThumbnailFragment
+        frames {
+            ...FrameFragment
         }
     }
 }
 
-query ListThumbnail($page: Int!, $limit: Int!) {
-    thumbnails(page: $page, limit: $limit) {
+query ListFrame($page: Int!, $limit: Int!) {
+    frames(page: $page, limit: $limit) {
         edges {
             node {
-                ...ThumbnailFragment
+                ...FrameFragment
             }
         }
         pageInfo {
@@ -37,18 +37,20 @@ query ListThumbnail($page: Int!, $limit: Int!) {
 fragment WorkFragment on Work {
     id
     videoUrl
-    thumbnails(limit: 3) {
+    frames(limit: 3) {
         id
         workId
-        imageUrl
+        orgImageUrl
+        resizedImageUrl
         imageGsPath
     }
 }
 
-fragment ThumbnailFragment on Thumbnail {
+fragment FrameFragment on Frame {
     id
     workId
-    imageUrl
+    orgImageUrl
+    resizedImageUrl
     imageGsPath
 }
 

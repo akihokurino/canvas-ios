@@ -23,10 +23,10 @@ struct ArchivePageView: View {
                     } else {
                         IfLetStore(
                             store.scope(
-                                state: { $0.thumbnailListView },
-                                action: ArchivePageVM.Action.thumbnailListView
+                                state: { $0.frameListView },
+                                action: ArchivePageVM.Action.frameListView
                             ),
-                            then: ThumbnailListView.init(store:)
+                            then: FrameListView.init(store:)
                         )
                     }
                 }
