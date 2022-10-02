@@ -13,7 +13,7 @@ struct ContractDetailView: View {
 
     var body: some View {
         WithViewStore(store) { viewStore in
-            List {
+            ScrollView {
                 VStack {
                     LazyVGrid(columns: gridItemLayout, alignment: HorizontalAlignment.leading, spacing: 3) {
                         ForEach(viewStore.state.tokens) { data in
@@ -27,11 +27,7 @@ struct ContractDetailView: View {
                         }
                     }
                 }
-                .listRowSeparator(.hidden)
-                .listRowInsets(EdgeInsets())
-                .buttonStyle(PlainButtonStyle())
             }
-            .listStyle(PlainListStyle())
             .overlay(
                 Group {
                     if viewStore.state.shouldShowHUD {

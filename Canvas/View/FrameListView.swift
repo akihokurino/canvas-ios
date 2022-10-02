@@ -14,7 +14,7 @@ struct FrameListView: View {
 
     var body: some View {
         WithViewStore(store) { viewStore in
-            List {
+            ScrollView {
                 LazyVGrid(columns: gridItemLayout, alignment: HorizontalAlignment.leading, spacing: 3) {
                     ForEach(viewStore.state.frames) { data in
                         Button(action: {
@@ -24,17 +24,27 @@ struct FrameListView: View {
                                 .scaledToFit()
                                 .frame(width: gridItemSize)
                         }
+                        .onAppear {
+                            if data == viewStore.state.frames.last {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                    viewStore.send(.startNext)
+                                }
+                            }
+                        }
                     }
                 }
-                .listRowSeparator(.hidden)
-                .listRowInsets(EdgeInsets())
-                .buttonStyle(PlainButtonStyle())
-
-                if viewStore.state.initialized {
-                    bottom
+                
+                if viewStore.state.initialized && viewStore.state.hasNext {
+                    HStack {
+                        Spacer()
+                        ProgressView()
+                        Spacer()
+                    }
+                    .frame(height: 60)
+                } else {
+                    Spacer().frame(height: 60)
                 }
             }
-            .listStyle(PlainListStyle())
             .overlay(
                 Group {
                     if viewStore.state.shouldShowHUD {
@@ -57,35 +67,6 @@ struct FrameListView: View {
             }
             .onAppear {
                 viewStore.send(.startInitialize)
-            }
-        }
-    }
-
-    private var bottom: some View {
-        WithViewStore(store) { viewStore in
-            Group {
-                if viewStore.state.hasNext && !viewStore.state.shouldShowNextLoading {
-                    Button(action: {
-                        viewStore.send(.startNext)
-                    }) {
-                        HStack {
-                            Spacer()
-                            Text("Next")
-                            Spacer()
-                        }
-                    }
-                    .frame(height: 60)
-                    .foregroundColor(Color.blue)
-                }
-
-                if viewStore.state.hasNext && viewStore.state.shouldShowNextLoading {
-                    HStack {
-                        Spacer()
-                        ProgressView()
-                        Spacer()
-                    }
-                    .frame(height: 60)
-                }
             }
         }
     }

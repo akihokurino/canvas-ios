@@ -66,7 +66,7 @@ enum FrameListVM {
             state.page += 1
 
             let page = state.page
-
+            
             return CanvasClient.shared.caller()
                 .flatMap { caller in caller.frames(page: page) }
                 .map { FramesWithHasNext(frames: $0.0, hasNext: $0.1) }

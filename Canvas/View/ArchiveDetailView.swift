@@ -14,7 +14,7 @@ struct ArchiveDetailView: View {
 
     var body: some View {
         WithViewStore(store) { viewStore in
-            List {
+            ScrollView {
                 VStack {
                     HStack {
                         ActionButton(text: "ERC721", background: !(viewStore.state.erc721?.tokenId.isEmpty ?? true) ? .primary : .disable) {
@@ -54,11 +54,7 @@ struct ArchiveDetailView: View {
                         }
                     }
                 }
-                .listRowSeparator(.hidden)
-                .listRowInsets(EdgeInsets())
-                .buttonStyle(PlainButtonStyle())
             }
-            .listStyle(PlainListStyle())
             .overlay(
                 Group {
                     if viewStore.state.shouldShowHUD {

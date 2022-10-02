@@ -7,7 +7,7 @@ struct WalletView: View {
 
     var body: some View {
         WithViewStore(store) { viewStore in
-            List {
+            ScrollView {
                 VStack(alignment: .leading) {
                     Button(action: {
                         UIPasteboard.general.string = viewStore.address
@@ -48,11 +48,7 @@ struct WalletView: View {
                     }
                 }
                 .padding()
-                .listRowSeparator(.hidden)
-                .listRowInsets(EdgeInsets())
-                .buttonStyle(PlainButtonStyle())
             }
-            .listStyle(PlainListStyle())
             .overlay(
                 Group {
                     if viewStore.state.shouldShowHUD {

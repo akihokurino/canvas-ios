@@ -8,20 +8,38 @@ struct ArchiveListView: View {
     var body: some View {
         WithViewStore(store) { viewStore in
             List {
-                ForEach(viewStore.state.archives) { item in
-                    ZStack {
+                VStack {
+                    ForEach(viewStore.state.archives) { item in
                         Button(action: {
                             viewStore.send(.presentDetailView(item))
                         }) {
                             ArchiveRow(data: item)
                         }
+                        .onAppear {
+                            if item == viewStore.state.archives.last {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                    viewStore.send(.startNext)
+                                }
+                            }
+                        }
                     }
-                }
-                .listRowSeparator(.hidden)
-                .buttonStyle(PlainButtonStyle())
+                    .listRowSeparator(.hidden)
+                    .buttonStyle(PlainButtonStyle())
 
-                if viewStore.state.initialized {
-                    bottom
+                    if viewStore.state.initialized && viewStore.state.hasNext {
+                        HStack {
+                            Spacer()
+                            ProgressView()
+                            Spacer()
+                        }
+                        .frame(height: 60)
+                        .listRowSeparator(.hidden)
+                        .buttonStyle(PlainButtonStyle())
+                    } else {
+                        Spacer().frame(height: 60)
+                            .listRowSeparator(.hidden)
+                            .buttonStyle(PlainButtonStyle())
+                    }
                 }
             }
             .overlay(
@@ -52,35 +70,6 @@ struct ArchiveListView: View {
                 ViewStore(store.stateless).send(.popDetailView)
             }
         )
-    }
-
-    private var bottom: some View {
-        WithViewStore(store) { viewStore in
-            Group {
-                if viewStore.state.hasNext && !viewStore.state.shouldShowNextLoading {
-                    Button(action: {
-                        viewStore.send(.startNext)
-                    }) {
-                        HStack {
-                            Spacer()
-                            Text("Next")
-                            Spacer()
-                        }
-                    }
-                    .frame(height: 60)
-                    .foregroundColor(Color.blue)
-                }
-
-                if viewStore.state.hasNext && viewStore.state.shouldShowNextLoading {
-                    HStack {
-                        Spacer()
-                        ProgressView()
-                        Spacer()
-                    }
-                    .frame(height: 60)
-                }
-            }
-        }
     }
 }
 

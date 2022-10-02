@@ -7,20 +7,38 @@ struct ContractListView: View {
     var body: some View {
         WithViewStore(store) { viewStore in
             List {
-                ForEach(viewStore.state.contracts) { item in
-                    ZStack {
+                VStack {
+                    ForEach(viewStore.state.contracts) { item in
                         Button(action: {
                             viewStore.send(.presentDetailView(item))
                         }) {
                             ContractRow(data: item)
                         }
+                        .onAppear {
+                            if item == viewStore.state.contracts.last {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                    viewStore.send(.startNext)
+                                }
+                            }
+                        }
                     }
-                }
-                .listRowSeparator(.hidden)
-                .buttonStyle(PlainButtonStyle())
+                    .listRowSeparator(.hidden)
+                    .buttonStyle(PlainButtonStyle())
 
-                if viewStore.state.initialized {
-                    bottom
+                    if viewStore.state.initialized && viewStore.state.hasNext {
+                        HStack {
+                            Spacer()
+                            ProgressView()
+                            Spacer()
+                        }
+                        .frame(height: 60)
+                        .listRowSeparator(.hidden)
+                        .buttonStyle(PlainButtonStyle())
+                    } else {
+                        Spacer().frame(height: 60)
+                            .listRowSeparator(.hidden)
+                            .buttonStyle(PlainButtonStyle())
+                    }
                 }
             }
             .overlay(
@@ -51,35 +69,6 @@ struct ContractListView: View {
                 ViewStore(store.stateless).send(.popDetailView)
             }
         )
-    }
-
-    private var bottom: some View {
-        WithViewStore(store) { viewStore in
-            Group {
-                if viewStore.state.hasNext && !viewStore.state.shouldShowNextLoading {
-                    Button(action: {
-                        viewStore.send(.startNext)
-                    }) {
-                        HStack {
-                            Spacer()
-                            Text("Next")
-                            Spacer()
-                        }
-                    }
-                    .frame(height: 60)
-                    .foregroundColor(Color.blue)
-                }
-
-                if viewStore.state.hasNext && viewStore.state.shouldShowNextLoading {
-                    HStack {
-                        Spacer()
-                        ProgressView()
-                        Spacer()
-                    }
-                    .frame(height: 60)
-                }
-            }
-        }
     }
 }
 
