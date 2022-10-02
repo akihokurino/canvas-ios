@@ -38,6 +38,8 @@ enum ArchiveListVM {
             state.shouldPullToRefresh = true
             state.page = 1
             state.hasNext = false
+            
+            print("テスト")
 
             let page = state.page
 

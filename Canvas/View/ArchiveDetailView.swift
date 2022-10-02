@@ -1,7 +1,6 @@
 import AVKit
 import ComposableArchitecture
 import SwiftUI
-import SwiftUIRefresh
 
 struct ArchiveDetailView: View {
     let store: Store<ArchiveDetailVM.State, ArchiveDetailVM.Action>
@@ -70,11 +69,8 @@ struct ArchiveDetailView: View {
                     }
                 }, alignment: .center
             )
-            .pullToRefresh(isShowing: viewStore.binding(
-                get: \.shouldPullToRefresh,
-                send: ArchiveDetailVM.Action.shouldPullToRefresh
-            )) {
-                viewStore.send(.startRefresh)
+            .refreshable {
+                await viewStore.send(.startRefresh, while: \.shouldPullToRefresh)
             }
             .onAppear {
                 viewStore.send(.startInitialize)

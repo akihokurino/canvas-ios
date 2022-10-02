@@ -1,11 +1,10 @@
 import Combine
 import ComposableArchitecture
 import SwiftUI
-import SwiftUIRefresh
 
 struct ArchiveListView: View {
     let store: Store<ArchiveListVM.State, ArchiveListVM.Action>
-    
+
     var body: some View {
         WithViewStore(store) { viewStore in
             List {
@@ -35,11 +34,8 @@ struct ArchiveListView: View {
                     }
                 }, alignment: .center
             )
-            .pullToRefresh(isShowing: viewStore.binding(
-                get: \.shouldPullToRefresh,
-                send: ArchiveListVM.Action.shouldPullToRefresh
-            )) {
-                viewStore.send(.startRefresh)
+            .refreshable {
+                await viewStore.send(.startRefresh, while: \.shouldPullToRefresh)
             }
             .navigationBarTitle("", displayMode: .inline)
             .onAppear {

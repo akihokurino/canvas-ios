@@ -1,7 +1,6 @@
 import Combine
 import ComposableArchitecture
 import SwiftUI
-import SwiftUIRefresh
 
 struct FrameListView: View {
     let store: Store<FrameListVM.State, FrameListVM.Action>
@@ -46,11 +45,8 @@ struct FrameListView: View {
                     }
                 }, alignment: .center
             )
-            .pullToRefresh(isShowing: viewStore.binding(
-                get: \.shouldPullToRefresh,
-                send: FrameListVM.Action.shouldPullToRefresh
-            )) {
-                viewStore.send(.startRefresh)
+            .refreshable {
+                await viewStore.send(.startRefresh, while: \.shouldPullToRefresh)
             }
             .navigationBarTitle("", displayMode: .inline)
             .sheet(isPresented: viewStore.binding(

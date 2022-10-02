@@ -33,11 +33,8 @@ struct ContractListView: View {
                     }
                 }, alignment: .center
             )
-            .pullToRefresh(isShowing: viewStore.binding(
-                get: \.shouldPullToRefresh,
-                send: ContractListVM.Action.shouldPullToRefresh
-            )) {
-                viewStore.send(.startRefresh)
+            .refreshable {
+                await viewStore.send(.startRefresh, while: \.shouldPullToRefresh)
             }
             .navigationBarTitle("", displayMode: .inline)
             .onAppear {

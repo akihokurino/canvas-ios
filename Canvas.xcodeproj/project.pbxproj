@@ -80,7 +80,6 @@
 		02E20E2E27CE46F300AED50C /* NftAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02E20E2D27CE46F300AED50C /* NftAPI.swift */; };
 		02E31FAB270F475100B94A81 /* LineArt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02E31FAA270F475100B94A81 /* LineArt.swift */; };
 		02F05F4F2824F08100A36AD4 /* WalletView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F05F4E2824F08100A36AD4 /* WalletView.swift */; };
-		02F06B5C273045A6006B671C /* SwiftUIRefresh in Frameworks */ = {isa = PBXBuildFile; productRef = 02F06B5B273045A6006B671C /* SwiftUIRefresh */; };
 		02F297A7288C1B3F00A50E60 /* ArchiveListVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F297A6288C1B3F00A50E60 /* ArchiveListVM.swift */; };
 		02F297A9288C235B00A50E60 /* ArchiveDetailVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F297A8288C235B00A50E60 /* ArchiveDetailVM.swift */; };
 		02F2EF0D27143FF800415B9A /* StreamDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F2EF0C27143FF800415B9A /* StreamDesign.swift */; };
@@ -185,7 +184,6 @@
 				0205F1672823FCF2008B8FF8 /* FirebaseStorage in Frameworks */,
 				02F4C30D27CCF99F00746255 /* Amplify in Frameworks */,
 				0205F1632823FCF2008B8FF8 /* FirebaseFunctions in Frameworks */,
-				02F06B5C273045A6006B671C /* SwiftUIRefresh in Frameworks */,
 				026C5E702729BB0400995BCB /* Apollo in Frameworks */,
 				02F4C30B27CCF99F00746255 /* AWSCognitoAuthPlugin in Frameworks */,
 				0205F1612823FCF2008B8FF8 /* FirebaseFirestore in Frameworks */,
@@ -407,7 +405,6 @@
 			name = Canvas;
 			packageProductDependencies = (
 				026C5E6F2729BB0400995BCB /* Apollo */,
-				02F06B5B273045A6006B671C /* SwiftUIRefresh */,
 				02F4C30A27CCF99F00746255 /* AWSCognitoAuthPlugin */,
 				02F4C30C27CCF99F00746255 /* Amplify */,
 				02AB3C3227D28470008043A6 /* ActivityIndicatorView */,
@@ -449,7 +446,6 @@
 			mainGroup = 021B2862270CB08C0093B0C9;
 			packageReferences = (
 				026C5E6E2729BB0400995BCB /* XCRemoteSwiftPackageReference "apollo-ios" */,
-				02F06B5A273045A6006B671C /* XCRemoteSwiftPackageReference "SwiftUIRefresh" */,
 				02F4C30927CCF99F00746255 /* XCRemoteSwiftPackageReference "amplify-ios" */,
 				02AB3C3127D28470008043A6 /* XCRemoteSwiftPackageReference "ActivityIndicatorView" */,
 				0205F15D2823FCF2008B8FF8 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
@@ -810,14 +806,6 @@
 				minimumVersion = 1.0.0;
 			};
 		};
-		02F06B5A273045A6006B671C /* XCRemoteSwiftPackageReference "SwiftUIRefresh" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/timbersoftware/SwiftUIRefresh.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.0.3;
-			};
-		};
 		02F4C30927CCF99F00746255 /* XCRemoteSwiftPackageReference "amplify-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/aws-amplify/amplify-ios";
@@ -873,11 +861,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 02AB3C3127D28470008043A6 /* XCRemoteSwiftPackageReference "ActivityIndicatorView" */;
 			productName = ActivityIndicatorView;
-		};
-		02F06B5B273045A6006B671C /* SwiftUIRefresh */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 02F06B5A273045A6006B671C /* XCRemoteSwiftPackageReference "SwiftUIRefresh" */;
-			productName = SwiftUIRefresh;
 		};
 		02F4C30A27CCF99F00746255 /* AWSCognitoAuthPlugin */ = {
 			isa = XCSwiftPackageProductDependency;

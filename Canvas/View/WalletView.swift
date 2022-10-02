@@ -1,7 +1,6 @@
 import CombineSchedulers
 import ComposableArchitecture
 import SwiftUI
-import SwiftUIRefresh
 
 struct WalletView: View {
     let store: Store<WalletVM.State, WalletVM.Action>
@@ -37,9 +36,15 @@ struct WalletView: View {
                         .font(.largeTitle)
 
                     Spacer().frame(height: 20)
-                    
+
                     ActionButton(text: "Faucets", background: .primary) {
-                        UIApplication.shared.open(URL(string: "https://goerlifaucet.com/")!)
+                        UIApplication.shared.open(URL(string: "https://goerlifaucet.com")!)
+                    }
+
+                    Spacer().frame(height: 20)
+
+                    ActionButton(text: "Moralis", background: .primary) {
+                        UIApplication.shared.open(URL(string: "https://admin.moralis.io/dapps")!)
                     }
                 }
                 .padding()
@@ -58,11 +63,8 @@ struct WalletView: View {
                     }
                 }, alignment: .center
             )
-            .pullToRefresh(isShowing: viewStore.binding(
-                get: \.shouldPullToRefresh,
-                send: WalletVM.Action.shouldPullToRefresh
-            )) {
-                viewStore.send(.startRefresh)
+            .refreshable {
+                await viewStore.send(.startRefresh, while: \.shouldPullToRefresh)
             }
             .navigationBarTitle("", displayMode: .inline)
             .onAppear {
