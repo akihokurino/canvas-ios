@@ -123,7 +123,7 @@ struct CanvasCaller {
 
     func frames(page: Int) -> Future<([CanvasAPI.FrameFragment], Bool), AppError> {
         return Future<([CanvasAPI.FrameFragment], Bool), AppError> { promise in
-            cli.fetch(query: CanvasAPI.ListFrameQuery(page: page, limit: 105)) { result in
+            cli.fetch(query: CanvasAPI.ListFrameQuery(page: page, limit: 18)) { result in
                 switch result {
                 case .success(let graphQLResult):
                     if let errors = graphQLResult.errors {
