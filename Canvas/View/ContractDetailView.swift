@@ -14,17 +14,33 @@ struct ContractDetailView: View {
     var body: some View {
         WithViewStore(store) { viewStore in
             ScrollView {
-                VStack {
-                    LazyVGrid(columns: gridItemLayout, alignment: HorizontalAlignment.leading, spacing: 3) {
-                        ForEach(viewStore.state.tokens) { data in
-                            Button(action: {
-                                viewStore.send(.presentSellNftView(data))
-                            }) {
-                                RemoteImageView(url: data.imageUrl)
-                                    .scaledToFit()
-                                    .frame(width: thumbnailSize)
-                            }
+                LazyVGrid(columns: gridItemLayout, alignment: HorizontalAlignment.leading, spacing: 3) {
+                    ForEach(viewStore.state.tokens) { data in
+                        Button(action: {
+                            viewStore.send(.presentSellNftView(data))
+                        }) {
+                            RemoteImageView(url: data.imageUrl)
+                                .scaledToFit()
+                                .frame(width: thumbnailSize)
                         }
+                    }
+                }
+                
+                if viewStore.state.initialized {
+                    if viewStore.state.hasNext {
+                        HStack {
+                            Spacer()
+                            ProgressView()
+                            Spacer()
+                        }
+                        .frame(height: 60)
+                        .onTapGesture {
+                            // TODO: onAppearでInfinityScroll実現できない
+                            // ロード時に全てのCellがonAppearしてしまう
+                            viewStore.send(.startNext)
+                        }
+                    } else {
+                        Spacer().frame(height: 60)
                     }
                 }
             }

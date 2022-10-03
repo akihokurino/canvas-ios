@@ -24,25 +24,25 @@ struct FrameListView: View {
                                 .scaledToFit()
                                 .frame(width: gridItemSize)
                         }
-                        .onAppear {
-                            if data == viewStore.state.frames.last {
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                    viewStore.send(.startNext)
-                                }
-                            }
-                        }
                     }
                 }
-                
-                if viewStore.state.initialized && viewStore.state.hasNext {
-                    HStack {
-                        Spacer()
-                        ProgressView()
-                        Spacer()
+
+                if viewStore.state.initialized {
+                    if viewStore.state.hasNext {
+                        HStack {
+                            Spacer()
+                            ProgressView()
+                            Spacer()
+                        }
+                        .frame(height: 60)
+                        .onTapGesture {
+                            // TODO: onAppearでInfinityScroll実現できない
+                            // ロード時に全てのCellがonAppearしてしまう
+                            viewStore.send(.startNext)
+                        }
+                    } else {
+                        Spacer().frame(height: 60)
                     }
-                    .frame(height: 60)
-                } else {
-                    Spacer().frame(height: 60)
                 }
             }
             .overlay(

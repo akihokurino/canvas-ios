@@ -7,37 +7,37 @@ struct ContractListView: View {
     var body: some View {
         WithViewStore(store) { viewStore in
             List {
-                VStack {
-                    ForEach(viewStore.state.contracts) { item in
-                        Button(action: {
-                            viewStore.send(.presentDetailView(item))
-                        }) {
-                            ContractRow(data: item)
-                        }
-                        .onAppear {
-                            if item == viewStore.state.contracts.last {
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                    viewStore.send(.startNext)
-                                }
+                if viewStore.state.initialized {
+                    VStack {
+                        ForEach(viewStore.state.contracts) { item in
+                            Button(action: {
+                                viewStore.send(.presentDetailView(item))
+                            }) {
+                                ContractRow(data: item)
                             }
                         }
-                    }
-                    .listRowSeparator(.hidden)
-                    .buttonStyle(PlainButtonStyle())
-
-                    if viewStore.state.initialized && viewStore.state.hasNext {
-                        HStack {
-                            Spacer()
-                            ProgressView()
-                            Spacer()
-                        }
-                        .frame(height: 60)
                         .listRowSeparator(.hidden)
                         .buttonStyle(PlainButtonStyle())
-                    } else {
-                        Spacer().frame(height: 60)
+                        
+                        if viewStore.state.hasNext {
+                            HStack {
+                                Spacer()
+                                ProgressView()
+                                Spacer()
+                            }
+                            .frame(height: 60)
                             .listRowSeparator(.hidden)
                             .buttonStyle(PlainButtonStyle())
+                            .onTapGesture {
+                                // TODO: onAppearでInfinityScroll実現できない
+                                // ロード時に全てのCellがonAppearしてしまう
+                                viewStore.send(.startNext)
+                            }
+                        } else {
+                            Spacer().frame(height: 60)
+                                .listRowSeparator(.hidden)
+                                .buttonStyle(PlainButtonStyle())
+                        }
                     }
                 }
             }
@@ -88,7 +88,7 @@ struct ContractRow: View {
                 .padding(.top, 2)
 
             HStack {
-                ForEach(data.tokens.shuffled().prefix(3)) { token in
+                ForEach(data.tokens.prefix(3)) { token in
                     RemoteImageView(url: token.imageUrl)
                         .aspectRatio(contentMode: .fit)
                         .frame(maxWidth: .infinity)

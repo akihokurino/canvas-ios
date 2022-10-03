@@ -57,7 +57,6 @@ enum ArchiveListVM {
             state.shouldPullToRefresh = false
             return .none
         case .startNext:
-            print("テスト")
             guard !state.shouldShowNextLoading, state.hasNext else {
                 return .none
             }
@@ -68,8 +67,6 @@ enum ArchiveListVM {
 
             let page = state.page
             
-            print(page)
-
             return CanvasClient.shared.caller()
                 .flatMap { caller in caller.works(page: page) }
                 .map { ArchivesWithHasNext(archives: $0.0, hasNext: $0.1) }

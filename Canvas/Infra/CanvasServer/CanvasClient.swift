@@ -66,7 +66,7 @@ struct CanvasCaller {
 
     func works(page: Int) -> Future<([CanvasAPI.WorkFragment], Bool), AppError> {
         return Future<([CanvasAPI.WorkFragment], Bool), AppError> { promise in
-            cli.fetch(query: CanvasAPI.ListWorkQuery(page: page, limit: 5)) { result in
+            cli.fetch(query: CanvasAPI.ListWorkQuery(page: page, limit: 10)) { result in
                 switch result {
                 case .success(let graphQLResult):
                     if let errors = graphQLResult.errors {

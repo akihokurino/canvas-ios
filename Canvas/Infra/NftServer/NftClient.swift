@@ -172,7 +172,7 @@ struct NftCaller {
 
     func contracts(cursor: String?) -> Future<([NftAPI.ContractFragment], String?), AppError> {
         return Future<([NftAPI.ContractFragment], String?), AppError> { promise in
-            cli.fetch(query: NftAPI.GetContractsQuery(cursor: cursor)) { result in
+            cli.fetch(query: NftAPI.GetContractsQuery(cursor: cursor, limit: 10)) { result in
                 switch result {
                 case .success(let graphQLResult):
                     if let errors = graphQLResult.errors {
@@ -198,7 +198,7 @@ struct NftCaller {
 
     func tokens(address: String, cursor: String?) -> Future<([NftAPI.TokenFragment], String?), AppError> {
         return Future<([NftAPI.TokenFragment], String?), AppError> { promise in
-            cli.fetch(query: NftAPI.GetTokensQuery(address: address, cursor: cursor)) { result in
+            cli.fetch(query: NftAPI.GetTokensQuery(address: address, cursor: cursor, limit: 18)) { result in
                 switch result {
                 case .success(let graphQLResult):
                     if let errors = graphQLResult.errors {

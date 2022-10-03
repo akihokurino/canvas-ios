@@ -33,8 +33,8 @@ query IsOwnNft($workId: String!) {
     }
 }
 
-query GetContracts($cursor: String) {
-    contracts(nextKey: $cursor, limit: 20) {
+query GetContracts($cursor: String, $limit: Int!) {
+    contracts(nextKey: $cursor, limit: $limit) {
         edges {
             node {
                 ...ContractFragment
@@ -44,8 +44,8 @@ query GetContracts($cursor: String) {
     }
 }
 
-query GetTokens($address: String!, $cursor: String) {
-    tokens(address: $address, nextKey: $cursor, limit: 20) {
+query GetTokens($address: String!, $cursor: String, $limit: Int!) {
+    tokens(address: $address, nextKey: $cursor, limit: $limit) {
         edges {
             node {
                 ...TokenFragment

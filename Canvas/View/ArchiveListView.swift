@@ -8,37 +8,37 @@ struct ArchiveListView: View {
     var body: some View {
         WithViewStore(store) { viewStore in
             List {
-                VStack {
-                    ForEach(viewStore.state.archives) { item in
-                        Button(action: {
-                            viewStore.send(.presentDetailView(item))
-                        }) {
-                            ArchiveRow(data: item)
-                        }
-                        .onAppear {
-                            if item == viewStore.state.archives.last {
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                    viewStore.send(.startNext)
-                                }
+                if viewStore.state.initialized {
+                    VStack {
+                        ForEach(viewStore.state.archives) { item in
+                            Button(action: {
+                                viewStore.send(.presentDetailView(item))
+                            }) {
+                                ArchiveRow(data: item)
                             }
                         }
-                    }
-                    .listRowSeparator(.hidden)
-                    .buttonStyle(PlainButtonStyle())
-
-                    if viewStore.state.initialized && viewStore.state.hasNext {
-                        HStack {
-                            Spacer()
-                            ProgressView()
-                            Spacer()
-                        }
-                        .frame(height: 60)
                         .listRowSeparator(.hidden)
                         .buttonStyle(PlainButtonStyle())
-                    } else {
-                        Spacer().frame(height: 60)
+
+                        if viewStore.state.hasNext {
+                            HStack {
+                                Spacer()
+                                ProgressView()
+                                Spacer()
+                            }
+                            .frame(height: 60)
                             .listRowSeparator(.hidden)
                             .buttonStyle(PlainButtonStyle())
+                            .onTapGesture {
+                                // TODO: onAppearでInfinityScroll実現できない
+                                // ロード時に全てのCellがonAppearしてしまう
+                                viewStore.send(.startNext)
+                            }
+                        } else {
+                            Spacer().frame(height: 60)
+                                .listRowSeparator(.hidden)
+                                .buttonStyle(PlainButtonStyle())
+                        }
                     }
                 }
             }
@@ -87,7 +87,7 @@ struct ArchiveRow: View {
             Text(data.id).font(.headline)
 
             HStack {
-                ForEach(data.frames.shuffled().prefix(3)) { frame in
+                ForEach(data.frames.prefix(3)) { frame in
                     RemoteImageView(url: frame.resizedImageUrl)
                         .aspectRatio(contentMode: .fit)
                         .frame(maxWidth: .infinity)

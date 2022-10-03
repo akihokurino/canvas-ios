@@ -569,8 +569,8 @@ public enum NftAPI {
     /// The raw GraphQL definition of this operation.
     public let operationDefinition: String =
       """
-      query GetContracts($cursor: String) {
-        contracts(nextKey: $cursor, limit: 20) {
+      query GetContracts($cursor: String, $limit: Int!) {
+        contracts(nextKey: $cursor, limit: $limit) {
           __typename
           edges {
             __typename
@@ -593,13 +593,15 @@ public enum NftAPI {
     }
 
     public var cursor: String?
+    public var limit: Int
 
-    public init(cursor: String? = nil) {
+    public init(cursor: String? = nil, limit: Int) {
       self.cursor = cursor
+      self.limit = limit
     }
 
     public var variables: GraphQLMap? {
-      return ["cursor": cursor]
+      return ["cursor": cursor, "limit": limit]
     }
 
     public struct Data: GraphQLSelectionSet {
@@ -607,7 +609,7 @@ public enum NftAPI {
 
       public static var selections: [GraphQLSelection] {
         return [
-          GraphQLField("contracts", arguments: ["nextKey": GraphQLVariable("cursor"), "limit": 20], type: .nonNull(.object(Contract.selections))),
+          GraphQLField("contracts", arguments: ["nextKey": GraphQLVariable("cursor"), "limit": GraphQLVariable("limit")], type: .nonNull(.object(Contract.selections))),
         ]
       }
 
@@ -776,8 +778,8 @@ public enum NftAPI {
     /// The raw GraphQL definition of this operation.
     public let operationDefinition: String =
       """
-      query GetTokens($address: String!, $cursor: String) {
-        tokens(address: $address, nextKey: $cursor, limit: 20) {
+      query GetTokens($address: String!, $cursor: String, $limit: Int!) {
+        tokens(address: $address, nextKey: $cursor, limit: $limit) {
           __typename
           edges {
             __typename
@@ -801,14 +803,16 @@ public enum NftAPI {
 
     public var address: String
     public var cursor: String?
+    public var limit: Int
 
-    public init(address: String, cursor: String? = nil) {
+    public init(address: String, cursor: String? = nil, limit: Int) {
       self.address = address
       self.cursor = cursor
+      self.limit = limit
     }
 
     public var variables: GraphQLMap? {
-      return ["address": address, "cursor": cursor]
+      return ["address": address, "cursor": cursor, "limit": limit]
     }
 
     public struct Data: GraphQLSelectionSet {
@@ -816,7 +820,7 @@ public enum NftAPI {
 
       public static var selections: [GraphQLSelection] {
         return [
-          GraphQLField("tokens", arguments: ["address": GraphQLVariable("address"), "nextKey": GraphQLVariable("cursor"), "limit": 20], type: .nonNull(.object(Token.selections))),
+          GraphQLField("tokens", arguments: ["address": GraphQLVariable("address"), "nextKey": GraphQLVariable("cursor"), "limit": GraphQLVariable("limit")], type: .nonNull(.object(Token.selections))),
         ]
       }
 
