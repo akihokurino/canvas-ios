@@ -127,12 +127,12 @@ struct NftCaller {
                     promise(.success((
                         erc721: data.mintedToken.erc721 != nil ?
                             Token(address: data.mintedToken.erc721!.address,
-                                  tokenId: data.mintedToken.erc721!.tokenId ?? "",
-                                  imageUrl: data.mintedToken.erc721!.imageUrl ?? "") : nil,
+                                  tokenId: data.mintedToken.erc721!.tokenId,
+                                  imageUrl: data.mintedToken.erc721!.imageUrl) : nil,
                         erc1155: data.mintedToken.erc1155 != nil ?
                             Token(address: data.mintedToken.erc1155!.address,
-                                  tokenId: data.mintedToken.erc1155!.tokenId ?? "",
-                                  imageUrl: data.mintedToken.erc1155!.imageUrl ?? "") : nil
+                                  tokenId: data.mintedToken.erc1155!.tokenId,
+                                  imageUrl: data.mintedToken.erc1155!.imageUrl) : nil
                     )))
                 case .failure(let error):
                     promise(.failure(.plain(error.localizedDescription)))

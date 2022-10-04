@@ -73,6 +73,8 @@ fragment TokenFragment on Token {
     name
     description
     imageUrl
+    isOwn
+    priceEth
 }
 
 mutation MintERC721($workId: String!, $gsPath: String!) {

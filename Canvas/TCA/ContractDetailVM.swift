@@ -200,7 +200,7 @@ extension ContractDetailVM {
             guard let token = selectToken else {
                 return nil
             }
-            return Token(address: token.address, tokenId: token.tokenId ?? "", imageUrl: token.imageUrl ?? "")
+            return Token(address: token.address, tokenId: token.tokenId, imageUrl: token.imageUrl)
         }
     }
 

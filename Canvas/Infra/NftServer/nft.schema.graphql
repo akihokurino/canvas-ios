@@ -72,15 +72,13 @@ type IsOwn {
 type Token {
   address: String!
   workId: String!
-  tokenId: String
-  name: String
-  description: String
-  imageUrl: String
-  imagePreviewUrl: String
-  imagePermalink: String
-  usdPrice: String
-  ethPrice: String
+  tokenId: String!
+  name: String!
+  description: String!
+  imageUrl: String!
+  priceEth: Float
   contract: Contract!
+  isOwn: Boolean!
 }
 
 input ImportWorkInput {

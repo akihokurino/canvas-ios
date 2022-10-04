@@ -347,8 +347,8 @@ public enum NftAPI {
             return [
               GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
               GraphQLField("address", type: .nonNull(.scalar(String.self))),
-              GraphQLField("tokenId", type: .scalar(String.self)),
-              GraphQLField("imageUrl", type: .scalar(String.self)),
+              GraphQLField("tokenId", type: .nonNull(.scalar(String.self))),
+              GraphQLField("imageUrl", type: .nonNull(.scalar(String.self))),
             ]
           }
 
@@ -358,7 +358,7 @@ public enum NftAPI {
             self.resultMap = unsafeResultMap
           }
 
-          public init(address: String, tokenId: String? = nil, imageUrl: String? = nil) {
+          public init(address: String, tokenId: String, imageUrl: String) {
             self.init(unsafeResultMap: ["__typename": "Token", "address": address, "tokenId": tokenId, "imageUrl": imageUrl])
           }
 
@@ -380,18 +380,18 @@ public enum NftAPI {
             }
           }
 
-          public var tokenId: String? {
+          public var tokenId: String {
             get {
-              return resultMap["tokenId"] as? String
+              return resultMap["tokenId"]! as! String
             }
             set {
               resultMap.updateValue(newValue, forKey: "tokenId")
             }
           }
 
-          public var imageUrl: String? {
+          public var imageUrl: String {
             get {
-              return resultMap["imageUrl"] as? String
+              return resultMap["imageUrl"]! as! String
             }
             set {
               resultMap.updateValue(newValue, forKey: "imageUrl")
@@ -406,8 +406,8 @@ public enum NftAPI {
             return [
               GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
               GraphQLField("address", type: .nonNull(.scalar(String.self))),
-              GraphQLField("tokenId", type: .scalar(String.self)),
-              GraphQLField("imageUrl", type: .scalar(String.self)),
+              GraphQLField("tokenId", type: .nonNull(.scalar(String.self))),
+              GraphQLField("imageUrl", type: .nonNull(.scalar(String.self))),
             ]
           }
 
@@ -417,7 +417,7 @@ public enum NftAPI {
             self.resultMap = unsafeResultMap
           }
 
-          public init(address: String, tokenId: String? = nil, imageUrl: String? = nil) {
+          public init(address: String, tokenId: String, imageUrl: String) {
             self.init(unsafeResultMap: ["__typename": "Token", "address": address, "tokenId": tokenId, "imageUrl": imageUrl])
           }
 
@@ -439,18 +439,18 @@ public enum NftAPI {
             }
           }
 
-          public var tokenId: String? {
+          public var tokenId: String {
             get {
-              return resultMap["tokenId"] as? String
+              return resultMap["tokenId"]! as! String
             }
             set {
               resultMap.updateValue(newValue, forKey: "tokenId")
             }
           }
 
-          public var imageUrl: String? {
+          public var imageUrl: String {
             get {
-              return resultMap["imageUrl"] as? String
+              return resultMap["imageUrl"]! as! String
             }
             set {
               resultMap.updateValue(newValue, forKey: "imageUrl")
@@ -945,8 +945,8 @@ public enum NftAPI {
               self.resultMap = unsafeResultMap
             }
 
-            public init(address: String, workId: String, tokenId: String? = nil, name: String? = nil, description: String? = nil, imageUrl: String? = nil) {
-              self.init(unsafeResultMap: ["__typename": "Token", "address": address, "workId": workId, "tokenId": tokenId, "name": name, "description": description, "imageUrl": imageUrl])
+            public init(address: String, workId: String, tokenId: String, name: String, description: String, imageUrl: String, isOwn: Bool, priceEth: Double? = nil) {
+              self.init(unsafeResultMap: ["__typename": "Token", "address": address, "workId": workId, "tokenId": tokenId, "name": name, "description": description, "imageUrl": imageUrl, "isOwn": isOwn, "priceEth": priceEth])
             }
 
             public var __typename: String {
@@ -1395,7 +1395,7 @@ public enum NftAPI {
           GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
           GraphQLField("address", type: .nonNull(.scalar(String.self))),
           GraphQLField("workId", type: .nonNull(.scalar(String.self))),
-          GraphQLField("imageUrl", type: .scalar(String.self)),
+          GraphQLField("imageUrl", type: .nonNull(.scalar(String.self))),
         ]
       }
 
@@ -1405,7 +1405,7 @@ public enum NftAPI {
         self.resultMap = unsafeResultMap
       }
 
-      public init(address: String, workId: String, imageUrl: String? = nil) {
+      public init(address: String, workId: String, imageUrl: String) {
         self.init(unsafeResultMap: ["__typename": "Token", "address": address, "workId": workId, "imageUrl": imageUrl])
       }
 
@@ -1436,9 +1436,9 @@ public enum NftAPI {
         }
       }
 
-      public var imageUrl: String? {
+      public var imageUrl: String {
         get {
-          return resultMap["imageUrl"] as? String
+          return resultMap["imageUrl"]! as! String
         }
         set {
           resultMap.updateValue(newValue, forKey: "imageUrl")
@@ -1459,6 +1459,8 @@ public enum NftAPI {
         name
         description
         imageUrl
+        isOwn
+        priceEth
       }
       """
 
@@ -1469,10 +1471,12 @@ public enum NftAPI {
         GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
         GraphQLField("address", type: .nonNull(.scalar(String.self))),
         GraphQLField("workId", type: .nonNull(.scalar(String.self))),
-        GraphQLField("tokenId", type: .scalar(String.self)),
-        GraphQLField("name", type: .scalar(String.self)),
-        GraphQLField("description", type: .scalar(String.self)),
-        GraphQLField("imageUrl", type: .scalar(String.self)),
+        GraphQLField("tokenId", type: .nonNull(.scalar(String.self))),
+        GraphQLField("name", type: .nonNull(.scalar(String.self))),
+        GraphQLField("description", type: .nonNull(.scalar(String.self))),
+        GraphQLField("imageUrl", type: .nonNull(.scalar(String.self))),
+        GraphQLField("isOwn", type: .nonNull(.scalar(Bool.self))),
+        GraphQLField("priceEth", type: .scalar(Double.self)),
       ]
     }
 
@@ -1482,8 +1486,8 @@ public enum NftAPI {
       self.resultMap = unsafeResultMap
     }
 
-    public init(address: String, workId: String, tokenId: String? = nil, name: String? = nil, description: String? = nil, imageUrl: String? = nil) {
-      self.init(unsafeResultMap: ["__typename": "Token", "address": address, "workId": workId, "tokenId": tokenId, "name": name, "description": description, "imageUrl": imageUrl])
+    public init(address: String, workId: String, tokenId: String, name: String, description: String, imageUrl: String, isOwn: Bool, priceEth: Double? = nil) {
+      self.init(unsafeResultMap: ["__typename": "Token", "address": address, "workId": workId, "tokenId": tokenId, "name": name, "description": description, "imageUrl": imageUrl, "isOwn": isOwn, "priceEth": priceEth])
     }
 
     public var __typename: String {
@@ -1513,39 +1517,57 @@ public enum NftAPI {
       }
     }
 
-    public var tokenId: String? {
+    public var tokenId: String {
       get {
-        return resultMap["tokenId"] as? String
+        return resultMap["tokenId"]! as! String
       }
       set {
         resultMap.updateValue(newValue, forKey: "tokenId")
       }
     }
 
-    public var name: String? {
+    public var name: String {
       get {
-        return resultMap["name"] as? String
+        return resultMap["name"]! as! String
       }
       set {
         resultMap.updateValue(newValue, forKey: "name")
       }
     }
 
-    public var description: String? {
+    public var description: String {
       get {
-        return resultMap["description"] as? String
+        return resultMap["description"]! as! String
       }
       set {
         resultMap.updateValue(newValue, forKey: "description")
       }
     }
 
-    public var imageUrl: String? {
+    public var imageUrl: String {
       get {
-        return resultMap["imageUrl"] as? String
+        return resultMap["imageUrl"]! as! String
       }
       set {
         resultMap.updateValue(newValue, forKey: "imageUrl")
+      }
+    }
+
+    public var isOwn: Bool {
+      get {
+        return resultMap["isOwn"]! as! Bool
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "isOwn")
+      }
+    }
+
+    public var priceEth: Double? {
+      get {
+        return resultMap["priceEth"] as? Double
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "priceEth")
       }
     }
   }
