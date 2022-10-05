@@ -5,6 +5,7 @@ struct TextFieldView: View {
 
     let label: String
     let keyboardType: UIKeyboardType
+    var isDisable: Bool = false
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -17,6 +18,7 @@ struct TextFieldView: View {
                 TextField("", text: $value, onEditingChanged: { _ in
 
                 }, onCommit: {})
+                    .disabled(isDisable)
                     .keyboardType(keyboardType)
                     .textFieldStyle(PlainTextFieldStyle())
                     .frame(height: 50)

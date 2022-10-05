@@ -238,21 +238,23 @@ public enum NftAPI {
           __typename
           erc721 {
             __typename
-            address
-            tokenId
-            imageUrl
+            ...TokenFragment
           }
           erc1155 {
             __typename
-            address
-            tokenId
-            imageUrl
+            ...TokenFragment
           }
         }
       }
       """
 
     public let operationName: String = "GetMintedToken"
+
+    public var queryDocument: String {
+      var document: String = operationDefinition
+      document.append("\n" + TokenFragment.fragmentDefinition)
+      return document
+    }
 
     public var workId: String
 
@@ -346,9 +348,7 @@ public enum NftAPI {
           public static var selections: [GraphQLSelection] {
             return [
               GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
-              GraphQLField("address", type: .nonNull(.scalar(String.self))),
-              GraphQLField("tokenId", type: .nonNull(.scalar(String.self))),
-              GraphQLField("imageUrl", type: .nonNull(.scalar(String.self))),
+              GraphQLFragmentSpread(TokenFragment.self),
             ]
           }
 
@@ -358,8 +358,8 @@ public enum NftAPI {
             self.resultMap = unsafeResultMap
           }
 
-          public init(address: String, tokenId: String, imageUrl: String) {
-            self.init(unsafeResultMap: ["__typename": "Token", "address": address, "tokenId": tokenId, "imageUrl": imageUrl])
+          public init(address: String, workId: String, tokenId: String, name: String, description: String, imageUrl: String, isOwn: Bool, priceEth: Double? = nil) {
+            self.init(unsafeResultMap: ["__typename": "Token", "address": address, "workId": workId, "tokenId": tokenId, "name": name, "description": description, "imageUrl": imageUrl, "isOwn": isOwn, "priceEth": priceEth])
           }
 
           public var __typename: String {
@@ -371,30 +371,29 @@ public enum NftAPI {
             }
           }
 
-          public var address: String {
+          public var fragments: Fragments {
             get {
-              return resultMap["address"]! as! String
+              return Fragments(unsafeResultMap: resultMap)
             }
             set {
-              resultMap.updateValue(newValue, forKey: "address")
+              resultMap += newValue.resultMap
             }
           }
 
-          public var tokenId: String {
-            get {
-              return resultMap["tokenId"]! as! String
-            }
-            set {
-              resultMap.updateValue(newValue, forKey: "tokenId")
-            }
-          }
+          public struct Fragments {
+            public private(set) var resultMap: ResultMap
 
-          public var imageUrl: String {
-            get {
-              return resultMap["imageUrl"]! as! String
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
             }
-            set {
-              resultMap.updateValue(newValue, forKey: "imageUrl")
+
+            public var tokenFragment: TokenFragment {
+              get {
+                return TokenFragment(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
             }
           }
         }
@@ -405,9 +404,7 @@ public enum NftAPI {
           public static var selections: [GraphQLSelection] {
             return [
               GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
-              GraphQLField("address", type: .nonNull(.scalar(String.self))),
-              GraphQLField("tokenId", type: .nonNull(.scalar(String.self))),
-              GraphQLField("imageUrl", type: .nonNull(.scalar(String.self))),
+              GraphQLFragmentSpread(TokenFragment.self),
             ]
           }
 
@@ -417,8 +414,8 @@ public enum NftAPI {
             self.resultMap = unsafeResultMap
           }
 
-          public init(address: String, tokenId: String, imageUrl: String) {
-            self.init(unsafeResultMap: ["__typename": "Token", "address": address, "tokenId": tokenId, "imageUrl": imageUrl])
+          public init(address: String, workId: String, tokenId: String, name: String, description: String, imageUrl: String, isOwn: Bool, priceEth: Double? = nil) {
+            self.init(unsafeResultMap: ["__typename": "Token", "address": address, "workId": workId, "tokenId": tokenId, "name": name, "description": description, "imageUrl": imageUrl, "isOwn": isOwn, "priceEth": priceEth])
           }
 
           public var __typename: String {
@@ -430,135 +427,30 @@ public enum NftAPI {
             }
           }
 
-          public var address: String {
+          public var fragments: Fragments {
             get {
-              return resultMap["address"]! as! String
+              return Fragments(unsafeResultMap: resultMap)
             }
             set {
-              resultMap.updateValue(newValue, forKey: "address")
+              resultMap += newValue.resultMap
             }
           }
 
-          public var tokenId: String {
-            get {
-              return resultMap["tokenId"]! as! String
+          public struct Fragments {
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
             }
-            set {
-              resultMap.updateValue(newValue, forKey: "tokenId")
+
+            public var tokenFragment: TokenFragment {
+              get {
+                return TokenFragment(unsafeResultMap: resultMap)
+              }
+              set {
+                resultMap += newValue.resultMap
+              }
             }
-          }
-
-          public var imageUrl: String {
-            get {
-              return resultMap["imageUrl"]! as! String
-            }
-            set {
-              resultMap.updateValue(newValue, forKey: "imageUrl")
-            }
-          }
-        }
-      }
-    }
-  }
-
-  public final class IsOwnNftQuery: GraphQLQuery {
-    /// The raw GraphQL definition of this operation.
-    public let operationDefinition: String =
-      """
-      query IsOwnNft($workId: String!) {
-        isOwnNft(workId: $workId) {
-          __typename
-          erc721
-          erc1155
-        }
-      }
-      """
-
-    public let operationName: String = "IsOwnNft"
-
-    public var workId: String
-
-    public init(workId: String) {
-      self.workId = workId
-    }
-
-    public var variables: GraphQLMap? {
-      return ["workId": workId]
-    }
-
-    public struct Data: GraphQLSelectionSet {
-      public static let possibleTypes: [String] = ["QueryRoot"]
-
-      public static var selections: [GraphQLSelection] {
-        return [
-          GraphQLField("isOwnNft", arguments: ["workId": GraphQLVariable("workId")], type: .nonNull(.object(IsOwnNft.selections))),
-        ]
-      }
-
-      public private(set) var resultMap: ResultMap
-
-      public init(unsafeResultMap: ResultMap) {
-        self.resultMap = unsafeResultMap
-      }
-
-      public init(isOwnNft: IsOwnNft) {
-        self.init(unsafeResultMap: ["__typename": "QueryRoot", "isOwnNft": isOwnNft.resultMap])
-      }
-
-      public var isOwnNft: IsOwnNft {
-        get {
-          return IsOwnNft(unsafeResultMap: resultMap["isOwnNft"]! as! ResultMap)
-        }
-        set {
-          resultMap.updateValue(newValue.resultMap, forKey: "isOwnNft")
-        }
-      }
-
-      public struct IsOwnNft: GraphQLSelectionSet {
-        public static let possibleTypes: [String] = ["IsOwn"]
-
-        public static var selections: [GraphQLSelection] {
-          return [
-            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
-            GraphQLField("erc721", type: .nonNull(.scalar(Bool.self))),
-            GraphQLField("erc1155", type: .nonNull(.scalar(Bool.self))),
-          ]
-        }
-
-        public private(set) var resultMap: ResultMap
-
-        public init(unsafeResultMap: ResultMap) {
-          self.resultMap = unsafeResultMap
-        }
-
-        public init(erc721: Bool, erc1155: Bool) {
-          self.init(unsafeResultMap: ["__typename": "IsOwn", "erc721": erc721, "erc1155": erc1155])
-        }
-
-        public var __typename: String {
-          get {
-            return resultMap["__typename"]! as! String
-          }
-          set {
-            resultMap.updateValue(newValue, forKey: "__typename")
-          }
-        }
-
-        public var erc721: Bool {
-          get {
-            return resultMap["erc721"]! as! Bool
-          }
-          set {
-            resultMap.updateValue(newValue, forKey: "erc721")
-          }
-        }
-
-        public var erc1155: Bool {
-          get {
-            return resultMap["erc1155"]! as! Bool
-          }
-          set {
-            resultMap.updateValue(newValue, forKey: "erc1155")
           }
         }
       }

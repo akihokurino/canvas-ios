@@ -18,7 +18,7 @@ extension NftAPI.ContractFragment.Token: Identifiable, Equatable {
     public var id: String {
         return "\(address)#\(workId)"
     }
-    
+
     public static func == (lhs: NftAPI.ContractFragment.Token, rhs: NftAPI.ContractFragment.Token) -> Bool {
         return lhs.id == rhs.id
     }
@@ -106,8 +106,8 @@ struct NftCaller {
         }
     }
 
-    func mintedToken(workId: String) -> Future<(erc721: Token?, erc1155: Token?), AppError> {
-        return Future<(erc721: Token?, erc1155: Token?), AppError> { promise in
+    func mintedToken(workId: String) -> Future<(erc721: NftAPI.TokenFragment?, erc1155: NftAPI.TokenFragment?), AppError> {
+        return Future<(erc721: NftAPI.TokenFragment?, erc1155: NftAPI.TokenFragment?), AppError> { promise in
             cli.fetch(query: NftAPI.GetMintedTokenQuery(workId: workId)) { result in
                 switch result {
                 case .success(let graphQLResult):
@@ -125,43 +125,8 @@ struct NftCaller {
                     }
 
                     promise(.success((
-                        erc721: data.mintedToken.erc721 != nil ?
-                            Token(address: data.mintedToken.erc721!.address,
-                                  tokenId: data.mintedToken.erc721!.tokenId,
-                                  imageUrl: data.mintedToken.erc721!.imageUrl) : nil,
-                        erc1155: data.mintedToken.erc1155 != nil ?
-                            Token(address: data.mintedToken.erc1155!.address,
-                                  tokenId: data.mintedToken.erc1155!.tokenId,
-                                  imageUrl: data.mintedToken.erc1155!.imageUrl) : nil
-                    )))
-                case .failure(let error):
-                    promise(.failure(.plain(error.localizedDescription)))
-                }
-            }
-        }
-    }
-
-    func isOwnNft(workId: String) -> Future<(erc721: Bool, erc1155: Bool), AppError> {
-        return Future<(erc721: Bool, erc1155: Bool), AppError> { promise in
-            cli.fetch(query: NftAPI.IsOwnNftQuery(workId: workId)) { result in
-                switch result {
-                case .success(let graphQLResult):
-                    if let errors = graphQLResult.errors {
-                        if !errors.filter({ $0.message != nil }).isEmpty {
-                            let messages = errors.filter { $0.message != nil }.map { $0.message! }
-                            promise(.failure(.plain(messages.joined(separator: "\n"))))
-                            return
-                        }
-                    }
-
-                    guard let data = graphQLResult.data else {
-                        promise(.failure(AppError.defaultError()))
-                        return
-                    }
-
-                    promise(.success((
-                        erc721: data.isOwnNft.erc721,
-                        erc1155: data.isOwnNft.erc1155
+                        erc721: data.mintedToken.erc721?.fragments.tokenFragment,
+                        erc1155: data.mintedToken.erc1155?.fragments.tokenFragment
                     )))
                 case .failure(let error):
                     promise(.failure(.plain(error.localizedDescription)))

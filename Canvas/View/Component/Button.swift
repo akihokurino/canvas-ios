@@ -1,6 +1,6 @@
 import SwiftUI
 
-enum ActionButtonColor {
+enum ActionButtonType {
     case primary
     case caution
     case disable
@@ -19,18 +19,18 @@ enum ActionButtonColor {
 
 struct ActionButton: View {
     let text: String
-    let background: ActionButtonColor
+    let buttonType: ActionButtonType
     let action: () -> Void
 
-    init(text: String, background: ActionButtonColor, action: @escaping () -> Void) {
+    init(text: String, buttonType: ActionButtonType, action: @escaping () -> Void) {
         self.text = text
-        self.background = background
+        self.buttonType = buttonType
         self.action = action
     }
 
     var body: some View {
         Button(action: {
-            guard background != .disable else {
+            guard buttonType != .disable else {
                 return
             }
             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
@@ -46,7 +46,7 @@ struct ActionButton: View {
         }
         .padding(.horizontal, 5)
         .padding(.vertical, 15)
-        .background(background.color)
+        .background(buttonType.color)
         .cornerRadius(4.0)
     }
 }

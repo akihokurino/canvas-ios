@@ -14,22 +14,11 @@ query GetMe {
 query GetMintedToken($workId: String!) {
     mintedToken(workId: $workId) {
         erc721 {
-            address
-            tokenId
-            imageUrl
+            ...TokenFragment
         }
         erc1155 {
-            address
-            tokenId
-            imageUrl
+            ...TokenFragment
         }
-    }
-}
-
-query IsOwnNft($workId: String!) {
-    isOwnNft(workId: $workId) {
-        erc721
-        erc1155
     }
 }
 

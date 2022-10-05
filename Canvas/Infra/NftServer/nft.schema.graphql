@@ -64,11 +64,6 @@ input RegisterContractInput {
   abi: String!
 }
 
-type IsOwn {
-  erc721: Boolean!
-  erc1155: Boolean!
-}
-
 type Token {
   address: String!
   workId: String!
@@ -116,7 +111,6 @@ type QueryRoot {
   contract(address: String!): Contract!
   tokens(address: String!, nextKey: String, limit: Int): TokenConnection!
   mintedToken(workId: String!): MintedToken!
-  isOwnNft(workId: String!): IsOwn!
 }
 
 type FrameEdge {

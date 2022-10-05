@@ -65,7 +65,7 @@ struct ContractDetailView: View {
                 get: \.isPresentedSellNftView,
                 send: ContractDetailVM.Action.isPresentedSellNftView
             )) {
-                SellNftView(schema: viewStore.state.contract.schema, token: viewStore.state.selectTokenSummary!, isOwn: true, sell: { ether in
+                SellNftView(token: viewStore.state.selectToken!, sell: { ether in
                     switch viewStore.state.contract.schema {
                     case .erc721:
                         viewStore.send(.isPresentedSellNftView(false))

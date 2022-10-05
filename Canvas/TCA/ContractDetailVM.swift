@@ -12,7 +12,7 @@ enum ContractDetailVM {
 
             state.shouldShowHUD = true
             state.cursor = nil
-            
+
             let address = state.contract.address
             let cursor = state.cursor
 
@@ -37,7 +37,7 @@ enum ContractDetailVM {
         case .startRefresh:
             state.shouldPullToRefresh = true
             state.cursor = nil
-            
+
             let address = state.contract.address
             let cursor = state.cursor
 
@@ -62,7 +62,7 @@ enum ContractDetailVM {
             }
 
             state.shouldShowNextLoading = true
-            
+
             let address = state.contract.address
             let cursor = state.cursor
 
@@ -88,7 +88,7 @@ enum ContractDetailVM {
             state.shouldPullToRefresh = val
             return .none
         case .presentSellNftView(let token):
-            state.selectToken =  token
+            state.selectToken = token
             state.isPresentedSellNftView = true
             return .none
         case .isPresentedSellNftView(let val):
@@ -101,8 +101,9 @@ enum ContractDetailVM {
             state.shouldShowHUD = true
 
             return NftClient.shared.caller()
-                .flatMap { caller in caller.sellERC721(workId: token.workId, ether: input.ether) }
-                .map { _ in true }
+                .flatMap { caller in caller.sellERC721(workId: token.workId, ether: input.ether).map { caller } }
+                .flatMap { caller in caller.mintedToken(workId: token.workId) }
+                .map { $0.0! }
                 .subscribe(on: environment.backgroundQueue)
                 .receive(on: environment.mainQueue)
                 .catchToEffect()
@@ -114,14 +115,16 @@ enum ContractDetailVM {
             state.shouldShowHUD = true
 
             return NftClient.shared.caller()
-                .flatMap { caller in caller.sellERC1155(workId: token.workId, ether: input.ether) }
-                .map { _ in true }
+                .flatMap { caller in caller.sellERC1155(workId: token.workId, ether: input.ether).map { caller } }
+                .flatMap { caller in caller.mintedToken(workId: token.workId) }
+                .map { $0.1! }
                 .subscribe(on: environment.backgroundQueue)
                 .receive(on: environment.mainQueue)
                 .catchToEffect()
                 .map(ContractDetailVM.Action.selled)
-        case .selled(.success(_)):
+        case .selled(.success(let token)):
             state.shouldShowHUD = false
+            state.tokens = state.tokens.map { $0.id == token.id ? token : $0 }
             return .none
         case .selled(.failure(_)):
             state.shouldShowHUD = false
@@ -133,8 +136,9 @@ enum ContractDetailVM {
             state.shouldShowHUD = true
 
             return NftClient.shared.caller()
-                .flatMap { caller in caller.transferERC721(workId: token.workId, toAddress: input.toAddress) }
-                .map { _ in true }
+                .flatMap { caller in caller.transferERC721(workId: token.workId, toAddress: input.toAddress).map { caller } }
+                .flatMap { caller in caller.mintedToken(workId: token.workId) }
+                .map { $0.0! }
                 .subscribe(on: environment.backgroundQueue)
                 .receive(on: environment.mainQueue)
                 .catchToEffect()
@@ -146,14 +150,16 @@ enum ContractDetailVM {
             state.shouldShowHUD = true
 
             return NftClient.shared.caller()
-                .flatMap { caller in caller.transferERC1155(workId: token.workId, toAddress: input.toAddress) }
-                .map { _ in true }
+                .flatMap { caller in caller.transferERC1155(workId: token.workId, toAddress: input.toAddress).map { caller } }
+                .flatMap { caller in caller.mintedToken(workId: token.workId) }
+                .map { $0.1! }
                 .subscribe(on: environment.backgroundQueue)
                 .receive(on: environment.mainQueue)
                 .catchToEffect()
                 .map(ContractDetailVM.Action.selled)
-        case .transfered(.success(_)):
+        case .transfered(.success(let token)):
             state.shouldShowHUD = false
+            state.tokens = state.tokens.map { $0.id == token.id ? token : $0 }
             return .none
         case .transfered(.failure(_)):
             state.shouldShowHUD = false
@@ -176,15 +182,15 @@ extension ContractDetailVM {
         case isPresentedSellNftView(Bool)
         case sellERC721(SellInput)
         case sellERC1155(SellInput)
-        case selled(Result<Bool, AppError>)
+        case selled(Result<NftAPI.TokenFragment, AppError>)
         case transferERC721(TransferInput)
         case transferERC1155(TransferInput)
-        case transfered(Result<Bool, AppError>)
+        case transfered(Result<NftAPI.TokenFragment, AppError>)
     }
 
     struct State: Equatable {
         let contract: NftAPI.ContractFragment
-        
+
         var initialized = false
         var shouldShowHUD = false
         var shouldPullToRefresh = false
@@ -194,14 +200,9 @@ extension ContractDetailVM {
         var hasNext: Bool {
             cursor != ""
         }
+
         var selectToken: NftAPI.TokenFragment? = nil
         var isPresentedSellNftView = false
-        var selectTokenSummary: Token? {
-            guard let token = selectToken else {
-                return nil
-            }
-            return Token(address: token.address, tokenId: token.tokenId, imageUrl: token.imageUrl)
-        }
     }
 
     struct Environment {

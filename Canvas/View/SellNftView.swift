@@ -1,44 +1,61 @@
 import SwiftUI
 
 struct SellNftView: View {
-    let schema: NftAPI.Schema
-    let token: Token
-    let isOwn: Bool
+    let token: NftAPI.TokenFragment
     let sell: (Double) -> Void
     let transfer: (String) -> Void
 
     @State var ether: String = ""
     @State var address: String = ""
 
-    var body: some View {
-        VStack {
-            RemoteImageView(url: token.imageUrl)
-                .frame(width: 200)
-                .clipped()
+    @Environment(\.presentationMode) var presentationMode
 
-            Spacer().frame(height: 10)
-            TextFieldView(value: $ether, label: "Ether", keyboardType: .decimalPad)
-            Spacer().frame(height: 10)
-            TextFieldView(value: $address, label: "To Address", keyboardType: .default)
-            Spacer()
-            HStack {
-                ActionButton(text: "Sell", background: isOwn ? .primary : .disable) {
-                    if !ether.isEmpty {
-                        sell(Double(ether)!)
+    var body: some View {
+        NavigationView {
+            VStack {
+                RemoteImageView(url: token.imageUrl)
+                    .frame(width: 200)
+                    .clipped()
+
+                Spacer().frame(height: 10)
+                TextFieldView(value: $ether, label: "売買額（Ether）", keyboardType: .decimalPad, isDisable: token.priceEth != nil)
+                Spacer().frame(height: 10)
+                TextFieldView(value: $address, label: "宛先", keyboardType: .emailAddress, isDisable: !token.isOwn)
+                Spacer()
+                HStack {
+                    ActionButton(text: "売り注文", buttonType: !token.isOwn || token.priceEth != nil ? .disable : .primary) {
+                        if !ether.isEmpty {
+                            sell(Double(ether)!)
+                        }
+                    }
+                    Spacer()
+                    ActionButton(text: "送付", buttonType: !token.isOwn ? .disable : .primary) {
+                        if !address.isEmpty {
+                            transfer(address)
+                        }
                     }
                 }
-                Spacer()
-                ActionButton(text: "Transfer", background: isOwn ? .primary : .disable) {
-                    if !address.isEmpty {
-                        transfer(address)
-                    }
-                }
-                Spacer()
-                ActionButton(text: "Web", background: isOwn ? .primary : .disable) {
-                    UIApplication.shared.open(URL(string: "https://testnets.opensea.io/assets/\(token.address)/\(token.tokenId)")!)
+            }
+            .padding()
+            .navigationBarTitle("NFT取引", displayMode: .inline)
+            .navigationBarItems(leading: Button(action: {
+                self.presentationMode.wrappedValue.dismiss()
+            }) {
+                Image(systemName: "xmark")
+                    .resizable()
+                    .frame(width: 15, height: 15, alignment: .center)
+            }, trailing: Button(action: {
+                UIApplication.shared.open(URL(string: "https://testnets.opensea.io/assets/\(token.address)/\(token.tokenId)")!)
+            }) {
+                Image(systemName: "link")
+                    .resizable()
+                    .frame(width: 20, height: 20, alignment: .center)
+            })
+            .onAppear {
+                if let price = token.priceEth {
+                    ether = "\(price)"
                 }
             }
         }
-        .padding()
     }
 }

@@ -12,7 +12,7 @@ struct ArchivePageView: View {
                     get: \.currentSelection,
                     send: ArchivePageVM.Action.changePage
                 )) {
-                    Text("ワーク").tag(0)
+                    Text("アーカイブ").tag(0)
                     Text("フレーム").tag(1)
                 }
                 .pickerStyle(SegmentedPickerStyle())

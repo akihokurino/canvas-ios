@@ -37,13 +37,13 @@ struct WalletView: View {
 
                     Spacer().frame(height: 20)
 
-                    ActionButton(text: "Faucets", background: .primary) {
+                    ActionButton(text: "Faucets", buttonType: .primary) {
                         UIApplication.shared.open(URL(string: "https://goerlifaucet.com")!)
                     }
 
                     Spacer().frame(height: 20)
 
-                    ActionButton(text: "Moralis", background: .primary) {
+                    ActionButton(text: "Moralis", buttonType: .primary) {
                         UIApplication.shared.open(URL(string: "https://admin.moralis.io/dapps")!)
                     }
                 }

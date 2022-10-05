@@ -16,18 +16,6 @@ struct ArchiveDetailView: View {
         WithViewStore(store) { viewStore in
             ScrollView {
                 VStack {
-                    HStack {
-                        ActionButton(text: "ERC721", background: !(viewStore.state.erc721?.tokenId.isEmpty ?? true) ? .primary : .disable) {
-                            viewStore.send(.presentSellNftView(.erc721))
-                        }
-                        Spacer()
-                        ActionButton(text: "ERC1155", background: !(viewStore.state.erc1155?.tokenId.isEmpty ?? true) ? .primary : .disable) {
-                            viewStore.send(.presentSellNftView(.erc1155))
-                        }
-                    }
-                    .padding(.top, 20)
-                    .padding(.horizontal, 20)
-
                     ZStack(alignment: .center) {
                         VideoView(url: URL(string: viewStore.state.archive.videoUrl)!)
                             .frame(maxWidth: .infinity)
@@ -41,6 +29,49 @@ struct ArchiveDetailView: View {
                         .frame(maxWidth: .infinity)
                         .frame(height: 70)
                         .background(Color(UIColor.systemBackground)), alignment: .bottom)
+
+                    Group {
+                        VStack(alignment: .leading) {
+                            Text("NFT取引")
+                                .font(.headline)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+
+                            if viewStore.state.erc721 != nil {
+                                Button(action: {
+                                    viewStore.send(.presentSellNftView(.erc721))
+                                }) {
+                                    HStack {
+                                        Text("ERC721").font(.subheadline)
+                                        Spacer()
+                                        Image(systemName: "chevron.forward")
+                                            .resizable()
+                                            .frame(width: 8, height: 15, alignment: .center)
+                                    }
+                                }
+                                .foregroundColor(Color("Text"))
+                                Divider()
+                            }
+
+                            if viewStore.state.erc1155 != nil {
+                                Button(action: {
+                                    viewStore.send(.presentSellNftView(.erc1155))
+                                }) {
+                                    HStack {
+                                        Text("ERC1155").font(.subheadline)
+                                        Spacer()
+                                        Image(systemName: "chevron.forward")
+                                            .resizable()
+                                            .frame(width: 8, height: 15, alignment: .center)
+                                    }
+                                }
+                                .foregroundColor(Color("Text"))
+                                Divider()
+                            }
+                        }
+                        .padding(.horizontal, 16)
+
+                        Spacer().frame(height: 40)
+                    }
 
                     LazyVGrid(columns: gridItemLayout, alignment: HorizontalAlignment.leading, spacing: 3) {
                         ForEach(viewStore.state.frames) { data in
@@ -94,7 +125,7 @@ struct ArchiveDetailView: View {
                 get: \.isPresentedERC721SellNftView,
                 send: ArchiveDetailVM.Action.isPresentedERC721SellNftView
             )) {
-                SellNftView(schema: .erc721, token: viewStore.state.erc721!, isOwn: viewStore.state.ownERC721, sell: { ether in
+                SellNftView(token: viewStore.state.erc721!, sell: { ether in
                     viewStore.send(.isPresentedERC721SellNftView(false))
                     viewStore.send(.sellERC721(SellInput(ether: ether)))
                 }, transfer: { address in
@@ -106,7 +137,7 @@ struct ArchiveDetailView: View {
                 get: \.isPresentedERC1155SellNftView,
                 send: ArchiveDetailVM.Action.isPresentedERC1155SellNftView
             )) {
-                SellNftView(schema: .erc1155, token: viewStore.state.erc1155!, isOwn: viewStore.state.ownERC1155, sell: { ether in
+                SellNftView(token: viewStore.state.erc1155!, sell: { ether in
                     viewStore.send(.isPresentedERC1155SellNftView(false))
                     viewStore.send(.sellERC1155(SellInput(ether: ether)))
                 }, transfer: { address in

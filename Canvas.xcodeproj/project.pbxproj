@@ -40,6 +40,7 @@
 		02495FDD2711A3E30023230B /* BoidsMajic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02495FDC2711A3E30023230B /* BoidsMajic.swift */; };
 		02543C7D271D3C29009AE283 /* MapGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02543C7C271D3C29009AE283 /* MapGenerator.swift */; };
 		02543C7F271D665E009AE283 /* CircleDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02543C7E271D665E009AE283 /* CircleDesign.swift */; };
+		0258C0AA28ED31FE00F6F14B /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0258C0A928ED31FE00F6F14B /* Colors.xcassets */; };
 		026C5E672729B68100995BCB /* canvas.app.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 026C5E662729B68100995BCB /* canvas.app.graphql */; };
 		026C5E6B2729BA2500995BCB /* canvas.schema.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 026C5E6A2729BA2500995BCB /* canvas.schema.graphql */; };
 		026C5E6D2729BA8C00995BCB /* CanvasAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 026C5E6C2729BA8C00995BCB /* CanvasAPI.swift */; };
@@ -71,7 +72,6 @@
 		02D26CCB273183E500678F6F /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02D26CCA273183E500678F6F /* VideoView.swift */; };
 		02D26CCD2731848500678F6F /* ArchiveDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02D26CCC2731848500678F6F /* ArchiveDetailView.swift */; };
 		02D2A1122715CE5B00CF5AD1 /* Splash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02D2A1112715CE5B00CF5AD1 /* Splash.swift */; };
-		02DBF0DD28EC389200E88AF2 /* PageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02DBF0DC28EC389200E88AF2 /* PageView.swift */; };
 		02E188F5288ABC30001F24F5 /* WalletVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02E188F4288ABC30001F24F5 /* WalletVM.swift */; };
 		02E20E2327CDFD1700AED50C /* NetworkInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02E20E2227CDFD1700AED50C /* NetworkInterceptor.swift */; };
 		02E20E2527CE36E500AED50C /* AmplifyAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02E20E2427CE36E400AED50C /* AmplifyAuth.swift */; };
@@ -122,6 +122,7 @@
 		02495FDC2711A3E30023230B /* BoidsMajic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoidsMajic.swift; sourceTree = "<group>"; };
 		02543C7C271D3C29009AE283 /* MapGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapGenerator.swift; sourceTree = "<group>"; };
 		02543C7E271D665E009AE283 /* CircleDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleDesign.swift; sourceTree = "<group>"; };
+		0258C0A928ED31FE00F6F14B /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		026C5E662729B68100995BCB /* canvas.app.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = canvas.app.graphql; sourceTree = "<group>"; };
 		026C5E6A2729BA2500995BCB /* canvas.schema.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = canvas.schema.graphql; sourceTree = "<group>"; };
 		026C5E6C2729BA8C00995BCB /* CanvasAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CanvasAPI.swift; sourceTree = "<group>"; };
@@ -153,7 +154,6 @@
 		02D78D9227295F220026A66A /* Canvas.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Canvas.entitlements; sourceTree = "<group>"; };
 		02D78D9327295F340026A66A /* CanvasRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CanvasRelease.entitlements; sourceTree = "<group>"; };
 		02D78D9427295F7B0026A66A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		02DBF0DC28EC389200E88AF2 /* PageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageView.swift; sourceTree = "<group>"; };
 		02E188F4288ABC30001F24F5 /* WalletVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletVM.swift; sourceTree = "<group>"; };
 		02E20E2227CDFD1700AED50C /* NetworkInterceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkInterceptor.swift; sourceTree = "<group>"; };
 		02E20E2427CE36E400AED50C /* AmplifyAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmplifyAuth.swift; sourceTree = "<group>"; };
@@ -231,6 +231,7 @@
 				02A19D43272C516500DBFA24 /* View */,
 				021B286E270CB08C0093B0C9 /* CanvasApp.swift */,
 				021B2872270CB08D0093B0C9 /* Assets.xcassets */,
+				0258C0A928ED31FE00F6F14B /* Colors.xcassets */,
 				02D78D9427295F7B0026A66A /* Info.plist */,
 				029B2FFB2722CAA5008BC3F3 /* GoogleService-Info.plist */,
 				02D78D9327295F340026A66A /* CanvasRelease.entitlements */,
@@ -349,9 +350,9 @@
 				02780674282E0E9A00074144 /* SellNftView.swift */,
 				02A19D46272C518C00DBFA24 /* FrameListView.swift */,
 				02F944B8272DA539002A9B2B /* FrameDetailView.swift */,
-				02F05F4E2824F08100A36AD4 /* WalletView.swift */,
 				02388F8D28CB13A500E2AAC0 /* ContractListView.swift */,
 				02388F8F28CB13C300E2AAC0 /* ContractDetailView.swift */,
+				02F05F4E2824F08100A36AD4 /* WalletView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -365,7 +366,6 @@
 				02AB3C3427D2848F008043A6 /* HUD.swift */,
 				023AC5FD272C69A2005C858D /* RemoteImageView.swift */,
 				02D26CCA273183E500678F6F /* VideoView.swift */,
-				02DBF0DC28EC389200E88AF2 /* PageView.swift */,
 			);
 			path = Component;
 			sourceTree = "<group>";
@@ -474,6 +474,7 @@
 				021B2873270CB08D0093B0C9 /* Assets.xcassets in Resources */,
 				026C5E6B2729BA2500995BCB /* canvas.schema.graphql in Resources */,
 				02E20E2A27CE449500AED50C /* nft.schema.graphql in Resources */,
+				0258C0AA28ED31FE00F6F14B /* Colors.xcassets in Resources */,
 				02E20E2C27CE44D100AED50C /* nft.app.graphql in Resources */,
 				029B2FFC2722CAA5008BC3F3 /* GoogleService-Info.plist in Resources */,
 				F9CBD627AFC66549B3CA7FCE /* awsconfiguration.json in Resources */,
@@ -489,7 +490,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				02388F8C28CB130B00E2AAC0 /* ContractDetailVM.swift in Sources */,
-				02DBF0DD28EC389200E88AF2 /* PageView.swift in Sources */,
 				029E6A87271EA64F00F6A8EF /* ColorRain.swift in Sources */,
 				02388F9328CB18B400E2AAC0 /* Models.swift in Sources */,
 				02392F1F271C502600D8931F /* RectangleGetter.swift in Sources */,
