@@ -2,7 +2,7 @@ import Combine
 import ComposableArchitecture
 import Foundation
 
-enum ContractListVM {
+enum TokenListVM {
     static let reducer = Reducer<State, Action, Environment> { state, action, environment in
         switch action {
         case .startInitialize:
@@ -13,17 +13,18 @@ enum ContractListVM {
             state.shouldShowHUD = true
             state.cursor = nil
 
+            let address = state.contract.address
             let cursor = state.cursor
 
             return NftClient.shared.caller()
-                .flatMap { caller in caller.contracts(cursor: cursor) }
-                .map { ContractsWithCursor(contracts: $0.0, cursor: $0.1) }
+                .flatMap { caller in caller.tokens(address: address, cursor: cursor) }
+                .map { TokensWithCursor(tokens: $0.0, cursor: $0.1) }
                 .subscribe(on: environment.backgroundQueue)
                 .receive(on: environment.mainQueue)
                 .catchToEffect()
-                .map(ContractListVM.Action.endInitialize)
+                .map(TokenListVM.Action.endInitialize)
         case .endInitialize(.success(let result)):
-            state.contracts = result.contracts
+            state.tokens = result.tokens
             state.cursor = result.cursor
             state.shouldShowHUD = false
 
@@ -37,17 +38,18 @@ enum ContractListVM {
             state.shouldPullToRefresh = true
             state.cursor = nil
 
+            let address = state.contract.address
             let cursor = state.cursor
 
             return NftClient.shared.caller()
-                .flatMap { caller in caller.contracts(cursor: cursor) }
-                .map { ContractsWithCursor(contracts: $0.0, cursor: $0.1) }
+                .flatMap { caller in caller.tokens(address: address, cursor: cursor) }
+                .map { TokensWithCursor(tokens: $0.0, cursor: $0.1) }
                 .subscribe(on: environment.backgroundQueue)
                 .receive(on: environment.mainQueue)
                 .catchToEffect()
-                .map(ContractListVM.Action.endRefresh)
+                .map(TokenListVM.Action.endRefresh)
         case .endRefresh(.success(let result)):
-            state.contracts = result.contracts
+            state.tokens = result.tokens
             state.cursor = result.cursor
             state.shouldPullToRefresh = false
             return .none
@@ -61,17 +63,18 @@ enum ContractListVM {
 
             state.shouldShowNextLoading = true
 
+            let address = state.contract.address
             let cursor = state.cursor
 
             return NftClient.shared.caller()
-                .flatMap { caller in caller.contracts(cursor: cursor) }
-                .map { ContractsWithCursor(contracts: $0.0, cursor: $0.1) }
+                .flatMap { caller in caller.tokens(address: address, cursor: cursor) }
+                .map { TokensWithCursor(tokens: $0.0, cursor: $0.1) }
                 .subscribe(on: environment.backgroundQueue)
                 .receive(on: environment.mainQueue)
                 .catchToEffect()
-                .map(ContractListVM.Action.endNext)
+                .map(TokenListVM.Action.endNext)
         case .endNext(.success(let result)):
-            state.contracts.append(contentsOf: result.contracts)
+            state.tokens.append(contentsOf: result.tokens)
             state.cursor = result.cursor
             state.shouldShowNextLoading = false
             return .none
@@ -84,80 +87,37 @@ enum ContractListVM {
         case .shouldPullToRefresh(let val):
             state.shouldPullToRefresh = val
             return .none
-        case .presentDetailView(let data):
-            state.contractDetailView = ContractDetailVM.State(
-                contract: data,
-                tokenListView: TokenListVM.State(contract: data),
-                multiTokenListView: MultiTokenListVM.State(contract: data)
-            )
-            return .none
-        case .popDetailView:
-            state.contractDetailView = nil
-            return .none
-        case .startSyncAllToken:
-            state.shouldShowHUD = true
-
-            return NftClient.shared.caller()
-                .flatMap { caller in caller.syncAllTokens() }
-                .map { true }
-                .subscribe(on: environment.backgroundQueue)
-                .receive(on: environment.mainQueue)
-                .catchToEffect()
-                .map(ContractListVM.Action.endSyncAllTokens)
-        case .endSyncAllTokens(.success(_)):
-            state.shouldShowHUD = false
-            return .none
-        case .endSyncAllTokens(.failure(_)):
-            state.shouldShowHUD = false
-            return .none
-
-        case .contractDetailView(let action):
+        case .presentSellNftView(let token):
             return .none
         }
     }
-    .connect(
-        ContractDetailVM.reducer,
-        state: \.contractDetailView,
-        action: /ContractListVM.Action.contractDetailView,
-        environment: { _environment in
-            ContractDetailVM.Environment(
-                mainQueue: _environment.mainQueue,
-                backgroundQueue: _environment.backgroundQueue
-            )
-        }
-    )
 }
 
-extension ContractListVM {
+extension TokenListVM {
     enum Action: Equatable {
         case startInitialize
-        case endInitialize(Result<ContractsWithCursor, AppError>)
+        case endInitialize(Result<TokensWithCursor, AppError>)
         case startRefresh
-        case endRefresh(Result<ContractsWithCursor, AppError>)
+        case endRefresh(Result<TokensWithCursor, AppError>)
         case startNext
-        case endNext(Result<ContractsWithCursor, AppError>)
+        case endNext(Result<TokensWithCursor, AppError>)
         case shouldShowHUD(Bool)
         case shouldPullToRefresh(Bool)
-        case presentDetailView(NftAPI.ContractFragment)
-        case popDetailView
-        case startSyncAllToken
-        case endSyncAllTokens(Result<Bool, AppError>)
-
-        case contractDetailView(ContractDetailVM.Action)
+        case presentSellNftView(NftAPI.TokenFragment)
     }
 
     struct State: Equatable {
+        let contract: NftAPI.ContractFragment
+
         var initialized = false
         var shouldShowHUD = false
         var shouldPullToRefresh = false
         var shouldShowNextLoading = false
         var cursor: String? = nil
-        var contracts: [NftAPI.ContractFragment] = []
+        var tokens: [NftAPI.TokenFragment] = []
         var hasNext: Bool {
             cursor != ""
         }
-
-        var contractDetailView: ContractDetailVM.State?
     }
 
     struct Environment {

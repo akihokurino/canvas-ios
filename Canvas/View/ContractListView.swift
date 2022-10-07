@@ -4,6 +4,8 @@ import SwiftUI
 struct ContractListView: View {
     let store: Store<ContractListVM.State, ContractListVM.Action>
 
+    @State private var presentMenu = false
+
     var body: some View {
         WithViewStore(store) { viewStore in
             List {
@@ -18,7 +20,7 @@ struct ContractListView: View {
                         }
                         .listRowSeparator(.hidden)
                         .buttonStyle(PlainButtonStyle())
-                        
+
                         if viewStore.state.hasNext {
                             HStack {
                                 Spacer()
@@ -55,8 +57,22 @@ struct ContractListView: View {
                 await viewStore.send(.startRefresh, while: \.shouldPullToRefresh)
             }
             .navigationBarTitle("", displayMode: .inline)
+            .navigationBarItems(trailing: Button(action: {
+                presentMenu = true
+            }) {
+                Image(systemName: "ellipsis")
+            })
             .onAppear {
                 viewStore.send(.startInitialize)
+            }
+            .actionSheet(isPresented: $presentMenu) {
+                ActionSheet(title: Text("メニュー"), buttons:
+                    [
+                        .default(Text("OpenSeaと同期")) {
+                            viewStore.send(.startSyncAllToken)
+                        },
+                        .cancel(),
+                    ])
             }
         }
         .navigate(
@@ -88,7 +104,7 @@ struct ContractRow: View {
                 .padding(.top, 2)
 
             HStack {
-                ForEach(data.tokens.prefix(3)) { token in
+                ForEach((data.tokens.map { $0.fragments.tokenFragment } + data.multiTokens.map { $0.fragments.tokenFragment }).prefix(3)) { token in
                     RemoteImageView(url: token.imageUrl)
                         .aspectRatio(contentMode: .fit)
                         .frame(maxWidth: .infinity)

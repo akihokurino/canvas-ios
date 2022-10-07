@@ -5,6 +5,8 @@ import SwiftUI
 struct ArchiveDetailView: View {
     let store: Store<ArchiveDetailVM.State, ArchiveDetailVM.Action>
 
+    @State private var presentMenu = false
+
     private let gridItemSize = UIScreen.main.bounds.size.width / 3
     private let gridItemLayout = [
         GridItem(.flexible()),
@@ -104,6 +106,20 @@ struct ArchiveDetailView: View {
                 viewStore.send(.fetchFrames)
             }
             .navigationBarTitle("", displayMode: .inline)
+            .navigationBarItems(trailing: Button(action: {
+                presentMenu = true
+            }) {
+                Image(systemName: "ellipsis")
+            })
+            .actionSheet(isPresented: $presentMenu) {
+                ActionSheet(title: Text("メニュー"), buttons:
+                    [
+                        .default(Text("一括発行")) {
+                            print("選択肢１")
+                        },
+                        .cancel(),
+                    ])
+            }
             .sheet(isPresented: viewStore.binding(
                 get: \.isPresentedMintNftView,
                 send: ArchiveDetailVM.Action.isPresentedMintNftView

@@ -44,14 +44,25 @@ query GetTokens($address: String!, $cursor: String, $limit: Int!) {
     }
 }
 
+query GetMultiTokens($address: String!, $cursor: String, $limit: Int!) {
+    multiTokens(address: $address, nextKey: $cursor, limit: $limit) {
+        edges {
+            node {
+                ...TokenFragment
+            }
+        }
+        nextKey
+    }
+}
 
 fragment ContractFragment on Contract {
     address
     schema
     tokens {
-        address
-        workId
-        imageUrl
+        ...TokenFragment
+    }
+    multiTokens {
+        ...TokenFragment
     }
 }
 
@@ -112,5 +123,33 @@ mutation TransferERC1155($workId: String!, $toAddress: String!) {
         workId: $workId,
         toAddress: $toAddress,
         amount: 1,
+    })
+}
+
+mutation BulkMintERC721($workId: String!, $ether: Float!) {
+    bulkMintErc721(input: {
+        workId: $workId,
+        ether: $ether,
+        useIpfs: true,
+    })
+}
+
+mutation BulkMintERC1155($workId: String!, $amount: Int!, $ether: Float!) {
+    bulkMintErc1155(input: {
+        workId: $workId,
+        amount: $amount,
+        ether: $ether,
+        useIpfs: true,
+    })
+}
+
+mutation SyncAllTokens {
+    syncAllTokens
+}
+
+mutation SellAllToken($address: String!, $ether: Float!) {
+    sellAllTokens(input: {
+        address: $address,
+        ether: $ether,
     })
 }

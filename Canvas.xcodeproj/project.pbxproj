@@ -67,6 +67,10 @@
 		02AB3C3327D28470008043A6 /* ActivityIndicatorView in Frameworks */ = {isa = PBXBuildFile; productRef = 02AB3C3227D28470008043A6 /* ActivityIndicatorView */; };
 		02AB3C3527D2848F008043A6 /* HUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02AB3C3427D2848F008043A6 /* HUD.swift */; };
 		02B25ED92711361F0067A73D /* BoidsDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B25ED82711361F0067A73D /* BoidsDesign.swift */; };
+		02B3A7BB28F0219900DC5CFE /* TokenListVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B3A7BA28F0219900DC5CFE /* TokenListVM.swift */; };
+		02B3A7BF28F0245F00DC5CFE /* MultiTokenListVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B3A7BE28F0245F00DC5CFE /* MultiTokenListVM.swift */; };
+		02B3A7C128F0294000DC5CFE /* TokenListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B3A7C028F0294000DC5CFE /* TokenListView.swift */; };
+		02B3A7C328F0295200DC5CFE /* MultiTokenListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B3A7C228F0295200DC5CFE /* MultiTokenListView.swift */; };
 		02BFA0F3272A7969002997F8 /* CanvasClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02BFA0F2272A7969002997F8 /* CanvasClient.swift */; };
 		02C696962718467A00C65CDC /* SplashReturn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02C696952718467A00C65CDC /* SplashReturn.swift */; };
 		02D26CCB273183E500678F6F /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02D26CCA273183E500678F6F /* VideoView.swift */; };
@@ -146,6 +150,10 @@
 		02AB3C2F27D281F2008043A6 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		02AB3C3427D2848F008043A6 /* HUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUD.swift; sourceTree = "<group>"; };
 		02B25ED82711361F0067A73D /* BoidsDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoidsDesign.swift; sourceTree = "<group>"; };
+		02B3A7BA28F0219900DC5CFE /* TokenListVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenListVM.swift; sourceTree = "<group>"; };
+		02B3A7BE28F0245F00DC5CFE /* MultiTokenListVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiTokenListVM.swift; sourceTree = "<group>"; };
+		02B3A7C028F0294000DC5CFE /* TokenListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenListView.swift; sourceTree = "<group>"; };
+		02B3A7C228F0295200DC5CFE /* MultiTokenListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiTokenListView.swift; sourceTree = "<group>"; };
 		02BFA0F2272A7969002997F8 /* CanvasClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasClient.swift; sourceTree = "<group>"; };
 		02C696952718467A00C65CDC /* SplashReturn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashReturn.swift; sourceTree = "<group>"; };
 		02D26CCA273183E500678F6F /* VideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
@@ -324,6 +332,8 @@
 				02E188F4288ABC30001F24F5 /* WalletVM.swift */,
 				02388F8928CB12F400E2AAC0 /* ContractListVM.swift */,
 				02388F8B28CB130B00E2AAC0 /* ContractDetailVM.swift */,
+				02B3A7BA28F0219900DC5CFE /* TokenListVM.swift */,
+				02B3A7BE28F0245F00DC5CFE /* MultiTokenListVM.swift */,
 			);
 			path = TCA;
 			sourceTree = "<group>";
@@ -352,6 +362,8 @@
 				02F944B8272DA539002A9B2B /* FrameDetailView.swift */,
 				02388F8D28CB13A500E2AAC0 /* ContractListView.swift */,
 				02388F8F28CB13C300E2AAC0 /* ContractDetailView.swift */,
+				02B3A7C028F0294000DC5CFE /* TokenListView.swift */,
+				02B3A7C228F0295200DC5CFE /* MultiTokenListView.swift */,
 				02F05F4E2824F08100A36AD4 /* WalletView.swift */,
 			);
 			path = View;
@@ -495,6 +507,7 @@
 				02392F1F271C502600D8931F /* RectangleGetter.swift in Sources */,
 				02495FDD2711A3E30023230B /* BoidsMajic.swift in Sources */,
 				028DC775271EED0C00B7AF1B /* Fish.swift in Sources */,
+				02B3A7C328F0295200DC5CFE /* MultiTokenListView.swift in Sources */,
 				022C17CD2712FE6700D2FD62 /* ParticleStream.swift in Sources */,
 				021B2871270CB08C0093B0C9 /* RootView.swift in Sources */,
 				02F6CC422714775E002C22B7 /* ParticleRotate3D.swift in Sources */,
@@ -527,12 +540,14 @@
 				029B30092722E959008BC3F3 /* FirebaseAuth.swift in Sources */,
 				02E20E2727CE3FAC00AED50C /* NftClient.swift in Sources */,
 				02C696962718467A00C65CDC /* SplashReturn.swift in Sources */,
+				02B3A7BF28F0245F00DC5CFE /* MultiTokenListVM.swift in Sources */,
 				02543C7F271D665E009AE283 /* CircleDesign.swift in Sources */,
 				0231698428D72B2F0027FAF8 /* ArchivePageView.swift in Sources */,
 				02E20E2327CDFD1700AED50C /* NetworkInterceptor.swift in Sources */,
 				02449DA827231D93000A011A /* Error.swift in Sources */,
 				026C5E6D2729BA8C00995BCB /* CanvasAPI.swift in Sources */,
 				02A19D47272C518C00DBFA24 /* FrameListView.swift in Sources */,
+				02B3A7BB28F0219900DC5CFE /* TokenListVM.swift in Sources */,
 				02E20E2E27CE46F300AED50C /* NftAPI.swift in Sources */,
 				02F2EF0D27143FF800415B9A /* StreamDesign.swift in Sources */,
 				02AB3C2B27D27C84008043A6 /* MintNftView.swift in Sources */,
@@ -547,6 +562,7 @@
 				02D2A1122715CE5B00CF5AD1 /* Splash.swift in Sources */,
 				02F944B7272DA321002A9B2B /* ArchiveListView.swift in Sources */,
 				0211F95E288AB3C3002A797E /* UIView+Image.swift in Sources */,
+				02B3A7C128F0294000DC5CFE /* TokenListView.swift in Sources */,
 				0211F960288AB3E2002A797E /* Shape+Fill.swift in Sources */,
 				02E20E2527CE36E500AED50C /* AmplifyAuth.swift in Sources */,
 				02E188F5288ABC30001F24F5 /* WalletVM.swift in Sources */,

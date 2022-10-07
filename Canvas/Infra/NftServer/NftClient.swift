@@ -14,16 +14,6 @@ extension NftAPI.ContractFragment: Identifiable, Equatable {
     }
 }
 
-extension NftAPI.ContractFragment.Token: Identifiable, Equatable {
-    public var id: String {
-        return "\(address)#\(workId)"
-    }
-
-    public static func == (lhs: NftAPI.ContractFragment.Token, rhs: NftAPI.ContractFragment.Token) -> Bool {
-        return lhs.id == rhs.id
-    }
-}
-
 extension NftAPI.TokenFragment: Identifiable, Equatable {
     public var id: String {
         return "\(address)#\(workId)"
@@ -187,6 +177,32 @@ struct NftCaller {
         }
     }
 
+    func multiTokens(address: String, cursor: String?) -> Future<([NftAPI.TokenFragment], String?), AppError> {
+        return Future<([NftAPI.TokenFragment], String?), AppError> { promise in
+            cli.fetch(query: NftAPI.GetMultiTokensQuery(address: address, cursor: cursor, limit: 18)) { result in
+                switch result {
+                case .success(let graphQLResult):
+                    if let errors = graphQLResult.errors {
+                        if !errors.filter({ $0.message != nil }).isEmpty {
+                            let messages = errors.filter { $0.message != nil }.map { $0.message! }
+                            promise(.failure(.plain(messages.joined(separator: "\n"))))
+                            return
+                        }
+                    }
+
+                    guard let data = graphQLResult.data else {
+                        promise(.failure(AppError.defaultError()))
+                        return
+                    }
+
+                    promise(.success((data.multiTokens.edges.map { $0.node.fragments.tokenFragment }, data.multiTokens.nextKey)))
+                case .failure(let error):
+                    promise(.failure(.plain(error.localizedDescription)))
+                }
+            }
+        }
+    }
+
     func mintERC721(workId: String, gsPath: String) -> Future<Void, AppError> {
         return Future<Void, AppError> { promise in
             cli.perform(mutation: NftAPI.MintErc721Mutation(workId: workId, gsPath: gsPath)) { result in
@@ -295,6 +311,90 @@ struct NftCaller {
     func transferERC1155(workId: String, toAddress: String) -> Future<Void, AppError> {
         return Future<Void, AppError> { promise in
             cli.perform(mutation: NftAPI.TransferErc1155Mutation(workId: workId, toAddress: toAddress)) { result in
+                switch result {
+                case .success(let graphQLResult):
+                    if let errors = graphQLResult.errors {
+                        if !errors.filter({ $0.message != nil }).isEmpty {
+                            let messages = errors.filter { $0.message != nil }.map { $0.message! }
+                            promise(.failure(.plain(messages.joined(separator: "\n"))))
+                            return
+                        }
+                    }
+
+                    promise(.success(()))
+                case .failure(let error):
+                    promise(.failure(.plain(error.localizedDescription)))
+                }
+            }
+        }
+    }
+
+    func syncAllTokens() -> Future<Void, AppError> {
+        return Future<Void, AppError> { promise in
+            cli.perform(mutation: NftAPI.SyncAllTokensMutation()) { result in
+                switch result {
+                case .success(let graphQLResult):
+                    if let errors = graphQLResult.errors {
+                        if !errors.filter({ $0.message != nil }).isEmpty {
+                            let messages = errors.filter { $0.message != nil }.map { $0.message! }
+                            promise(.failure(.plain(messages.joined(separator: "\n"))))
+                            return
+                        }
+                    }
+
+                    promise(.success(()))
+                case .failure(let error):
+                    promise(.failure(.plain(error.localizedDescription)))
+                }
+            }
+        }
+    }
+
+    func bulkMintERC721(workId: String, ether: Double) -> Future<Void, AppError> {
+        return Future<Void, AppError> { promise in
+            cli.perform(mutation: NftAPI.BulkMintErc721Mutation(workId: workId, ether: ether)) { result in
+                switch result {
+                case .success(let graphQLResult):
+                    if let errors = graphQLResult.errors {
+                        if !errors.filter({ $0.message != nil }).isEmpty {
+                            let messages = errors.filter { $0.message != nil }.map { $0.message! }
+                            promise(.failure(.plain(messages.joined(separator: "\n"))))
+                            return
+                        }
+                    }
+
+                    promise(.success(()))
+                case .failure(let error):
+                    promise(.failure(.plain(error.localizedDescription)))
+                }
+            }
+        }
+    }
+
+    func bulkMintERC1155(workId: String, amount: Int, ether: Double) -> Future<Void, AppError> {
+        return Future<Void, AppError> { promise in
+            cli.perform(mutation: NftAPI.BulkMintErc1155Mutation(workId: workId, amount: amount, ether: ether)) { result in
+                switch result {
+                case .success(let graphQLResult):
+                    if let errors = graphQLResult.errors {
+                        if !errors.filter({ $0.message != nil }).isEmpty {
+                            let messages = errors.filter { $0.message != nil }.map { $0.message! }
+                            promise(.failure(.plain(messages.joined(separator: "\n"))))
+                            return
+                        }
+                    }
+
+                    promise(.success(()))
+                case .failure(let error):
+                    promise(.failure(.plain(error.localizedDescription)))
+                }
+            }
+        }
+    }
+
+    func sellAllTokens(address: String, ether: Double) -> Future<Void, AppError> {
+        return Future<Void, AppError> { promise in
+            cli.perform(mutation: NftAPI.SellAllTokenMutation(address: address, ether: ether)) { result in
                 switch result {
                 case .success(let graphQLResult):
                     if let errors = graphQLResult.errors {

@@ -1,4 +1,5 @@
 import Foundation
+import SwiftUIPager
 
 struct ArchivesWithHasNext: Equatable {
     let archives: [CanvasAPI.WorkFragment]
@@ -29,3 +30,12 @@ struct Wallet: Equatable {
     let address: String
     let balance: Double
 }
+
+extension Page: Equatable, Hashable {
+    public static func == (lhs: SwiftUIPager.Page, rhs: SwiftUIPager.Page) -> Bool {
+        return lhs.index == rhs.index
+    }
+
+    public func hash(into hasher: inout Hasher) {}
+}
+

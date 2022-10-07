@@ -42,14 +42,10 @@ struct SellNftView: View {
                 self.presentationMode.wrappedValue.dismiss()
             }) {
                 Image(systemName: "xmark")
-                    .resizable()
-                    .frame(width: 15, height: 15, alignment: .center)
             }, trailing: Button(action: {
                 UIApplication.shared.open(URL(string: "https://testnets.opensea.io/assets/\(token.address)/\(token.tokenId)")!)
             }) {
                 Image(systemName: "link")
-                    .resizable()
-                    .frame(width: 20, height: 20, alignment: .center)
             })
             .onAppear {
                 if let price = token.priceEth {

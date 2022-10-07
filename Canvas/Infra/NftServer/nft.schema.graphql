@@ -50,12 +50,15 @@ type MutationRoot {
   deleteWork(id: String!): Boolean!
   registerContract(input: RegisterContractInput!): Contract!
   mintErc721(input: MintERC721Input!): Boolean!
+  bulkMintErc721(input: BulkMintERC721Input!): Boolean!
   mintErc1155(input: MintERC1155Input!): Boolean!
+  bulkMintErc1155(input: BulkMintERC1155Input!): Boolean!
   sellErc721(input: SellERC721Input!): Boolean!
   sellErc1155(input: SellERC1155Input!): Boolean!
   transferErc721(input: TransferERC721Input!): Boolean!
   transferErc1155(input: TransferERC1155Input!): Boolean!
   syncAllTokens: Boolean!
+  sellAllTokens(input: SellAllTokenInput!): Boolean!
 }
 
 input RegisterContractInput {
@@ -87,6 +90,11 @@ input MintERC721Input {
   isAsync: Boolean!
 }
 
+input SellAllTokenInput {
+  address: String!
+  ether: Float!
+}
+
 type Frame {
   id: String!
   workId: String!
@@ -110,6 +118,7 @@ type QueryRoot {
   contractsByAddresses(addresses: [String!]!): [Contract!]!
   contract(address: String!): Contract!
   tokens(address: String!, nextKey: String, limit: Int): TokenConnection!
+  multiTokens(address: String!, nextKey: String, limit: Int): TokenConnection!
   mintedToken(workId: String!): MintedToken!
 }
 
@@ -121,10 +130,10 @@ type ContractEdge {
   node: Contract!
 }
 
-input SellERC1155Input {
+input BulkMintERC721Input {
   workId: String!
   ether: Float!
-  amount: Int!
+  useIpfs: Boolean!
 }
 
 type WorkConnection {
@@ -140,6 +149,12 @@ type Nft1155Balance {
 
 input ImportFrameInput {
   isAsync: Boolean!
+}
+
+input SellERC1155Input {
+  workId: String!
+  ether: Float!
+  amount: Int!
 }
 
 enum Schema {
@@ -164,11 +179,19 @@ type MintedToken {
   erc1155: Token
 }
 
+input BulkMintERC1155Input {
+  workId: String!
+  ether: Float!
+  amount: Int!
+  useIpfs: Boolean!
+}
+
 type Contract {
   address: String!
   schema: Schema!
   network: Network!
   tokens: [Token!]!
+  multiTokens: [Token!]!
 }
 
 input MintERC1155Input {
