@@ -69,7 +69,7 @@ struct ContractListView: View {
                 ActionSheet(title: Text("メニュー"), buttons:
                     [
                         .default(Text("OpenSeaと同期")) {
-                            viewStore.send(.startSyncAllToken)
+                            viewStore.send(.startSyncAllTokens)
                         },
                         .cancel(),
                     ])

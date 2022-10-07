@@ -16,6 +16,12 @@ enum ContractDetailVM {
         case .isPresentedSellNftView(let val):
             state.isPresentedSellNftView = val
             return .none
+        case .presentBulkSellNftView:
+            state.isPresentedBulkSellNftView = true
+            return .none
+        case .isPresentedBulkSellNftView(let val):
+            state.isPresentedBulkSellNftView = val
+            return .none
         case .sellERC721(let input):
             guard let token = state.selectToken else {
                 return .none
@@ -96,6 +102,25 @@ enum ContractDetailVM {
         case .transfered(.failure(_)):
             state.shouldShowHUD = false
             return .none
+        case .startSellAllTokens(let data):
+            state.shouldShowHUD = true
+
+            let address = state.contract.address
+
+            return NftClient.shared.caller()
+                .flatMap { caller in caller.sellAllTokens(address: address, ether: data.ether) }
+                .map { true }
+                .subscribe(on: environment.backgroundQueue)
+                .receive(on: environment.mainQueue)
+                .catchToEffect()
+                .map(ContractDetailVM.Action.endSellAllTokens)
+        case .endSellAllTokens(.success(_)):
+            state.shouldShowHUD = false
+            return .none
+        case .endSellAllTokens(.failure(_)):
+            state.shouldShowHUD = false
+            return .none
+
         case .tokenListView(let action):
             switch action {
             case .presentSellNftView(let data):
@@ -145,12 +170,16 @@ extension ContractDetailVM {
         case changePage(Int)
         case shouldShowHUD(Bool)
         case isPresentedSellNftView(Bool)
+        case presentBulkSellNftView
+        case isPresentedBulkSellNftView(Bool)
         case sellERC721(SellInput)
         case sellERC1155(SellInput)
         case selled(Result<NftAPI.TokenFragment, AppError>)
         case transferERC721(TransferInput)
         case transferERC1155(TransferInput)
         case transfered(Result<NftAPI.TokenFragment, AppError>)
+        case startSellAllTokens(SellAllTokensInput)
+        case endSellAllTokens(Result<Bool, AppError>)
 
         case tokenListView(TokenListVM.Action)
         case multiTokenListView(MultiTokenListVM.Action)
@@ -165,6 +194,7 @@ extension ContractDetailVM {
         var currentSelection: Int = 0
         var selectToken: NftAPI.TokenFragment? = nil
         var isPresentedSellNftView = false
+        var isPresentedBulkSellNftView = false
 
         var tokenListView: TokenListVM.State?
         var multiTokenListView: MultiTokenListVM.State?
@@ -174,4 +204,8 @@ extension ContractDetailVM {
         let mainQueue: AnySchedulerOf<DispatchQueue>
         let backgroundQueue: AnySchedulerOf<DispatchQueue>
     }
+}
+
+struct SellAllTokensInput: Equatable {
+    let ether: Double
 }

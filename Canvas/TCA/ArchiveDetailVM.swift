@@ -61,6 +61,12 @@ enum ArchiveDetailVM {
         case .isPresentedMintNftView(let val):
             state.isPresentedMintNftView = val
             return .none
+        case .presentBulkMintNftView:
+            state.isPresentedBulkMintNftView = true
+            return .none
+        case .isPresentedBulkMintNftView(let val):
+            state.isPresentedBulkMintNftView = val
+            return .none
         case .mintERC721(let input):
             guard let data = state.selectFrame else {
                 return .none
@@ -99,6 +105,34 @@ enum ArchiveDetailVM {
             state.shouldShowHUD = false
             return .none
         case .minted(.failure(_)):
+            state.shouldShowHUD = false
+            return .none
+        case .bulkMintERC721(let input):
+            let archive = state.archive
+            state.shouldShowHUD = true
+
+            return NftClient.shared.caller()
+                .flatMap { caller in caller.bulkMintERC721(workId: archive.id, ether: input.ether) }
+                .map { true }
+                .subscribe(on: environment.backgroundQueue)
+                .receive(on: environment.mainQueue)
+                .catchToEffect()
+                .map(ArchiveDetailVM.Action.bulkMinted)
+        case .bulkMintERC1155(let input):
+            let archive = state.archive
+            state.shouldShowHUD = true
+
+            return NftClient.shared.caller()
+                .flatMap { caller in caller.bulkMintERC1155(workId: archive.id, amount: input.amount, ether: input.ether) }
+                .map { true }
+                .subscribe(on: environment.backgroundQueue)
+                .receive(on: environment.mainQueue)
+                .catchToEffect()
+                .map(ArchiveDetailVM.Action.bulkMinted)
+        case .bulkMinted(.success(_)):
+            state.shouldShowHUD = false
+            return .none
+        case .bulkMinted(.failure(_)):
             state.shouldShowHUD = false
             return .none
         case .presentSellNftView(let schema):
@@ -208,9 +242,14 @@ extension ArchiveDetailVM {
         case shouldPullToRefresh(Bool)
         case presentMintNftView(CanvasAPI.FrameFragment)
         case isPresentedMintNftView(Bool)
+        case presentBulkMintNftView
+        case isPresentedBulkMintNftView(Bool)
         case mintERC721(MintERC721Input)
         case mintERC1155(MintERC1155Input)
         case minted(Result<TokenBundle, AppError>)
+        case bulkMintERC721(BulkMintERC721Input)
+        case bulkMintERC1155(BulkMintERC1155Input)
+        case bulkMinted(Result<Bool, AppError>)
         case presentSellNftView(NftAPI.Schema)
         case isPresentedERC721SellNftView(Bool)
         case isPresentedERC1155SellNftView(Bool)
@@ -234,6 +273,7 @@ extension ArchiveDetailVM {
         var erc721: NftAPI.TokenFragment?
         var erc1155: NftAPI.TokenFragment?
         var isPresentedMintNftView = false
+        var isPresentedBulkMintNftView = false
         var selectFrame: CanvasAPI.FrameFragment? = nil
         var isPresentedERC721SellNftView = false
         var isPresentedERC1155SellNftView = false
@@ -249,6 +289,15 @@ struct MintERC721Input: Equatable {}
 
 struct MintERC1155Input: Equatable {
     let amount: Int
+}
+
+struct BulkMintERC721Input: Equatable {
+    let ether: Double
+}
+
+struct BulkMintERC1155Input: Equatable {
+    let amount: Int
+    let ether: Double
 }
 
 struct SellInput: Equatable {

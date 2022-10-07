@@ -73,10 +73,19 @@ struct ContractDetailView: View {
                 ActionSheet(title: Text("メニュー"), buttons:
                     [
                         .default(Text("一括売り注文")) {
-                            print("選択肢１")
+                            viewStore.send(.presentBulkSellNftView)
                         },
                         .cancel(),
                     ])
+            }
+            .sheet(isPresented: viewStore.binding(
+                get: \.isPresentedBulkSellNftView,
+                send: ContractDetailVM.Action.isPresentedBulkSellNftView
+            )) {
+                BulkSellNftView { ether in
+                    viewStore.send(.isPresentedBulkSellNftView(false))
+                    viewStore.send(.startSellAllTokens(SellAllTokensInput(ether: ether)))
+                }
             }
             .sheet(isPresented: viewStore.binding(
                 get: \.isPresentedSellNftView,

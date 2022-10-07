@@ -94,7 +94,7 @@ enum ContractListVM {
         case .popDetailView:
             state.contractDetailView = nil
             return .none
-        case .startSyncAllToken:
+        case .startSyncAllTokens:
             state.shouldShowHUD = true
 
             return NftClient.shared.caller()
@@ -140,7 +140,7 @@ extension ContractListVM {
         case shouldPullToRefresh(Bool)
         case presentDetailView(NftAPI.ContractFragment)
         case popDetailView
-        case startSyncAllToken
+        case startSyncAllTokens
         case endSyncAllTokens(Result<Bool, AppError>)
 
         case contractDetailView(ContractDetailVM.Action)

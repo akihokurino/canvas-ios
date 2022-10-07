@@ -38,8 +38,6 @@ struct MintNftView: View {
                 self.presentationMode.wrappedValue.dismiss()
             }) {
                 Image(systemName: "xmark")
-                    .resizable()
-                    .frame(width: 15, height: 15, alignment: .center)
             })
         }
     }

@@ -115,7 +115,7 @@ struct ArchiveDetailView: View {
                 ActionSheet(title: Text("メニュー"), buttons:
                     [
                         .default(Text("一括発行")) {
-                            print("選択肢１")
+                            viewStore.send(.presentBulkMintNftView)
                         },
                         .cancel(),
                     ])
@@ -132,6 +132,23 @@ struct ArchiveDetailView: View {
                         viewStore.send(.mintERC721(MintERC721Input()))
                     case .erc1155:
                         viewStore.send(.mintERC1155(MintERC1155Input(amount: amount!)))
+                    default:
+                        break
+                    }
+                }
+            }
+            .sheet(isPresented: viewStore.binding(
+                get: \.isPresentedBulkMintNftView,
+                send: ArchiveDetailVM.Action.isPresentedBulkMintNftView
+            )) {
+                BulkMintNftView() { schema, amount, ether in
+                    viewStore.send(.isPresentedBulkMintNftView(false))
+
+                    switch schema {
+                    case .erc721:
+                        viewStore.send(.bulkMintERC721(BulkMintERC721Input(ether: ether)))
+                    case .erc1155:
+                        viewStore.send(.bulkMintERC1155(BulkMintERC1155Input(amount: amount!, ether: ether)))
                     default:
                         break
                     }
