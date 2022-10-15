@@ -31,7 +31,7 @@ enum ContractDetailVM {
             return NftClient.shared.caller()
                 .flatMap { caller in caller.sellERC721(workId: token.workId, ether: input.ether).map { caller } }
                 .flatMap { caller in caller.mintedToken(workId: token.workId) }
-                .map { $0.0! }
+                .map { $0.0 }
                 .subscribe(on: environment.backgroundQueue)
                 .receive(on: environment.mainQueue)
                 .catchToEffect()
@@ -45,7 +45,7 @@ enum ContractDetailVM {
             return NftClient.shared.caller()
                 .flatMap { caller in caller.sellERC1155(workId: token.workId, ether: input.ether).map { caller } }
                 .flatMap { caller in caller.mintedToken(workId: token.workId) }
-                .map { $0.1! }
+                .map { $0.1 }
                 .subscribe(on: environment.backgroundQueue)
                 .receive(on: environment.mainQueue)
                 .catchToEffect()
@@ -53,10 +53,10 @@ enum ContractDetailVM {
         case .selled(.success(let token)):
             state.shouldShowHUD = false
             if state.tokenListView != nil {
-                state.tokenListView!.tokens = state.tokenListView!.tokens.map { $0.id == token.id ? token : $0 }
+                state.tokenListView!.tokens = state.tokenListView!.tokens.map { $0.id == token?.id ? token! : $0 }
             }
             if state.multiTokenListView != nil {
-                state.multiTokenListView!.tokens = state.multiTokenListView!.tokens.map { $0.id == token.id ? token : $0 }
+                state.multiTokenListView!.tokens = state.multiTokenListView!.tokens.map { $0.id == token?.id ? token! : $0 }
             }
             return .none
         case .selled(.failure(_)):
@@ -71,7 +71,7 @@ enum ContractDetailVM {
             return NftClient.shared.caller()
                 .flatMap { caller in caller.transferERC721(workId: token.workId, toAddress: input.toAddress).map { caller } }
                 .flatMap { caller in caller.mintedToken(workId: token.workId) }
-                .map { $0.0! }
+                .map { $0.0 }
                 .subscribe(on: environment.backgroundQueue)
                 .receive(on: environment.mainQueue)
                 .catchToEffect()
@@ -85,7 +85,7 @@ enum ContractDetailVM {
             return NftClient.shared.caller()
                 .flatMap { caller in caller.transferERC1155(workId: token.workId, toAddress: input.toAddress).map { caller } }
                 .flatMap { caller in caller.mintedToken(workId: token.workId) }
-                .map { $0.1! }
+                .map { $0.1 }
                 .subscribe(on: environment.backgroundQueue)
                 .receive(on: environment.mainQueue)
                 .catchToEffect()
@@ -93,10 +93,10 @@ enum ContractDetailVM {
         case .transfered(.success(let token)):
             state.shouldShowHUD = false
             if state.tokenListView != nil {
-                state.tokenListView!.tokens = state.tokenListView!.tokens.map { $0.id == token.id ? token : $0 }
+                state.tokenListView!.tokens = state.tokenListView!.tokens.map { $0.id == token?.id ? token! : $0 }
             }
             if state.multiTokenListView != nil {
-                state.multiTokenListView!.tokens = state.multiTokenListView!.tokens.map { $0.id == token.id ? token : $0 }
+                state.multiTokenListView!.tokens = state.multiTokenListView!.tokens.map { $0.id == token?.id ? token! : $0 }
             }
             return .none
         case .transfered(.failure(_)):
@@ -174,10 +174,10 @@ extension ContractDetailVM {
         case isPresentedBulkSellNftView(Bool)
         case sellERC721(SellInput)
         case sellERC1155(SellInput)
-        case selled(Result<NftAPI.TokenFragment, AppError>)
+        case selled(Result<NftAPI.TokenFragment?, AppError>)
         case transferERC721(TransferInput)
         case transferERC1155(TransferInput)
-        case transfered(Result<NftAPI.TokenFragment, AppError>)
+        case transfered(Result<NftAPI.TokenFragment?, AppError>)
         case startSellAllTokens(SellAllTokensInput)
         case endSellAllTokens(Result<Bool, AppError>)
 
