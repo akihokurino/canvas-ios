@@ -156,7 +156,7 @@ enum ArchiveDetailVM {
             state.shouldShowHUD = true
 
             return NftClient.shared.caller()
-                .flatMap { caller in caller.sellERC721(workId: archive.id, ether: input.ether).map { caller } }
+                .flatMap { caller in caller.sellERC721(workId: archive.id, ether: input.ether).map { _ in caller } }
                 .flatMap { caller in caller.mintedToken(workId: archive.id) }
                 .map { TokenBundle(erc721: $0.0, erc1155: $0.1) }
                 .subscribe(on: environment.backgroundQueue)
@@ -168,7 +168,7 @@ enum ArchiveDetailVM {
             state.shouldShowHUD = true
 
             return NftClient.shared.caller()
-                .flatMap { caller in caller.sellERC1155(workId: archive.id, ether: input.ether).map { caller } }
+                .flatMap { caller in caller.sellERC1155(workId: archive.id, ether: input.ether).map { _ in caller } }
                 .flatMap { caller in caller.mintedToken(workId: archive.id) }
                 .map { TokenBundle(erc721: $0.0, erc1155: $0.1) }
                 .subscribe(on: environment.backgroundQueue)
@@ -188,7 +188,7 @@ enum ArchiveDetailVM {
             state.shouldShowHUD = true
 
             return NftClient.shared.caller()
-                .flatMap { caller in caller.transferERC721(workId: archive.id, toAddress: input.toAddress).map { caller } }
+                .flatMap { caller in caller.transferERC721(workId: archive.id, toAddress: input.toAddress).map { _ in caller } }
                 .flatMap { caller in caller.mintedToken(workId: archive.id) }
                 .map { TokenBundle(erc721: $0.0, erc1155: $0.1) }
                 .subscribe(on: environment.backgroundQueue)
@@ -200,7 +200,7 @@ enum ArchiveDetailVM {
             state.shouldShowHUD = true
 
             return NftClient.shared.caller()
-                .flatMap { caller in caller.transferERC1155(workId: archive.id, toAddress: input.toAddress).map { caller } }
+                .flatMap { caller in caller.transferERC1155(workId: archive.id, toAddress: input.toAddress).map { _ in caller } }
                 .flatMap { caller in caller.mintedToken(workId: archive.id) }
                 .map { TokenBundle(erc721: $0.0, erc1155: $0.1) }
                 .subscribe(on: environment.backgroundQueue)

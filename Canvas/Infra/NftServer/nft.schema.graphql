@@ -53,10 +53,10 @@ type MutationRoot {
   bulkMintErc721(input: BulkMintERC721Input!): Boolean!
   mintErc1155(input: MintERC1155Input!): Boolean!
   bulkMintErc1155(input: BulkMintERC1155Input!): Boolean!
-  sellErc721(input: SellERC721Input!): Boolean!
-  sellErc1155(input: SellERC1155Input!): Boolean!
-  transferErc721(input: TransferERC721Input!): Boolean!
-  transferErc1155(input: TransferERC1155Input!): Boolean!
+  sellErc721(input: SellERC721Input!): Token!
+  sellErc1155(input: SellERC1155Input!): Token!
+  transferErc721(input: TransferERC721Input!): Token!
+  transferErc1155(input: TransferERC1155Input!): Token!
   syncAllTokens: Boolean!
   sellAllTokens(input: SellAllTokenInput!): Boolean!
 }

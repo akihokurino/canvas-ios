@@ -245,8 +245,8 @@ struct NftCaller {
         }
     }
 
-    func sellERC721(workId: String, ether: Double) -> Future<Void, AppError> {
-        return Future<Void, AppError> { promise in
+    func sellERC721(workId: String, ether: Double) -> Future<NftAPI.TokenFragment, AppError> {
+        return Future<NftAPI.TokenFragment, AppError> { promise in
             cli.perform(mutation: NftAPI.SellErc721Mutation(workId: workId, ether: ether)) { result in
                 switch result {
                 case .success(let graphQLResult):
@@ -258,7 +258,12 @@ struct NftCaller {
                         }
                     }
 
-                    promise(.success(()))
+                    guard let data = graphQLResult.data else {
+                        promise(.failure(AppError.defaultError()))
+                        return
+                    }
+
+                    promise(.success(data.sellErc721.fragments.tokenFragment))
                 case .failure(let error):
                     promise(.failure(.plain(error.localizedDescription)))
                 }
@@ -266,8 +271,8 @@ struct NftCaller {
         }
     }
 
-    func sellERC1155(workId: String, ether: Double) -> Future<Void, AppError> {
-        return Future<Void, AppError> { promise in
+    func sellERC1155(workId: String, ether: Double) -> Future<NftAPI.TokenFragment, AppError> {
+        return Future<NftAPI.TokenFragment, AppError> { promise in
             cli.perform(mutation: NftAPI.SellErc1155Mutation(workId: workId, ether: ether)) { result in
                 switch result {
                 case .success(let graphQLResult):
@@ -279,7 +284,12 @@ struct NftCaller {
                         }
                     }
 
-                    promise(.success(()))
+                    guard let data = graphQLResult.data else {
+                        promise(.failure(AppError.defaultError()))
+                        return
+                    }
+
+                    promise(.success(data.sellErc1155.fragments.tokenFragment))
                 case .failure(let error):
                     promise(.failure(.plain(error.localizedDescription)))
                 }
@@ -287,8 +297,8 @@ struct NftCaller {
         }
     }
 
-    func transferERC721(workId: String, toAddress: String) -> Future<Void, AppError> {
-        return Future<Void, AppError> { promise in
+    func transferERC721(workId: String, toAddress: String) -> Future<NftAPI.TokenFragment, AppError> {
+        return Future<NftAPI.TokenFragment, AppError> { promise in
             cli.perform(mutation: NftAPI.TransferErc721Mutation(workId: workId, toAddress: toAddress)) { result in
                 switch result {
                 case .success(let graphQLResult):
@@ -299,8 +309,13 @@ struct NftCaller {
                             return
                         }
                     }
+                    
+                    guard let data = graphQLResult.data else {
+                        promise(.failure(AppError.defaultError()))
+                        return
+                    }
 
-                    promise(.success(()))
+                    promise(.success(data.transferErc721.fragments.tokenFragment))
                 case .failure(let error):
                     promise(.failure(.plain(error.localizedDescription)))
                 }
@@ -308,8 +323,8 @@ struct NftCaller {
         }
     }
 
-    func transferERC1155(workId: String, toAddress: String) -> Future<Void, AppError> {
-        return Future<Void, AppError> { promise in
+    func transferERC1155(workId: String, toAddress: String) -> Future<NftAPI.TokenFragment, AppError> {
+        return Future<NftAPI.TokenFragment, AppError> { promise in
             cli.perform(mutation: NftAPI.TransferErc1155Mutation(workId: workId, toAddress: toAddress)) { result in
                 switch result {
                 case .success(let graphQLResult):
@@ -320,8 +335,13 @@ struct NftCaller {
                             return
                         }
                     }
+                    
+                    guard let data = graphQLResult.data else {
+                        promise(.failure(AppError.defaultError()))
+                        return
+                    }
 
-                    promise(.success(()))
+                    promise(.success(data.transferErc1155.fragments.tokenFragment))
                 case .failure(let error):
                     promise(.failure(.plain(error.localizedDescription)))
                 }

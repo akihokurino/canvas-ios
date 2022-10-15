@@ -100,7 +100,9 @@ mutation SellERC721($workId: String!, $ether: Float!) {
     sellErc721(input: {
         workId: $workId,
         ether: $ether,
-    })
+    }) {
+        ...TokenFragment
+    }
 }
 
 mutation SellERC1155($workId: String!, $ether: Float!) {
@@ -108,14 +110,18 @@ mutation SellERC1155($workId: String!, $ether: Float!) {
         workId: $workId,
         ether: $ether,
         amount: 1,
-    })
+    }) {
+        ...TokenFragment
+    }
 }
 
 mutation TransferERC721($workId: String!, $toAddress: String!) {
     transferErc721(input: {
         workId: $workId,
         toAddress: $toAddress,
-    })
+    }) {
+        ...TokenFragment
+    }
 }
 
 mutation TransferERC1155($workId: String!, $toAddress: String!) {
@@ -123,7 +129,9 @@ mutation TransferERC1155($workId: String!, $toAddress: String!) {
         workId: $workId,
         toAddress: $toAddress,
         amount: 1,
-    })
+    }) {
+        ...TokenFragment
+    }
 }
 
 mutation BulkMintERC721($workId: String!, $ether: Float!) {
