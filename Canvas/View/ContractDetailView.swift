@@ -63,7 +63,7 @@ struct ContractDetailView: View {
                     }
                 }, alignment: .center
             )
-            .navigationBarTitle("", displayMode: .inline)
+            .navigationBarTitle(viewStore.state.contract.name, displayMode: .inline)
             .navigationBarItems(trailing: Button(action: {
                 presentMenu = true
             }) {

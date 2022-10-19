@@ -99,10 +99,12 @@ struct ContractRow: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            Text(data.address).font(.headline)
+            Text("\(data.name) / \(data.network.rawValue)").font(.headline)
+            Text(data.address).font(.subheadline)
+                .padding(.top, 1)
             Text("\(data.schema.rawValue)").font(.caption)
-                .padding(.top, 2)
-
+                .padding(.top, 1)
+            
             HStack {
                 ForEach((data.tokens.map { $0.fragments.tokenFragment } + data.multiTokens.map { $0.fragments.tokenFragment }).prefix(3)) { token in
                     RemoteImageView(url: token.imageUrl)

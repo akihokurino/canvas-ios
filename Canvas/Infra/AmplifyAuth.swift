@@ -19,7 +19,7 @@ class AmplifyAuthManager {
             
             let _ = Amplify.Auth.signOut()
             
-            Amplify.Auth.signIn(username: "aki030402@gmail.com", password: "Test1234") { result in
+            Amplify.Auth.signIn(username: Env["COGNITO_EMAIL"], password: Env["COGNITO_PASSWORD"]) { result in
                 switch result {
                 case .success:
                     promise(.success(()))

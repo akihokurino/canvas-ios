@@ -46,6 +46,46 @@ public enum NftAPI {
     }
   }
 
+  public enum Network: RawRepresentable, Equatable, Hashable, CaseIterable, Apollo.JSONDecodable, Apollo.JSONEncodable {
+    public typealias RawValue = String
+    case rinkeby
+    case goerli
+    /// Auto generated constant for unknown enum values
+    case __unknown(RawValue)
+
+    public init?(rawValue: RawValue) {
+      switch rawValue {
+        case "RINKEBY": self = .rinkeby
+        case "GOERLI": self = .goerli
+        default: self = .__unknown(rawValue)
+      }
+    }
+
+    public var rawValue: RawValue {
+      switch self {
+        case .rinkeby: return "RINKEBY"
+        case .goerli: return "GOERLI"
+        case .__unknown(let value): return value
+      }
+    }
+
+    public static func == (lhs: Network, rhs: Network) -> Bool {
+      switch (lhs, rhs) {
+        case (.rinkeby, .rinkeby): return true
+        case (.goerli, .goerli): return true
+        case (.__unknown(let lhsValue), .__unknown(let rhsValue)): return lhsValue == rhsValue
+        default: return false
+      }
+    }
+
+    public static var allCases: [Network] {
+      return [
+        .rinkeby,
+        .goerli,
+      ]
+    }
+  }
+
   public final class GetMeQuery: GraphQLQuery {
     /// The raw GraphQL definition of this operation.
     public let operationDefinition: String =
@@ -1895,7 +1935,9 @@ public enum NftAPI {
       fragment ContractFragment on Contract {
         __typename
         address
+        name
         schema
+        network
         tokens {
           __typename
           ...TokenFragment
@@ -1913,7 +1955,9 @@ public enum NftAPI {
       return [
         GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
         GraphQLField("address", type: .nonNull(.scalar(String.self))),
+        GraphQLField("name", type: .nonNull(.scalar(String.self))),
         GraphQLField("schema", type: .nonNull(.scalar(Schema.self))),
+        GraphQLField("network", type: .nonNull(.scalar(Network.self))),
         GraphQLField("tokens", type: .nonNull(.list(.nonNull(.object(Token.selections))))),
         GraphQLField("multiTokens", type: .nonNull(.list(.nonNull(.object(MultiToken.selections))))),
       ]
@@ -1925,8 +1969,8 @@ public enum NftAPI {
       self.resultMap = unsafeResultMap
     }
 
-    public init(address: String, schema: Schema, tokens: [Token], multiTokens: [MultiToken]) {
-      self.init(unsafeResultMap: ["__typename": "Contract", "address": address, "schema": schema, "tokens": tokens.map { (value: Token) -> ResultMap in value.resultMap }, "multiTokens": multiTokens.map { (value: MultiToken) -> ResultMap in value.resultMap }])
+    public init(address: String, name: String, schema: Schema, network: Network, tokens: [Token], multiTokens: [MultiToken]) {
+      self.init(unsafeResultMap: ["__typename": "Contract", "address": address, "name": name, "schema": schema, "network": network, "tokens": tokens.map { (value: Token) -> ResultMap in value.resultMap }, "multiTokens": multiTokens.map { (value: MultiToken) -> ResultMap in value.resultMap }])
     }
 
     public var __typename: String {
@@ -1947,12 +1991,30 @@ public enum NftAPI {
       }
     }
 
+    public var name: String {
+      get {
+        return resultMap["name"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "name")
+      }
+    }
+
     public var schema: Schema {
       get {
         return resultMap["schema"]! as! Schema
       }
       set {
         resultMap.updateValue(newValue, forKey: "schema")
+      }
+    }
+
+    public var network: Network {
+      get {
+        return resultMap["network"]! as! Network
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "network")
       }
     }
 

@@ -57,7 +57,9 @@ query GetMultiTokens($address: String!, $cursor: String, $limit: Int!) {
 
 fragment ContractFragment on Contract {
     address
+    name
     schema
+    network
     tokens {
         ...TokenFragment
     }

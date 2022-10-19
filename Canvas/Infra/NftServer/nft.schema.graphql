@@ -188,6 +188,7 @@ input BulkMintERC1155Input {
 
 type Contract {
   address: String!
+  name: String!
   schema: Schema!
   network: Network!
   tokens: [Token!]!

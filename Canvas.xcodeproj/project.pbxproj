@@ -75,6 +75,7 @@
 		02B3A7C328F0295200DC5CFE /* MultiTokenListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B3A7C228F0295200DC5CFE /* MultiTokenListView.swift */; };
 		02BFA0F3272A7969002997F8 /* CanvasClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02BFA0F2272A7969002997F8 /* CanvasClient.swift */; };
 		02C696962718467A00C65CDC /* SplashReturn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02C696952718467A00C65CDC /* SplashReturn.swift */; };
+		02C959DB2900318000D7AE7C /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02C959DA2900317E00D7AE7C /* Environment.swift */; };
 		02D26CCB273183E500678F6F /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02D26CCA273183E500678F6F /* VideoView.swift */; };
 		02D26CCD2731848500678F6F /* ArchiveDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02D26CCC2731848500678F6F /* ArchiveDetailView.swift */; };
 		02D2A1122715CE5B00CF5AD1 /* Splash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02D2A1112715CE5B00CF5AD1 /* Splash.swift */; };
@@ -160,6 +161,7 @@
 		02B3A7C228F0295200DC5CFE /* MultiTokenListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiTokenListView.swift; sourceTree = "<group>"; };
 		02BFA0F2272A7969002997F8 /* CanvasClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasClient.swift; sourceTree = "<group>"; };
 		02C696952718467A00C65CDC /* SplashReturn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashReturn.swift; sourceTree = "<group>"; };
+		02C959DA2900317E00D7AE7C /* Environment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		02D26CCA273183E500678F6F /* VideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
 		02D26CCC2731848500678F6F /* ArchiveDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveDetailView.swift; sourceTree = "<group>"; };
 		02D2A1112715CE5B00CF5AD1 /* Splash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Splash.swift; sourceTree = "<group>"; };
@@ -242,6 +244,7 @@
 				021B287C270CB2590093B0C9 /* Work */,
 				02A19D43272C516500DBFA24 /* View */,
 				021B286E270CB08C0093B0C9 /* CanvasApp.swift */,
+				02C959DA2900317E00D7AE7C /* Environment.swift */,
 				021B2872270CB08D0093B0C9 /* Assets.xcassets */,
 				0258C0A928ED31FE00F6F14B /* Colors.xcassets */,
 				02D78D9427295F7B0026A66A /* Info.plist */,
@@ -415,6 +418,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 021B2879270CB08D0093B0C9 /* Build configuration list for PBXNativeTarget "Canvas" */;
 			buildPhases = (
+				02C959D929002E3800D7AE7C /* Build Env */,
 				021B2867270CB08C0093B0C9 /* Sources */,
 				021B2868270CB08C0093B0C9 /* Frameworks */,
 				021B2869270CB08C0093B0C9 /* Resources */,
@@ -502,6 +506,27 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		02C959D929002E3800D7AE7C /* Build Env */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Build Env";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/build-env.sh\" \"${SRCROOT}/.env\" \"${SRCROOT}/${PROJECT}\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		021B2867270CB08C0093B0C9 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -566,6 +591,7 @@
 				02388F8A28CB12F400E2AAC0 /* ContractListVM.swift in Sources */,
 				02F297A7288C1B3F00A50E60 /* ArchiveListVM.swift in Sources */,
 				02BFA0F3272A7969002997F8 /* CanvasClient.swift in Sources */,
+				02C959DB2900318000D7AE7C /* Environment.swift in Sources */,
 				0231698628D7406D0027FAF8 /* ArchivePageVM.swift in Sources */,
 				02D2A1122715CE5B00CF5AD1 /* Splash.swift in Sources */,
 				02F944B7272DA321002A9B2B /* ArchiveListView.swift in Sources */,
