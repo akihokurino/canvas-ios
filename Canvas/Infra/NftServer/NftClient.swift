@@ -51,7 +51,7 @@ struct NftClient {
 
                     let transport = RequestChainNetworkTransport(
                         interceptorProvider: provider,
-                        endpointURL: URL(string: "https://ji1t807ur2.execute-api.ap-northeast-1.amazonaws.com/default/graphql")!,
+                        endpointURL: URL(string: "https://canvas-nft-api.akiho.app/graphql")!,
                         additionalHeaders: ["authorization": "bearer \(token)"]
                     )
 
