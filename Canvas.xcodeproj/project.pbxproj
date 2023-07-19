@@ -304,6 +304,7 @@
 		026C5E652729B5DB00995BCB /* AssetGenerator */ = {
 			isa = PBXGroup;
 			children = (
+				029B30082722E959008BC3F3 /* FirebaseAuth.swift */,
 				02D49E002A6824B2004A0871 /* AssetGeneratorAPI.swift */,
 				02BFA0F2272A7969002997F8 /* AssetGeneratorClient.swift */,
 				026C5E662729B68100995BCB /* asset-generator.app.graphql */,
@@ -318,10 +319,8 @@
 				026C5E652729B5DB00995BCB /* AssetGenerator */,
 				02E20E2827CE3FB400AED50C /* NftGenerator */,
 				029B30062722E25F008BC3F3 /* FirebaseStorage.swift */,
-				029B30082722E959008BC3F3 /* FirebaseAuth.swift */,
 				028D3AA32729B1DA000EC82F /* FirebaseMessage.swift */,
 				02E20E2227CDFD1700AED50C /* NetworkInterceptor.swift */,
-				02E20E2427CE36E400AED50C /* AmplifyAuth.swift */,
 			);
 			path = Infra;
 			sourceTree = "<group>";
@@ -394,6 +393,7 @@
 		02E20E2827CE3FB400AED50C /* NftGenerator */ = {
 			isa = PBXGroup;
 			children = (
+				02E20E2427CE36E400AED50C /* AmplifyAuth.swift */,
 				02FCF9422A6830AB009BA139 /* NftGeneratorAPI.swift */,
 				02E20E2627CE3FAC00AED50C /* NftGeneratorClient.swift */,
 				02E20E2B27CE44D100AED50C /* nft-generator.app.graphql */,
