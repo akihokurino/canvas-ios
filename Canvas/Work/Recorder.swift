@@ -14,7 +14,7 @@ class Recorder: ObservableObject {
         let bitrate: UInt = 16
     }
 
-    private static let MAX_SECONDS: Double = 30
+    private static let MAX_SECONDS: Double = 10
     private let recorder = RPScreenRecorder.shared()
     private let configuration = Configuration()
     private let work: Work

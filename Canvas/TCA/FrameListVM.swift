@@ -99,6 +99,12 @@ enum FrameListVM {
         case .isPresentedDetailView(let val):
             state.isPresentedDetailView = val
             return .none
+        case .isPresentedErrorAlert(let val):
+            state.isPresentedErrorAlert = val
+            if !val {
+                state.error = nil
+            }
+            return .none
         }
     }
 }
@@ -115,6 +121,7 @@ extension FrameListVM {
         case shouldPullToRefresh(Bool)
         case presentDetailView(CanvasAPI.FrameFragment)
         case isPresentedDetailView(Bool)
+        case isPresentedErrorAlert(Bool)
     }
 
     struct State: Equatable {
@@ -127,6 +134,8 @@ extension FrameListVM {
         var isPresentedDetailView = false
         var frames: [CanvasAPI.FrameFragment] = []
         var selectFrame: CanvasAPI.FrameFragment? = nil
+        var isPresentedErrorAlert = false
+        var error: AppError?
     }
 
     struct Environment {

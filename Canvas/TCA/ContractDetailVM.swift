@@ -55,8 +55,10 @@ enum ContractDetailVM {
                 state.multiTokenListView!.tokens = state.multiTokenListView!.tokens.map { $0.id == token.id ? token : $0 }
             }
             return .none
-        case .selled(.failure(_)):
+        case .selled(.failure(let error)):
             state.shouldShowHUD = false
+            state.isPresentedErrorAlert = true
+            state.error = error
             return .none
         case .transferERC721(let input):
             guard let token = state.selectToken else {
@@ -91,8 +93,10 @@ enum ContractDetailVM {
                 state.multiTokenListView!.tokens = state.multiTokenListView!.tokens.map { $0.id == token.id ? token : $0 }
             }
             return .none
-        case .transfered(.failure(_)):
+        case .transfered(.failure(let error)):
             state.shouldShowHUD = false
+            state.isPresentedErrorAlert = true
+            state.error = error
             return .none
         case .startSellAllTokens(let data):
             state.shouldShowHUD = true
@@ -109,8 +113,16 @@ enum ContractDetailVM {
         case .endSellAllTokens(.success(_)):
             state.shouldShowHUD = false
             return .none
-        case .endSellAllTokens(.failure(_)):
+        case .endSellAllTokens(.failure(let error)):
             state.shouldShowHUD = false
+            state.isPresentedErrorAlert = true
+            state.error = error
+            return .none
+        case .isPresentedErrorAlert(let val):
+            state.isPresentedErrorAlert = val
+            if !val {
+                state.error = nil
+            }
             return .none
 
         case .tokenListView(let action):
@@ -172,6 +184,7 @@ extension ContractDetailVM {
         case transfered(Result<NftAPI.TokenFragment, AppError>)
         case startSellAllTokens(SellAllTokensInput)
         case endSellAllTokens(Result<Bool, AppError>)
+        case isPresentedErrorAlert(Bool)
 
         case tokenListView(TokenListVM.Action)
         case multiTokenListView(MultiTokenListVM.Action)
@@ -180,13 +193,15 @@ extension ContractDetailVM {
     struct State: Equatable {
         let contract: NftAPI.ContractFragment
         let pageIndexes = Array(0 ..< 2)
-
+        
         var shouldShowHUD = false
         var currentPage: Page = .withIndex(0)
         var currentSelection: Int = 0
         var selectToken: NftAPI.TokenFragment? = nil
         var isPresentedSellNftView = false
         var isPresentedBulkSellNftView = false
+        var isPresentedErrorAlert = false
+        var error: AppError?
 
         var tokenListView: TokenListVM.State?
         var multiTokenListView: MultiTokenListVM.State?

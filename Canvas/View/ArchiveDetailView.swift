@@ -141,7 +141,7 @@ struct ArchiveDetailView: View {
                 get: \.isPresentedBulkMintNftView,
                 send: ArchiveDetailVM.Action.isPresentedBulkMintNftView
             )) {
-                BulkMintNftView() { schema, amount, ether in
+                BulkMintNftView { schema, amount, ether in
                     viewStore.send(.isPresentedBulkMintNftView(false))
 
                     switch schema {
@@ -177,6 +177,20 @@ struct ArchiveDetailView: View {
                     viewStore.send(.isPresentedERC1155SellNftView(false))
                     viewStore.send(.transferERC1155(TransferInput(toAddress: address)))
                 })
+            }
+            .alert(
+                viewStore.error?.alert.title ?? "",
+                isPresented: viewStore.binding(
+                    get: { $0.isPresentedErrorAlert },
+                    send: ArchiveDetailVM.Action.isPresentedErrorAlert
+                ),
+                presenting: viewStore.error?.alert
+            ) { _ in
+                Button("OK") {
+                    viewStore.send(.isPresentedErrorAlert(false))
+                }
+            } message: { entity in
+                Text(entity.message)
             }
         }
     }

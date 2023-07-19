@@ -100,6 +100,20 @@ struct RootView: View {
             )) {
                 Alert(title: Text(viewStore.alertText))
             }
+            .alert(
+                viewStore.error?.alert.title ?? "",
+                isPresented: viewStore.binding(
+                    get: { $0.isPresentedErrorAlert },
+                    send: RootVM.Action.isPresentedErrorAlert
+                ),
+                presenting: viewStore.error?.alert
+            ) { _ in
+                Button("OK") {
+                    viewStore.send(.isPresentedErrorAlert(false))
+                }
+            } message: { entity in
+                Text(entity.message)
+            }
         }
     }
 }

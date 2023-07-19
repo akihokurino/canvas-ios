@@ -30,8 +30,10 @@ enum ContractListVM {
             state.initialized = true
 
             return .none
-        case .endInitialize(.failure(_)):
+        case .endInitialize(.failure(let error)):
             state.shouldShowHUD = false
+            state.isPresentedErrorAlert = true
+            state.error = error
             return .none
         case .startRefresh:
             state.shouldPullToRefresh = true
@@ -51,8 +53,10 @@ enum ContractListVM {
             state.cursor = result.cursor
             state.shouldPullToRefresh = false
             return .none
-        case .endRefresh(.failure(_)):
+        case .endRefresh(.failure(let error)):
             state.shouldPullToRefresh = false
+            state.isPresentedErrorAlert = true
+            state.error = error
             return .none
         case .startNext:
             guard !state.shouldShowNextLoading, state.hasNext else {
@@ -75,8 +79,10 @@ enum ContractListVM {
             state.cursor = result.cursor
             state.shouldShowNextLoading = false
             return .none
-        case .endNext(.failure(_)):
+        case .endNext(.failure(let error)):
             state.shouldShowNextLoading = false
+            state.isPresentedErrorAlert = true
+            state.error = error
             return .none
         case .shouldShowHUD(let val):
             state.shouldShowHUD = val
@@ -107,8 +113,16 @@ enum ContractListVM {
         case .endSyncAllTokens(.success(_)):
             state.shouldShowHUD = false
             return .none
-        case .endSyncAllTokens(.failure(_)):
+        case .endSyncAllTokens(.failure(let error)):
             state.shouldShowHUD = false
+            state.isPresentedErrorAlert = true
+            state.error = error
+            return .none
+        case .isPresentedErrorAlert(let val):
+            state.isPresentedErrorAlert = val
+            if !val {
+                state.error = nil
+            }
             return .none
 
         case .contractDetailView(let action):
@@ -142,6 +156,7 @@ extension ContractListVM {
         case popDetailView
         case startSyncAllTokens
         case endSyncAllTokens(Result<Bool, AppError>)
+        case isPresentedErrorAlert(Bool)
 
         case contractDetailView(ContractDetailVM.Action)
     }
@@ -156,6 +171,9 @@ extension ContractListVM {
         var hasNext: Bool {
             cursor != ""
         }
+
+        var isPresentedErrorAlert = false
+        var error: AppError?
 
         var contractDetailView: ContractDetailVM.State?
     }

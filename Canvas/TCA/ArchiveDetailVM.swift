@@ -26,8 +26,10 @@ enum ArchiveDetailVM {
             state.shouldShowHUD = false
             state.initialized = true
             return .none
-        case .endInitialize(.failure(_)):
+        case .endInitialize(.failure(let error)):
             state.shouldShowHUD = false
+            state.isPresentedErrorAlert = true
+            state.error = error
             return .none
         case .startRefresh:
             let archive = state.archive
@@ -45,8 +47,10 @@ enum ArchiveDetailVM {
             state.erc1155 = result.erc1155
             state.shouldPullToRefresh = false
             return .none
-        case .endRefresh(.failure(_)):
+        case .endRefresh(.failure(let error)):
             state.shouldPullToRefresh = false
+            state.isPresentedErrorAlert = true
+            state.error = error
             return .none
         case .shouldShowHUD(let val):
             state.shouldShowHUD = val
@@ -104,8 +108,10 @@ enum ArchiveDetailVM {
             state.erc1155 = result.erc1155
             state.shouldShowHUD = false
             return .none
-        case .minted(.failure(_)):
+        case .minted(.failure(let error)):
             state.shouldShowHUD = false
+            state.isPresentedErrorAlert = true
+            state.error = error
             return .none
         case .bulkMintERC721(let input):
             let archive = state.archive
@@ -132,8 +138,10 @@ enum ArchiveDetailVM {
         case .bulkMinted(.success(_)):
             state.shouldShowHUD = false
             return .none
-        case .bulkMinted(.failure(_)):
+        case .bulkMinted(.failure(let error)):
             state.shouldShowHUD = false
+            state.isPresentedErrorAlert = true
+            state.error = error
             return .none
         case .presentSellNftView(let schema):
             switch schema {
@@ -180,8 +188,10 @@ enum ArchiveDetailVM {
             state.erc1155 = result.erc1155
             state.shouldShowHUD = false
             return .none
-        case .selled(.failure(_)):
+        case .selled(.failure(let error)):
             state.shouldShowHUD = false
+            state.isPresentedErrorAlert = true
+            state.error = error
             return .none
         case .transferERC721(let input):
             let archive = state.archive
@@ -212,8 +222,10 @@ enum ArchiveDetailVM {
             state.erc1155 = result.erc1155
             state.shouldShowHUD = false
             return .none
-        case .transfered(.failure(_)):
+        case .transfered(.failure(let error)):
             state.shouldShowHUD = false
+            state.isPresentedErrorAlert = true
+            state.error = error
             return .none
         case .fetchFrames:
             let workId = state.archive.id
@@ -226,7 +238,15 @@ enum ArchiveDetailVM {
         case .frames(.success(let frames)):
             state.frames = frames
             return .none
-        case .frames(.failure(_)):
+        case .frames(.failure(let error)):
+            state.isPresentedErrorAlert = true
+            state.error = error
+            return .none
+        case .isPresentedErrorAlert(let val):
+            state.isPresentedErrorAlert = val
+            if !val {
+                state.error = nil
+            }
             return .none
         }
     }
@@ -261,6 +281,7 @@ extension ArchiveDetailVM {
         case transfered(Result<TokenBundle, AppError>)
         case fetchFrames
         case frames(Result<[CanvasAPI.FrameFragment], AppError>)
+        case isPresentedErrorAlert(Bool)
     }
 
     struct State: Equatable {
@@ -277,6 +298,8 @@ extension ArchiveDetailVM {
         var selectFrame: CanvasAPI.FrameFragment? = nil
         var isPresentedERC721SellNftView = false
         var isPresentedERC1155SellNftView = false
+        var isPresentedErrorAlert = false
+        var error: AppError?
     }
 
     struct Environment {

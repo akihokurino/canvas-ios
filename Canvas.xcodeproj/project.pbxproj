@@ -36,7 +36,6 @@
 		02392F1F271C502600D8931F /* RectangleGetter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02392F1E271C502600D8931F /* RectangleGetter.swift */; };
 		02392F21271C551200D8931F /* SpiderDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02392F20271C551200D8931F /* SpiderDesign.swift */; };
 		023AC5FE272C69A2005C858D /* RemoteImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 023AC5FD272C69A2005C858D /* RemoteImageView.swift */; };
-		02449DA827231D93000A011A /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02449DA727231D93000A011A /* Error.swift */; };
 		02495FDD2711A3E30023230B /* BoidsMajic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02495FDC2711A3E30023230B /* BoidsMajic.swift */; };
 		02543C7D271D3C29009AE283 /* MapGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02543C7C271D3C29009AE283 /* MapGenerator.swift */; };
 		02543C7F271D665E009AE283 /* CircleDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02543C7E271D665E009AE283 /* CircleDesign.swift */; };
@@ -79,6 +78,7 @@
 		02D26CCB273183E500678F6F /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02D26CCA273183E500678F6F /* VideoView.swift */; };
 		02D26CCD2731848500678F6F /* ArchiveDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02D26CCC2731848500678F6F /* ArchiveDetailView.swift */; };
 		02D2A1122715CE5B00CF5AD1 /* Splash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02D2A1112715CE5B00CF5AD1 /* Splash.swift */; };
+		02D49DFF2A681CC2004A0871 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02D49DFE2A681CC2004A0871 /* Error.swift */; };
 		02E188F5288ABC30001F24F5 /* WalletVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02E188F4288ABC30001F24F5 /* WalletVM.swift */; };
 		02E20E2327CDFD1700AED50C /* NetworkInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02E20E2227CDFD1700AED50C /* NetworkInterceptor.swift */; };
 		02E20E2527CE36E500AED50C /* AmplifyAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02E20E2427CE36E400AED50C /* AmplifyAuth.swift */; };
@@ -125,7 +125,6 @@
 		02392F1E271C502600D8931F /* RectangleGetter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RectangleGetter.swift; sourceTree = "<group>"; };
 		02392F20271C551200D8931F /* SpiderDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpiderDesign.swift; sourceTree = "<group>"; };
 		023AC5FD272C69A2005C858D /* RemoteImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteImageView.swift; sourceTree = "<group>"; };
-		02449DA727231D93000A011A /* Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
 		02495FDC2711A3E30023230B /* BoidsMajic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoidsMajic.swift; sourceTree = "<group>"; };
 		02543C7C271D3C29009AE283 /* MapGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapGenerator.swift; sourceTree = "<group>"; };
 		02543C7E271D665E009AE283 /* CircleDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleDesign.swift; sourceTree = "<group>"; };
@@ -165,6 +164,7 @@
 		02D26CCA273183E500678F6F /* VideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
 		02D26CCC2731848500678F6F /* ArchiveDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveDetailView.swift; sourceTree = "<group>"; };
 		02D2A1112715CE5B00CF5AD1 /* Splash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Splash.swift; sourceTree = "<group>"; };
+		02D49DFE2A681CC2004A0871 /* Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
 		02D78D9227295F220026A66A /* Canvas.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Canvas.entitlements; sourceTree = "<group>"; };
 		02D78D9327295F340026A66A /* CanvasRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CanvasRelease.entitlements; sourceTree = "<group>"; };
 		02D78D9427295F7B0026A66A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -296,6 +296,7 @@
 			isa = PBXGroup;
 			children = (
 				02388F9228CB18B400E2AAC0 /* Models.swift */,
+				02D49DFE2A681CC2004A0871 /* Error.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -321,7 +322,6 @@
 				028D3AA32729B1DA000EC82F /* FirebaseMessage.swift */,
 				02E20E2227CDFD1700AED50C /* NetworkInterceptor.swift */,
 				02E20E2427CE36E400AED50C /* AmplifyAuth.swift */,
-				02449DA727231D93000A011A /* Error.swift */,
 			);
 			path = Infra;
 			sourceTree = "<group>";
@@ -569,6 +569,7 @@
 				029DDF102889BB3600118174 /* RootVM.swift in Sources */,
 				02780675282E0E9A00074144 /* SellNftView.swift in Sources */,
 				0299D8152720684200483DE1 /* Recorder.swift in Sources */,
+				02D49DFF2A681CC2004A0871 /* Error.swift in Sources */,
 				022C17CB2712C26200D2FD62 /* Lightning.swift in Sources */,
 				029B30092722E959008BC3F3 /* FirebaseAuth.swift in Sources */,
 				02E20E2727CE3FAC00AED50C /* NftClient.swift in Sources */,
@@ -577,7 +578,6 @@
 				02543C7F271D665E009AE283 /* CircleDesign.swift in Sources */,
 				0231698428D72B2F0027FAF8 /* ArchivePageView.swift in Sources */,
 				02E20E2327CDFD1700AED50C /* NetworkInterceptor.swift in Sources */,
-				02449DA827231D93000A011A /* Error.swift in Sources */,
 				026C5E6D2729BA8C00995BCB /* CanvasAPI.swift in Sources */,
 				02A19D47272C518C00DBFA24 /* FrameListView.swift in Sources */,
 				02B3A7BB28F0219900DC5CFE /* TokenListVM.swift in Sources */,
@@ -659,7 +659,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -714,7 +714,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;

@@ -52,14 +52,22 @@ enum RootVM {
             state.initialized = true
 
             return .none
-        case .endInitialize(.failure(_)):
+        case .endInitialize(.failure(let error)):
             state.shouldShowHUD = false
+            state.isPresentedErrorAlert = true
+            state.error = error
             return .none
         case .shouldShowHUD(let val):
             state.shouldShowHUD = val
             return .none
         case .presentAlert(let val):
             state.isPresentedAlert = val
+            return .none
+        case .isPresentedErrorAlert(let val):
+            state.isPresentedErrorAlert = val
+            if !val {
+                state.error = nil
+            }
             return .none
 
         case .workListView(let action):
@@ -141,6 +149,7 @@ extension RootVM {
         case endInitialize(Result<Bool, AppError>)
         case shouldShowHUD(Bool)
         case presentAlert(Bool)
+        case isPresentedErrorAlert(Bool)
 
         case workListView(WorkListVM.Action)
         case archivePageView(ArchivePageVM.Action)
@@ -153,6 +162,8 @@ extension RootVM {
         var shouldShowHUD = false
         var isPresentedAlert = false
         var alertText = ""
+        var isPresentedErrorAlert = false
+        var error: AppError?
 
         var workListView: WorkListVM.State?
         var archivePageView: ArchivePageVM.State?

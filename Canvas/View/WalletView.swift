@@ -34,18 +34,6 @@ struct WalletView: View {
                         .foregroundColor(Color.white)
                         .cornerRadius(5.0)
                         .font(.largeTitle)
-
-                    Spacer().frame(height: 20)
-
-                    ActionButton(text: "Faucets", buttonType: .primary) {
-                        UIApplication.shared.open(URL(string: "https://goerlifaucet.com")!)
-                    }
-
-                    Spacer().frame(height: 20)
-
-                    ActionButton(text: "Moralis", buttonType: .primary) {
-                        UIApplication.shared.open(URL(string: "https://admin.moralis.io/dapps")!)
-                    }
                 }
                 .padding()
             }
@@ -65,6 +53,20 @@ struct WalletView: View {
             .navigationBarTitle("", displayMode: .inline)
             .onAppear {
                 viewStore.send(.startInitialize)
+            }
+            .alert(
+                viewStore.error?.alert.title ?? "",
+                isPresented: viewStore.binding(
+                    get: { $0.isPresentedErrorAlert },
+                    send: WalletVM.Action.isPresentedErrorAlert
+                ),
+                presenting: viewStore.error?.alert
+            ) { _ in
+                Button("OK") {
+                    viewStore.send(.isPresentedErrorAlert(false))
+                }
+            } message: { entity in
+                Text(entity.message)
             }
         }
     }

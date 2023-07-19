@@ -9,7 +9,7 @@ enum WalletVM {
             guard !state.initialized else {
                 return .none
             }
-            
+
             state.shouldShowHUD = true
 
             return NftClient.shared.caller()
@@ -23,12 +23,14 @@ enum WalletVM {
             state.address = result.address
             state.balance = result.balance
             state.shouldShowHUD = false
-            
+
             state.initialized = true
-            
+
             return .none
-        case .endInitialize(.failure(_)):
+        case .endInitialize(.failure(let error)):
             state.shouldShowHUD = false
+            state.isPresentedErrorAlert = true
+            state.error = error
             return .none
         case .startRefresh:
             state.shouldPullToRefresh = true
@@ -45,14 +47,22 @@ enum WalletVM {
             state.balance = result.balance
             state.shouldPullToRefresh = false
             return .none
-        case .endRefresh(.failure(_)):
+        case .endRefresh(.failure(let error)):
             state.shouldPullToRefresh = false
+            state.isPresentedErrorAlert = true
+            state.error = error
             return .none
         case .shouldShowHUD(let val):
             state.shouldShowHUD = val
             return .none
         case .shouldPullToRefresh(let val):
             state.shouldPullToRefresh = val
+            return .none
+        case .isPresentedErrorAlert(let val):
+            state.isPresentedErrorAlert = val
+            if !val {
+                state.error = nil
+            }
             return .none
         }
     }
@@ -66,6 +76,7 @@ extension WalletVM {
         case endRefresh(Result<Wallet, AppError>)
         case shouldShowHUD(Bool)
         case shouldPullToRefresh(Bool)
+        case isPresentedErrorAlert(Bool)
     }
 
     struct State: Equatable {
@@ -74,6 +85,8 @@ extension WalletVM {
         var shouldPullToRefresh = false
         var address = ""
         var balance: Double = 0.0
+        var isPresentedErrorAlert = false
+        var error: AppError?
     }
 
     struct Environment {

@@ -31,14 +31,16 @@ enum ArchiveListVM {
             state.initialized = true
 
             return .none
-        case .endInitialize(.failure(_)):
+        case .endInitialize(.failure(let error)):
             state.shouldShowHUD = false
+            state.isPresentedErrorAlert = true
+            state.error = error
             return .none
         case .startRefresh:
             state.shouldPullToRefresh = true
             state.page = 1
             state.hasNext = false
-        
+
             let page = state.page
 
             return CanvasClient.shared.caller()
@@ -53,8 +55,10 @@ enum ArchiveListVM {
             state.hasNext = result.hasNext
             state.shouldPullToRefresh = false
             return .none
-        case .endRefresh(.failure(_)):
+        case .endRefresh(.failure(let error)):
             state.shouldPullToRefresh = false
+            state.isPresentedErrorAlert = true
+            state.error = error
             return .none
         case .startNext:
             guard !state.shouldShowNextLoading, state.hasNext else {
@@ -66,7 +70,7 @@ enum ArchiveListVM {
             state.page += 1
 
             let page = state.page
-            
+
             return CanvasClient.shared.caller()
                 .flatMap { caller in caller.works(page: page) }
                 .map { ArchivesWithHasNext(archives: $0.0, hasNext: $0.1) }
@@ -79,8 +83,10 @@ enum ArchiveListVM {
             state.hasNext = result.hasNext
             state.shouldShowNextLoading = false
             return .none
-        case .endNext(.failure(_)):
+        case .endNext(.failure(let error)):
             state.shouldShowNextLoading = false
+            state.isPresentedErrorAlert = true
+            state.error = error
             return .none
         case .shouldShowHUD(let val):
             state.shouldShowHUD = val
@@ -93,6 +99,12 @@ enum ArchiveListVM {
             return .none
         case .popDetailView:
             state.archiveDetailView = nil
+            return .none
+        case .isPresentedErrorAlert(let val):
+            state.isPresentedErrorAlert = val
+            if !val {
+                state.error = nil
+            }
             return .none
 
         case .archiveDetailView(let action):
@@ -124,6 +136,7 @@ extension ArchiveListVM {
         case shouldPullToRefresh(Bool)
         case presentDetailView(CanvasAPI.WorkFragment)
         case popDetailView
+        case isPresentedErrorAlert(Bool)
 
         case archiveDetailView(ArchiveDetailVM.Action)
     }
@@ -136,6 +149,8 @@ extension ArchiveListVM {
         var page = 1
         var hasNext = false
         var archives: [CanvasAPI.WorkFragment] = []
+        var isPresentedErrorAlert = false
+        var error: AppError?
 
         var archiveDetailView: ArchiveDetailVM.State?
     }

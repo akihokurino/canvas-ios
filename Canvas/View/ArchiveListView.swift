@@ -59,6 +59,20 @@ struct ArchiveListView: View {
             .onAppear {
                 viewStore.send(.startInitialize)
             }
+            .alert(
+                viewStore.error?.alert.title ?? "",
+                isPresented: viewStore.binding(
+                    get: { $0.isPresentedErrorAlert },
+                    send: ArchiveListVM.Action.isPresentedErrorAlert
+                ),
+                presenting: viewStore.error?.alert
+            ) { _ in
+                Button("OK") {
+                    viewStore.send(.isPresentedErrorAlert(false))
+                }
+            } message: { entity in
+                Text(entity.message)
+            }
         }
         .navigate(
             using: store.scope(

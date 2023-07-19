@@ -31,8 +31,10 @@ enum MultiTokenListVM {
             state.initialized = true
 
             return .none
-        case .endInitialize(.failure(_)):
+        case .endInitialize(.failure(let error)):
             state.shouldShowHUD = false
+            state.isPresentedErrorAlert = true
+            state.error = error
             return .none
         case .startRefresh:
             state.shouldPullToRefresh = true
@@ -53,8 +55,10 @@ enum MultiTokenListVM {
             state.cursor = result.cursor
             state.shouldPullToRefresh = false
             return .none
-        case .endRefresh(.failure(_)):
+        case .endRefresh(.failure(let error)):
             state.shouldPullToRefresh = false
+            state.isPresentedErrorAlert = true
+            state.error = error
             return .none
         case .startNext:
             guard !state.shouldShowNextLoading, state.hasNext else {
@@ -78,8 +82,10 @@ enum MultiTokenListVM {
             state.cursor = result.cursor
             state.shouldShowNextLoading = false
             return .none
-        case .endNext(.failure(_)):
+        case .endNext(.failure(let error)):
             state.shouldShowNextLoading = false
+            state.isPresentedErrorAlert = true
+            state.error = error
             return .none
         case .shouldShowHUD(let val):
             state.shouldShowHUD = val
@@ -89,6 +95,13 @@ enum MultiTokenListVM {
             return .none
         case .presentSellNftView(let token):
             return .none
+        case .isPresentedErrorAlert(let val):
+            state.isPresentedErrorAlert = val
+            if !val {
+                state.error = nil
+            }
+            return .none
+
         }
     }
 }
@@ -104,6 +117,7 @@ extension MultiTokenListVM {
         case shouldShowHUD(Bool)
         case shouldPullToRefresh(Bool)
         case presentSellNftView(NftAPI.TokenFragment)
+        case isPresentedErrorAlert(Bool)
     }
 
     struct State: Equatable {
@@ -118,6 +132,8 @@ extension MultiTokenListVM {
         var hasNext: Bool {
             cursor != ""
         }
+        var isPresentedErrorAlert = false
+        var error: AppError?
     }
 
     struct Environment {
