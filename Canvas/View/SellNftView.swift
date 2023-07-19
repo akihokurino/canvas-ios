@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct SellNftView: View {
-    let token: NftAPI.TokenFragment
+    let token: NftGeneratorAPI.TokenFragment
     let sell: (Double) -> Void
     let transfer: (String) -> Void
 

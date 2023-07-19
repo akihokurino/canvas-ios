@@ -4,8 +4,8 @@
 import Apollo
 import Foundation
 
-/// NftAPI namespace
-public enum NftAPI {
+/// NftGeneratorAPI namespace
+public enum NftGeneratorAPI {
   public enum Schema: RawRepresentable, Equatable, Hashable, CaseIterable, Apollo.JSONDecodable, Apollo.JSONEncodable {
     public typealias RawValue = String
     case erc721

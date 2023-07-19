@@ -12,7 +12,7 @@ enum WalletVM {
 
             state.shouldShowHUD = true
 
-            return NftClient.shared.caller()
+            return NftGeneratorClient.shared.caller()
                 .flatMap { caller in caller.wallet() }
                 .map { Wallet(address: $0.address, balance: $0.balance) }
                 .subscribe(on: environment.backgroundQueue)
@@ -35,7 +35,7 @@ enum WalletVM {
         case .startRefresh:
             state.shouldPullToRefresh = true
 
-            return NftClient.shared.caller()
+            return NftGeneratorClient.shared.caller()
                 .flatMap { caller in caller.wallet() }
                 .map { result in Wallet(address: result.address, balance: result.balance) }
                 .subscribe(on: environment.backgroundQueue)

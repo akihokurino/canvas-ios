@@ -28,7 +28,7 @@ enum ContractDetailVM {
             }
             state.shouldShowHUD = true
 
-            return NftClient.shared.caller()
+            return NftGeneratorClient.shared.caller()
                 .flatMap { caller in caller.sellERC721(workId: token.workId, ether: input.ether) }
                 .subscribe(on: environment.backgroundQueue)
                 .receive(on: environment.mainQueue)
@@ -40,7 +40,7 @@ enum ContractDetailVM {
             }
             state.shouldShowHUD = true
 
-            return NftClient.shared.caller()
+            return NftGeneratorClient.shared.caller()
                 .flatMap { caller in caller.sellERC1155(workId: token.workId, ether: input.ether) }
                 .subscribe(on: environment.backgroundQueue)
                 .receive(on: environment.mainQueue)
@@ -66,7 +66,7 @@ enum ContractDetailVM {
             }
             state.shouldShowHUD = true
 
-            return NftClient.shared.caller()
+            return NftGeneratorClient.shared.caller()
                 .flatMap { caller in caller.transferERC721(workId: token.workId, toAddress: input.toAddress) }
                 .subscribe(on: environment.backgroundQueue)
                 .receive(on: environment.mainQueue)
@@ -78,7 +78,7 @@ enum ContractDetailVM {
             }
             state.shouldShowHUD = true
 
-            return NftClient.shared.caller()
+            return NftGeneratorClient.shared.caller()
                 .flatMap { caller in caller.transferERC1155(workId: token.workId, toAddress: input.toAddress) }
                 .subscribe(on: environment.backgroundQueue)
                 .receive(on: environment.mainQueue)
@@ -103,7 +103,7 @@ enum ContractDetailVM {
 
             let address = state.contract.address
 
-            return NftClient.shared.caller()
+            return NftGeneratorClient.shared.caller()
                 .flatMap { caller in caller.sellAllTokens(address: address, ether: data.ether) }
                 .map { true }
                 .subscribe(on: environment.backgroundQueue)
@@ -178,10 +178,10 @@ extension ContractDetailVM {
         case isPresentedBulkSellNftView(Bool)
         case sellERC721(SellInput)
         case sellERC1155(SellInput)
-        case selled(Result<NftAPI.TokenFragment, AppError>)
+        case selled(Result<NftGeneratorAPI.TokenFragment, AppError>)
         case transferERC721(TransferInput)
         case transferERC1155(TransferInput)
-        case transfered(Result<NftAPI.TokenFragment, AppError>)
+        case transfered(Result<NftGeneratorAPI.TokenFragment, AppError>)
         case startSellAllTokens(SellAllTokensInput)
         case endSellAllTokens(Result<Bool, AppError>)
         case isPresentedErrorAlert(Bool)
@@ -191,13 +191,13 @@ extension ContractDetailVM {
     }
 
     struct State: Equatable {
-        let contract: NftAPI.ContractFragment
+        let contract: NftGeneratorAPI.ContractFragment
         let pageIndexes = Array(0 ..< 2)
         
         var shouldShowHUD = false
         var currentPage: Page = .withIndex(0)
         var currentSelection: Int = 0
-        var selectToken: NftAPI.TokenFragment? = nil
+        var selectToken: NftGeneratorAPI.TokenFragment? = nil
         var isPresentedSellNftView = false
         var isPresentedBulkSellNftView = false
         var isPresentedErrorAlert = false

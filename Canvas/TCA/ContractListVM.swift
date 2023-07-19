@@ -15,7 +15,7 @@ enum ContractListVM {
 
             let cursor = state.cursor
 
-            return NftClient.shared.caller()
+            return NftGeneratorClient.shared.caller()
                 .flatMap { caller in caller.contracts(cursor: cursor) }
                 .map { ContractsWithCursor(contracts: $0.0, cursor: $0.1) }
                 .subscribe(on: environment.backgroundQueue)
@@ -41,7 +41,7 @@ enum ContractListVM {
 
             let cursor = state.cursor
 
-            return NftClient.shared.caller()
+            return NftGeneratorClient.shared.caller()
                 .flatMap { caller in caller.contracts(cursor: cursor) }
                 .map { ContractsWithCursor(contracts: $0.0, cursor: $0.1) }
                 .subscribe(on: environment.backgroundQueue)
@@ -67,7 +67,7 @@ enum ContractListVM {
 
             let cursor = state.cursor
 
-            return NftClient.shared.caller()
+            return NftGeneratorClient.shared.caller()
                 .flatMap { caller in caller.contracts(cursor: cursor) }
                 .map { ContractsWithCursor(contracts: $0.0, cursor: $0.1) }
                 .subscribe(on: environment.backgroundQueue)
@@ -103,7 +103,7 @@ enum ContractListVM {
         case .startSyncAllTokens:
             state.shouldShowHUD = true
 
-            return NftClient.shared.caller()
+            return NftGeneratorClient.shared.caller()
                 .flatMap { caller in caller.syncAllTokens() }
                 .map { true }
                 .subscribe(on: environment.backgroundQueue)
@@ -152,7 +152,7 @@ extension ContractListVM {
         case endNext(Result<ContractsWithCursor, AppError>)
         case shouldShowHUD(Bool)
         case shouldPullToRefresh(Bool)
-        case presentDetailView(NftAPI.ContractFragment)
+        case presentDetailView(NftGeneratorAPI.ContractFragment)
         case popDetailView
         case startSyncAllTokens
         case endSyncAllTokens(Result<Bool, AppError>)
@@ -167,7 +167,7 @@ extension ContractListVM {
         var shouldPullToRefresh = false
         var shouldShowNextLoading = false
         var cursor: String? = nil
-        var contracts: [NftAPI.ContractFragment] = []
+        var contracts: [NftGeneratorAPI.ContractFragment] = []
         var hasNext: Bool {
             cursor != ""
         }

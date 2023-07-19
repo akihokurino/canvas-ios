@@ -13,7 +13,7 @@ enum ArchiveDetailVM {
             let archive = state.archive
             state.shouldShowHUD = true
 
-            return NftClient.shared.caller()
+            return NftGeneratorClient.shared.caller()
                 .flatMap { caller in caller.mintedToken(workId: archive.id) }
                 .map { TokenBundle(erc721: $0.0, erc1155: $0.1) }
                 .subscribe(on: environment.backgroundQueue)
@@ -35,7 +35,7 @@ enum ArchiveDetailVM {
             let archive = state.archive
             state.shouldPullToRefresh = true
 
-            return NftClient.shared.caller()
+            return NftGeneratorClient.shared.caller()
                 .flatMap { caller in caller.mintedToken(workId: archive.id) }
                 .map { TokenBundle(erc721: $0.0, erc1155: $0.1) }
                 .subscribe(on: environment.backgroundQueue)
@@ -79,7 +79,7 @@ enum ArchiveDetailVM {
             let archive = state.archive
             state.shouldShowHUD = true
 
-            return NftClient.shared.caller()
+            return NftGeneratorClient.shared.caller()
                 .flatMap { caller in caller.mintERC721(workId: archive.id, gsPath: data.imageGsPath).map { caller } }
                 .flatMap { caller in caller.mintedToken(workId: archive.id) }
                 .map { TokenBundle(erc721: $0.0, erc1155: $0.1) }
@@ -95,7 +95,7 @@ enum ArchiveDetailVM {
             let archive = state.archive
             state.shouldShowHUD = true
 
-            return NftClient.shared.caller()
+            return NftGeneratorClient.shared.caller()
                 .flatMap { caller in caller.mintERC1155(workId: archive.id, gsPath: data.imageGsPath, amount: input.amount).map { caller } }
                 .flatMap { caller in caller.mintedToken(workId: archive.id) }
                 .map { TokenBundle(erc721: $0.0, erc1155: $0.1) }
@@ -117,7 +117,7 @@ enum ArchiveDetailVM {
             let archive = state.archive
             state.shouldShowHUD = true
 
-            return NftClient.shared.caller()
+            return NftGeneratorClient.shared.caller()
                 .flatMap { caller in caller.bulkMintERC721(workId: archive.id, ether: input.ether) }
                 .map { true }
                 .subscribe(on: environment.backgroundQueue)
@@ -128,7 +128,7 @@ enum ArchiveDetailVM {
             let archive = state.archive
             state.shouldShowHUD = true
 
-            return NftClient.shared.caller()
+            return NftGeneratorClient.shared.caller()
                 .flatMap { caller in caller.bulkMintERC1155(workId: archive.id, amount: input.amount, ether: input.ether) }
                 .map { true }
                 .subscribe(on: environment.backgroundQueue)
@@ -163,7 +163,7 @@ enum ArchiveDetailVM {
             let archive = state.archive
             state.shouldShowHUD = true
 
-            return NftClient.shared.caller()
+            return NftGeneratorClient.shared.caller()
                 .flatMap { caller in caller.sellERC721(workId: archive.id, ether: input.ether).map { _ in caller } }
                 .flatMap { caller in caller.mintedToken(workId: archive.id) }
                 .map { TokenBundle(erc721: $0.0, erc1155: $0.1) }
@@ -175,7 +175,7 @@ enum ArchiveDetailVM {
             let archive = state.archive
             state.shouldShowHUD = true
 
-            return NftClient.shared.caller()
+            return NftGeneratorClient.shared.caller()
                 .flatMap { caller in caller.sellERC1155(workId: archive.id, ether: input.ether).map { _ in caller } }
                 .flatMap { caller in caller.mintedToken(workId: archive.id) }
                 .map { TokenBundle(erc721: $0.0, erc1155: $0.1) }
@@ -197,7 +197,7 @@ enum ArchiveDetailVM {
             let archive = state.archive
             state.shouldShowHUD = true
 
-            return NftClient.shared.caller()
+            return NftGeneratorClient.shared.caller()
                 .flatMap { caller in caller.transferERC721(workId: archive.id, toAddress: input.toAddress).map { _ in caller } }
                 .flatMap { caller in caller.mintedToken(workId: archive.id) }
                 .map { TokenBundle(erc721: $0.0, erc1155: $0.1) }
@@ -209,7 +209,7 @@ enum ArchiveDetailVM {
             let archive = state.archive
             state.shouldShowHUD = true
 
-            return NftClient.shared.caller()
+            return NftGeneratorClient.shared.caller()
                 .flatMap { caller in caller.transferERC1155(workId: archive.id, toAddress: input.toAddress).map { _ in caller } }
                 .flatMap { caller in caller.mintedToken(workId: archive.id) }
                 .map { TokenBundle(erc721: $0.0, erc1155: $0.1) }
@@ -270,7 +270,7 @@ extension ArchiveDetailVM {
         case bulkMintERC721(BulkMintERC721Input)
         case bulkMintERC1155(BulkMintERC1155Input)
         case bulkMinted(Result<Bool, AppError>)
-        case presentSellNftView(NftAPI.Schema)
+        case presentSellNftView(NftGeneratorAPI.Schema)
         case isPresentedERC721SellNftView(Bool)
         case isPresentedERC1155SellNftView(Bool)
         case sellERC721(SellInput)
@@ -291,8 +291,8 @@ extension ArchiveDetailVM {
         var initialized = false
         var shouldShowHUD = false
         var shouldPullToRefresh = false
-        var erc721: NftAPI.TokenFragment?
-        var erc1155: NftAPI.TokenFragment?
+        var erc721: NftGeneratorAPI.TokenFragment?
+        var erc1155: NftGeneratorAPI.TokenFragment?
         var isPresentedMintNftView = false
         var isPresentedBulkMintNftView = false
         var selectFrame: AssetGeneratorAPI.FrameFragment? = nil

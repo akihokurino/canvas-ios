@@ -4,28 +4,28 @@ import AWSPluginsCore
 import Combine
 import Foundation
 
-extension NftAPI.ContractFragment: Identifiable, Equatable {
+extension NftGeneratorAPI.ContractFragment: Identifiable, Equatable {
     public var id: String {
         return address
     }
 
-    public static func == (lhs: NftAPI.ContractFragment, rhs: NftAPI.ContractFragment) -> Bool {
+    public static func == (lhs: NftGeneratorAPI.ContractFragment, rhs: NftGeneratorAPI.ContractFragment) -> Bool {
         return lhs.id == rhs.id
     }
 }
 
-extension NftAPI.TokenFragment: Identifiable, Equatable {
+extension NftGeneratorAPI.TokenFragment: Identifiable, Equatable {
     public var id: String {
         return "\(address)#\(workId)"
     }
 
-    public static func == (lhs: NftAPI.TokenFragment, rhs: NftAPI.TokenFragment) -> Bool {
+    public static func == (lhs: NftGeneratorAPI.TokenFragment, rhs: NftGeneratorAPI.TokenFragment) -> Bool {
         return lhs.id == rhs.id
     }
 }
 
-struct NftClient {
-    static let shared = NftClient()
+struct NftGeneratorClient {
+    static let shared = NftGeneratorClient()
 
     func caller() -> Future<NftCaller, AppError> {
         return Future<NftCaller, AppError> { promise in
@@ -51,7 +51,7 @@ struct NftClient {
 
                     let transport = RequestChainNetworkTransport(
                         interceptorProvider: provider,
-                        endpointURL: URL(string: "https://canvas-nft-api.akiho.app/graphql")!,
+                        endpointURL: URL(string: "https://canvas-nft-generator.akiho.app/graphql")!,
                         additionalHeaders: ["authorization": "bearer \(token)"]
                     )
 
@@ -72,7 +72,7 @@ struct NftCaller {
 
     func wallet() -> Future<(address: String, balance: Double), AppError> {
         return Future<(address: String, balance: Double), AppError> { promise in
-            cli.fetch(query: NftAPI.GetMeQuery()) { result in
+            cli.fetch(query: NftGeneratorAPI.GetMeQuery()) { result in
                 switch result {
                 case .success(let graphQLResult):
                     if let errors = graphQLResult.errors {
@@ -96,9 +96,9 @@ struct NftCaller {
         }
     }
 
-    func mintedToken(workId: String) -> Future<(erc721: NftAPI.TokenFragment?, erc1155: NftAPI.TokenFragment?), AppError> {
-        return Future<(erc721: NftAPI.TokenFragment?, erc1155: NftAPI.TokenFragment?), AppError> { promise in
-            cli.fetch(query: NftAPI.GetMintedTokenQuery(workId: workId)) { result in
+    func mintedToken(workId: String) -> Future<(erc721: NftGeneratorAPI.TokenFragment?, erc1155: NftGeneratorAPI.TokenFragment?), AppError> {
+        return Future<(erc721: NftGeneratorAPI.TokenFragment?, erc1155: NftGeneratorAPI.TokenFragment?), AppError> { promise in
+            cli.fetch(query: NftGeneratorAPI.GetMintedTokenQuery(workId: workId)) { result in
                 switch result {
                 case .success(let graphQLResult):
                     if let errors = graphQLResult.errors {
@@ -125,9 +125,9 @@ struct NftCaller {
         }
     }
 
-    func contracts(cursor: String?) -> Future<([NftAPI.ContractFragment], String?), AppError> {
-        return Future<([NftAPI.ContractFragment], String?), AppError> { promise in
-            cli.fetch(query: NftAPI.GetContractsQuery(cursor: cursor, limit: 10)) { result in
+    func contracts(cursor: String?) -> Future<([NftGeneratorAPI.ContractFragment], String?), AppError> {
+        return Future<([NftGeneratorAPI.ContractFragment], String?), AppError> { promise in
+            cli.fetch(query: NftGeneratorAPI.GetContractsQuery(cursor: cursor, limit: 10)) { result in
                 switch result {
                 case .success(let graphQLResult):
                     if let errors = graphQLResult.errors {
@@ -151,9 +151,9 @@ struct NftCaller {
         }
     }
 
-    func tokens(address: String, cursor: String?) -> Future<([NftAPI.TokenFragment], String?), AppError> {
-        return Future<([NftAPI.TokenFragment], String?), AppError> { promise in
-            cli.fetch(query: NftAPI.GetTokensQuery(address: address, cursor: cursor, limit: 18)) { result in
+    func tokens(address: String, cursor: String?) -> Future<([NftGeneratorAPI.TokenFragment], String?), AppError> {
+        return Future<([NftGeneratorAPI.TokenFragment], String?), AppError> { promise in
+            cli.fetch(query: NftGeneratorAPI.GetTokensQuery(address: address, cursor: cursor, limit: 18)) { result in
                 switch result {
                 case .success(let graphQLResult):
                     if let errors = graphQLResult.errors {
@@ -177,9 +177,9 @@ struct NftCaller {
         }
     }
 
-    func multiTokens(address: String, cursor: String?) -> Future<([NftAPI.TokenFragment], String?), AppError> {
-        return Future<([NftAPI.TokenFragment], String?), AppError> { promise in
-            cli.fetch(query: NftAPI.GetMultiTokensQuery(address: address, cursor: cursor, limit: 18)) { result in
+    func multiTokens(address: String, cursor: String?) -> Future<([NftGeneratorAPI.TokenFragment], String?), AppError> {
+        return Future<([NftGeneratorAPI.TokenFragment], String?), AppError> { promise in
+            cli.fetch(query: NftGeneratorAPI.GetMultiTokensQuery(address: address, cursor: cursor, limit: 18)) { result in
                 switch result {
                 case .success(let graphQLResult):
                     if let errors = graphQLResult.errors {
@@ -205,7 +205,7 @@ struct NftCaller {
 
     func mintERC721(workId: String, gsPath: String) -> Future<Void, AppError> {
         return Future<Void, AppError> { promise in
-            cli.perform(mutation: NftAPI.MintErc721Mutation(workId: workId, gsPath: gsPath)) { result in
+            cli.perform(mutation: NftGeneratorAPI.MintErc721Mutation(workId: workId, gsPath: gsPath)) { result in
                 switch result {
                 case .success(let graphQLResult):
                     if let errors = graphQLResult.errors {
@@ -226,7 +226,7 @@ struct NftCaller {
 
     func mintERC1155(workId: String, gsPath: String, amount: Int) -> Future<Void, AppError> {
         return Future<Void, AppError> { promise in
-            cli.perform(mutation: NftAPI.MintErc1155Mutation(workId: workId, gsPath: gsPath, amount: amount)) { result in
+            cli.perform(mutation: NftGeneratorAPI.MintErc1155Mutation(workId: workId, gsPath: gsPath, amount: amount)) { result in
                 switch result {
                 case .success(let graphQLResult):
                     if let errors = graphQLResult.errors {
@@ -245,9 +245,9 @@ struct NftCaller {
         }
     }
 
-    func sellERC721(workId: String, ether: Double) -> Future<NftAPI.TokenFragment, AppError> {
-        return Future<NftAPI.TokenFragment, AppError> { promise in
-            cli.perform(mutation: NftAPI.SellErc721Mutation(workId: workId, ether: ether)) { result in
+    func sellERC721(workId: String, ether: Double) -> Future<NftGeneratorAPI.TokenFragment, AppError> {
+        return Future<NftGeneratorAPI.TokenFragment, AppError> { promise in
+            cli.perform(mutation: NftGeneratorAPI.SellErc721Mutation(workId: workId, ether: ether)) { result in
                 switch result {
                 case .success(let graphQLResult):
                     if let errors = graphQLResult.errors {
@@ -271,9 +271,9 @@ struct NftCaller {
         }
     }
 
-    func sellERC1155(workId: String, ether: Double) -> Future<NftAPI.TokenFragment, AppError> {
-        return Future<NftAPI.TokenFragment, AppError> { promise in
-            cli.perform(mutation: NftAPI.SellErc1155Mutation(workId: workId, ether: ether)) { result in
+    func sellERC1155(workId: String, ether: Double) -> Future<NftGeneratorAPI.TokenFragment, AppError> {
+        return Future<NftGeneratorAPI.TokenFragment, AppError> { promise in
+            cli.perform(mutation: NftGeneratorAPI.SellErc1155Mutation(workId: workId, ether: ether)) { result in
                 switch result {
                 case .success(let graphQLResult):
                     if let errors = graphQLResult.errors {
@@ -297,9 +297,9 @@ struct NftCaller {
         }
     }
 
-    func transferERC721(workId: String, toAddress: String) -> Future<NftAPI.TokenFragment, AppError> {
-        return Future<NftAPI.TokenFragment, AppError> { promise in
-            cli.perform(mutation: NftAPI.TransferErc721Mutation(workId: workId, toAddress: toAddress)) { result in
+    func transferERC721(workId: String, toAddress: String) -> Future<NftGeneratorAPI.TokenFragment, AppError> {
+        return Future<NftGeneratorAPI.TokenFragment, AppError> { promise in
+            cli.perform(mutation: NftGeneratorAPI.TransferErc721Mutation(workId: workId, toAddress: toAddress)) { result in
                 switch result {
                 case .success(let graphQLResult):
                     if let errors = graphQLResult.errors {
@@ -323,9 +323,9 @@ struct NftCaller {
         }
     }
 
-    func transferERC1155(workId: String, toAddress: String) -> Future<NftAPI.TokenFragment, AppError> {
-        return Future<NftAPI.TokenFragment, AppError> { promise in
-            cli.perform(mutation: NftAPI.TransferErc1155Mutation(workId: workId, toAddress: toAddress)) { result in
+    func transferERC1155(workId: String, toAddress: String) -> Future<NftGeneratorAPI.TokenFragment, AppError> {
+        return Future<NftGeneratorAPI.TokenFragment, AppError> { promise in
+            cli.perform(mutation: NftGeneratorAPI.TransferErc1155Mutation(workId: workId, toAddress: toAddress)) { result in
                 switch result {
                 case .success(let graphQLResult):
                     if let errors = graphQLResult.errors {
@@ -351,7 +351,7 @@ struct NftCaller {
 
     func syncAllTokens() -> Future<Void, AppError> {
         return Future<Void, AppError> { promise in
-            cli.perform(mutation: NftAPI.SyncAllTokensMutation()) { result in
+            cli.perform(mutation: NftGeneratorAPI.SyncAllTokensMutation()) { result in
                 switch result {
                 case .success(let graphQLResult):
                     if let errors = graphQLResult.errors {
@@ -372,7 +372,7 @@ struct NftCaller {
 
     func bulkMintERC721(workId: String, ether: Double) -> Future<Void, AppError> {
         return Future<Void, AppError> { promise in
-            cli.perform(mutation: NftAPI.BulkMintErc721Mutation(workId: workId, ether: ether)) { result in
+            cli.perform(mutation: NftGeneratorAPI.BulkMintErc721Mutation(workId: workId, ether: ether)) { result in
                 switch result {
                 case .success(let graphQLResult):
                     if let errors = graphQLResult.errors {
@@ -393,7 +393,7 @@ struct NftCaller {
 
     func bulkMintERC1155(workId: String, amount: Int, ether: Double) -> Future<Void, AppError> {
         return Future<Void, AppError> { promise in
-            cli.perform(mutation: NftAPI.BulkMintErc1155Mutation(workId: workId, amount: amount, ether: ether)) { result in
+            cli.perform(mutation: NftGeneratorAPI.BulkMintErc1155Mutation(workId: workId, amount: amount, ether: ether)) { result in
                 switch result {
                 case .success(let graphQLResult):
                     if let errors = graphQLResult.errors {
@@ -414,7 +414,7 @@ struct NftCaller {
 
     func sellAllTokens(address: String, ether: Double) -> Future<Void, AppError> {
         return Future<Void, AppError> { promise in
-            cli.perform(mutation: NftAPI.SellAllTokenMutation(address: address, ether: ether)) { result in
+            cli.perform(mutation: NftGeneratorAPI.SellAllTokenMutation(address: address, ether: ether)) { result in
                 switch result {
                 case .success(let graphQLResult):
                     if let errors = graphQLResult.errors {

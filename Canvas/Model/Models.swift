@@ -12,18 +12,18 @@ struct FramesWithHasNext: Equatable {
 }
 
 struct ContractsWithCursor: Equatable {
-    let contracts: [NftAPI.ContractFragment]
+    let contracts: [NftGeneratorAPI.ContractFragment]
     let cursor: String?
 }
 
 struct TokensWithCursor: Equatable {
-    let tokens: [NftAPI.TokenFragment]
+    let tokens: [NftGeneratorAPI.TokenFragment]
     let cursor: String?
 }
 
 struct TokenBundle: Equatable {
-    let erc721: NftAPI.TokenFragment?
-    let erc1155: NftAPI.TokenFragment?
+    let erc721: NftGeneratorAPI.TokenFragment?
+    let erc1155: NftGeneratorAPI.TokenFragment?
 }
 
 struct Wallet: Equatable {

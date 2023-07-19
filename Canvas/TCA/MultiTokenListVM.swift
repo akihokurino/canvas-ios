@@ -16,7 +16,7 @@ enum MultiTokenListVM {
             let address = state.contract.address
             let cursor = state.cursor
 
-            return NftClient.shared.caller()
+            return NftGeneratorClient.shared.caller()
                 .flatMap { caller in caller.multiTokens(address: address, cursor: cursor) }
                 .map { TokensWithCursor(tokens: $0.0, cursor: $0.1) }
                 .subscribe(on: environment.backgroundQueue)
@@ -43,7 +43,7 @@ enum MultiTokenListVM {
             let address = state.contract.address
             let cursor = state.cursor
 
-            return NftClient.shared.caller()
+            return NftGeneratorClient.shared.caller()
                 .flatMap { caller in caller.multiTokens(address: address, cursor: cursor) }
                 .map { TokensWithCursor(tokens: $0.0, cursor: $0.1) }
                 .subscribe(on: environment.backgroundQueue)
@@ -70,7 +70,7 @@ enum MultiTokenListVM {
             let address = state.contract.address
             let cursor = state.cursor
 
-            return NftClient.shared.caller()
+            return NftGeneratorClient.shared.caller()
                 .flatMap { caller in caller.multiTokens(address: address, cursor: cursor) }
                 .map { TokensWithCursor(tokens: $0.0, cursor: $0.1) }
                 .subscribe(on: environment.backgroundQueue)
@@ -116,19 +116,19 @@ extension MultiTokenListVM {
         case endNext(Result<TokensWithCursor, AppError>)
         case shouldShowHUD(Bool)
         case shouldPullToRefresh(Bool)
-        case presentSellNftView(NftAPI.TokenFragment)
+        case presentSellNftView(NftGeneratorAPI.TokenFragment)
         case isPresentedErrorAlert(Bool)
     }
 
     struct State: Equatable {
-        let contract: NftAPI.ContractFragment
+        let contract: NftGeneratorAPI.ContractFragment
 
         var initialized = false
         var shouldShowHUD = false
         var shouldPullToRefresh = false
         var shouldShowNextLoading = false
         var cursor: String? = nil
-        var tokens: [NftAPI.TokenFragment] = []
+        var tokens: [NftGeneratorAPI.TokenFragment] = []
         var hasNext: Bool {
             cursor != ""
         }

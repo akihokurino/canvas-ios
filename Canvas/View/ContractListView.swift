@@ -103,7 +103,7 @@ struct ContractListView: View {
 }
 
 struct ContractRow: View {
-    let data: NftAPI.ContractFragment
+    let data: NftGeneratorAPI.ContractFragment
 
     private let gridItemLayout = [
         GridItem(.flexible()),

@@ -4,7 +4,7 @@ struct MintNftView: View {
     let data: AssetGeneratorAPI.FrameFragment
     let hasERC721: Bool
     let hasERC1155: Bool
-    let callback: (NftAPI.Schema, Int?) -> Void
+    let callback: (NftGeneratorAPI.Schema, Int?) -> Void
 
     @State var amount: String = ""
     

@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct BulkMintNftView: View {
-    let callback: (NftAPI.Schema, Int?, Double) -> Void
+    let callback: (NftGeneratorAPI.Schema, Int?, Double) -> Void
 
     @State var amount: String = ""
     @State var ether: String = ""

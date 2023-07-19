@@ -12,10 +12,10 @@ gen:
 		--target=swift --queries=./Canvas/Infra/AssetGenerator/asset-generator.app.graphql \
 		--localSchemaFile=./Canvas/Infra/AssetGenerator/asset-generator.schema.graphql \
 		--namespace=AssetGeneratorAPI
-	npx apollo client:codegen ./Canvas/Infra/NftServer/NftAPI.swift \
-		--target=swift --queries=./Canvas/Infra/NftServer/nft.app.graphql \
-		--localSchemaFile=./Canvas/Infra/NftServer/nft.schema.graphql \
-		--namespace=NftAPI
+	npx apollo client:codegen ./Canvas/Infra/NftGenerator/NftGeneratorAPI.swift \
+		--target=swift --queries=./Canvas/Infra/NftGenerator/nft-generator.app.graphql \
+		--localSchemaFile=./Canvas/Infra/NftGenerator/nft-generator.schema.graphql \
+		--namespace=NftGeneratorAPI
 
 cognito-set-password:
 	aws cognito-idp admin-set-user-password \
