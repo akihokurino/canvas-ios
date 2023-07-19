@@ -15,13 +15,13 @@ enum RootVM {
             let firebaseAuthFlow = { () -> AnyPublisher<Void, AppError> in
                 if FirebaseAuthManager.shared.isLogin() {
                     return FirebaseMessageManager.shared.token()
-                        .flatMap { token in CanvasClient.shared.caller().map { ($0, token) } }
+                        .flatMap { token in AssetGeneratorClient.shared.caller().map { ($0, token) } }
                         .flatMap { tp in tp.0.registerFCMToken(token: tp.1) }
                         .eraseToAnyPublisher()
                 } else {
                     return FirebaseAuthManager.shared.signInAnonymously()
                         .flatMap { _ in FirebaseMessageManager.shared.token() }
-                        .flatMap { token in CanvasClient.shared.caller().map { ($0, token) } }
+                        .flatMap { token in AssetGeneratorClient.shared.caller().map { ($0, token) } }
                         .flatMap { tp in tp.0.registerFCMToken(token: tp.1) }
                         .eraseToAnyPublisher()
                 }

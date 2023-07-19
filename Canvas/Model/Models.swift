@@ -2,12 +2,12 @@ import Foundation
 import SwiftUIPager
 
 struct ArchivesWithHasNext: Equatable {
-    let archives: [CanvasAPI.WorkFragment]
+    let archives: [AssetGeneratorAPI.WorkFragment]
     let hasNext: Bool
 }
 
 struct FramesWithHasNext: Equatable {
-    let frames: [CanvasAPI.FrameFragment]
+    let frames: [AssetGeneratorAPI.FrameFragment]
     let hasNext: Bool
 }
 

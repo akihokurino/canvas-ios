@@ -3,26 +3,26 @@ import Combine
 import Firebase
 import UIKit
 
-extension CanvasAPI.WorkFragment: Identifiable, Equatable {
-    public static func == (lhs: CanvasAPI.WorkFragment, rhs: CanvasAPI.WorkFragment) -> Bool {
+extension AssetGeneratorAPI.WorkFragment: Identifiable, Equatable {
+    public static func == (lhs: AssetGeneratorAPI.WorkFragment, rhs: AssetGeneratorAPI.WorkFragment) -> Bool {
         return lhs.id == rhs.id
     }
 }
 
-extension CanvasAPI.WorkFragment.Frame: Identifiable, Equatable {
-    public static func == (lhs: CanvasAPI.WorkFragment.Frame, rhs: CanvasAPI.WorkFragment.Frame) -> Bool {
+extension AssetGeneratorAPI.WorkFragment.Frame: Identifiable, Equatable {
+    public static func == (lhs: AssetGeneratorAPI.WorkFragment.Frame, rhs: AssetGeneratorAPI.WorkFragment.Frame) -> Bool {
         return lhs.id == rhs.id
     }
 }
 
-extension CanvasAPI.FrameFragment: Identifiable, Equatable {
-    public static func == (lhs: CanvasAPI.FrameFragment, rhs: CanvasAPI.FrameFragment) -> Bool {
+extension AssetGeneratorAPI.FrameFragment: Identifiable, Equatable {
+    public static func == (lhs: AssetGeneratorAPI.FrameFragment, rhs: AssetGeneratorAPI.FrameFragment) -> Bool {
         return lhs.id == rhs.id
     }
 }
 
-struct CanvasClient {
-    static let shared = CanvasClient()
+struct AssetGeneratorClient {
+    static let shared = AssetGeneratorClient()
 
     func caller() -> Future<CanvasCaller, AppError> {
         return Future<CanvasCaller, AppError> { promise in
@@ -64,9 +64,9 @@ struct CanvasClient {
 struct CanvasCaller {
     let cli: ApolloClient
 
-    func works(page: Int) -> Future<([CanvasAPI.WorkFragment], Bool), AppError> {
-        return Future<([CanvasAPI.WorkFragment], Bool), AppError> { promise in
-            cli.fetch(query: CanvasAPI.ListWorkQuery(page: page, limit: 10)) { result in
+    func works(page: Int) -> Future<([AssetGeneratorAPI.WorkFragment], Bool), AppError> {
+        return Future<([AssetGeneratorAPI.WorkFragment], Bool), AppError> { promise in
+            cli.fetch(query: AssetGeneratorAPI.ListWorkQuery(page: page, limit: 10)) { result in
                 switch result {
                 case .success(let graphQLResult):
                     if let errors = graphQLResult.errors {
@@ -93,9 +93,9 @@ struct CanvasCaller {
         }
     }
     
-    func framesByWork(workId: String) -> Future<[CanvasAPI.FrameFragment], AppError> {
-        return Future<[CanvasAPI.FrameFragment], AppError> { promise in
-            cli.fetch(query: CanvasAPI.ListFrameByWorkQuery(workId: workId)) { result in
+    func framesByWork(workId: String) -> Future<[AssetGeneratorAPI.FrameFragment], AppError> {
+        return Future<[AssetGeneratorAPI.FrameFragment], AppError> { promise in
+            cli.fetch(query: AssetGeneratorAPI.ListFrameByWorkQuery(workId: workId)) { result in
                 switch result {
                 case .success(let graphQLResult):
                     if let errors = graphQLResult.errors {
@@ -121,9 +121,9 @@ struct CanvasCaller {
         }
     }
 
-    func frames(page: Int) -> Future<([CanvasAPI.FrameFragment], Bool), AppError> {
-        return Future<([CanvasAPI.FrameFragment], Bool), AppError> { promise in
-            cli.fetch(query: CanvasAPI.ListFrameQuery(page: page, limit: 18)) { result in
+    func frames(page: Int) -> Future<([AssetGeneratorAPI.FrameFragment], Bool), AppError> {
+        return Future<([AssetGeneratorAPI.FrameFragment], Bool), AppError> { promise in
+            cli.fetch(query: AssetGeneratorAPI.ListFrameQuery(page: page, limit: 18)) { result in
                 switch result {
                 case .success(let graphQLResult):
                     if let errors = graphQLResult.errors {
@@ -153,7 +153,7 @@ struct CanvasCaller {
     func registerFCMToken(token: String) -> Future<Void, AppError> {
         let udid = UIDevice.current.identifierForVendor!.uuidString
         return Future<Void, AppError> { promise in
-            cli.perform(mutation: CanvasAPI.RegisterFmcTokenMutation(token: token, device: udid)) { result in
+            cli.perform(mutation: AssetGeneratorAPI.RegisterFmcTokenMutation(token: token, device: udid)) { result in
                 switch result {
                 case .success(let graphQLResult):
                     if let errors = graphQLResult.errors {

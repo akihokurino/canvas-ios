@@ -229,7 +229,7 @@ enum ArchiveDetailVM {
             return .none
         case .fetchFrames:
             let workId = state.archive.id
-            return CanvasClient.shared.caller()
+            return AssetGeneratorClient.shared.caller()
                 .flatMap { caller in caller.framesByWork(workId: workId) }
                 .subscribe(on: environment.backgroundQueue)
                 .receive(on: environment.mainQueue)
@@ -260,7 +260,7 @@ extension ArchiveDetailVM {
         case endRefresh(Result<TokenBundle, AppError>)
         case shouldShowHUD(Bool)
         case shouldPullToRefresh(Bool)
-        case presentMintNftView(CanvasAPI.FrameFragment)
+        case presentMintNftView(AssetGeneratorAPI.FrameFragment)
         case isPresentedMintNftView(Bool)
         case presentBulkMintNftView
         case isPresentedBulkMintNftView(Bool)
@@ -280,14 +280,14 @@ extension ArchiveDetailVM {
         case transferERC1155(TransferInput)
         case transfered(Result<TokenBundle, AppError>)
         case fetchFrames
-        case frames(Result<[CanvasAPI.FrameFragment], AppError>)
+        case frames(Result<[AssetGeneratorAPI.FrameFragment], AppError>)
         case isPresentedErrorAlert(Bool)
     }
 
     struct State: Equatable {
-        let archive: CanvasAPI.WorkFragment
+        let archive: AssetGeneratorAPI.WorkFragment
 
-        var frames: [CanvasAPI.FrameFragment] = []
+        var frames: [AssetGeneratorAPI.FrameFragment] = []
         var initialized = false
         var shouldShowHUD = false
         var shouldPullToRefresh = false
@@ -295,7 +295,7 @@ extension ArchiveDetailVM {
         var erc1155: NftAPI.TokenFragment?
         var isPresentedMintNftView = false
         var isPresentedBulkMintNftView = false
-        var selectFrame: CanvasAPI.FrameFragment? = nil
+        var selectFrame: AssetGeneratorAPI.FrameFragment? = nil
         var isPresentedERC721SellNftView = false
         var isPresentedERC1155SellNftView = false
         var isPresentedErrorAlert = false

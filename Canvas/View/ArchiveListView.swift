@@ -88,7 +88,7 @@ struct ArchiveListView: View {
 }
 
 struct ArchiveRow: View {
-    let data: CanvasAPI.WorkFragment
+    let data: AssetGeneratorAPI.WorkFragment
 
     private let gridItemLayout = [
         GridItem(.flexible()),

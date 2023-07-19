@@ -85,7 +85,7 @@ extension AppDelegate: MessagingDelegate {
             return
         }
 
-        _ = CanvasClient.shared.caller()
+        _ = AssetGeneratorClient.shared.caller()
             .flatMap { caller in caller.registerFCMToken(token: token) }
             .subscribe(on: DispatchQueue.global())
             .receive(on: DispatchQueue.main)

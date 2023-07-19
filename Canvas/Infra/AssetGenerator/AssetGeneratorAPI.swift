@@ -4,8 +4,8 @@
 import Apollo
 import Foundation
 
-/// CanvasAPI namespace
-public enum CanvasAPI {
+/// AssetGeneratorAPI namespace
+public enum AssetGeneratorAPI {
   public final class ListWorkQuery: GraphQLQuery {
     /// The raw GraphQL definition of this operation.
     public let operationDefinition: String =

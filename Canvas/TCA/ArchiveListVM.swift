@@ -16,7 +16,7 @@ enum ArchiveListVM {
 
             let page = state.page
 
-            return CanvasClient.shared.caller()
+            return AssetGeneratorClient.shared.caller()
                 .flatMap { caller in caller.works(page: page) }
                 .map { ArchivesWithHasNext(archives: $0.0, hasNext: $0.1) }
                 .subscribe(on: environment.backgroundQueue)
@@ -43,7 +43,7 @@ enum ArchiveListVM {
 
             let page = state.page
 
-            return CanvasClient.shared.caller()
+            return AssetGeneratorClient.shared.caller()
                 .flatMap { caller in caller.works(page: page) }
                 .map { ArchivesWithHasNext(archives: $0.0, hasNext: $0.1) }
                 .subscribe(on: environment.backgroundQueue)
@@ -71,7 +71,7 @@ enum ArchiveListVM {
 
             let page = state.page
 
-            return CanvasClient.shared.caller()
+            return AssetGeneratorClient.shared.caller()
                 .flatMap { caller in caller.works(page: page) }
                 .map { ArchivesWithHasNext(archives: $0.0, hasNext: $0.1) }
                 .subscribe(on: environment.backgroundQueue)
@@ -134,7 +134,7 @@ extension ArchiveListVM {
         case endNext(Result<ArchivesWithHasNext, AppError>)
         case shouldShowHUD(Bool)
         case shouldPullToRefresh(Bool)
-        case presentDetailView(CanvasAPI.WorkFragment)
+        case presentDetailView(AssetGeneratorAPI.WorkFragment)
         case popDetailView
         case isPresentedErrorAlert(Bool)
 
@@ -148,7 +148,7 @@ extension ArchiveListVM {
         var shouldShowNextLoading = false
         var page = 1
         var hasNext = false
-        var archives: [CanvasAPI.WorkFragment] = []
+        var archives: [AssetGeneratorAPI.WorkFragment] = []
         var isPresentedErrorAlert = false
         var error: AppError?
 

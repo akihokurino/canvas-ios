@@ -16,7 +16,7 @@ enum FrameListVM {
 
             let page = state.page
 
-            return CanvasClient.shared.caller()
+            return AssetGeneratorClient.shared.caller()
                 .flatMap { caller in caller.frames(page: page) }
                 .map { FramesWithHasNext(frames: $0.0, hasNext: $0.1) }
                 .subscribe(on: environment.backgroundQueue)
@@ -41,7 +41,7 @@ enum FrameListVM {
 
             let page = state.page
 
-            return CanvasClient.shared.caller()
+            return AssetGeneratorClient.shared.caller()
                 .flatMap { caller in caller.frames(page: page) }
                 .map { FramesWithHasNext(frames: $0.0, hasNext: $0.1) }
                 .subscribe(on: environment.backgroundQueue)
@@ -67,7 +67,7 @@ enum FrameListVM {
 
             let page = state.page
             
-            return CanvasClient.shared.caller()
+            return AssetGeneratorClient.shared.caller()
                 .flatMap { caller in caller.frames(page: page) }
                 .map { FramesWithHasNext(frames: $0.0, hasNext: $0.1) }
                 .subscribe(on: environment.backgroundQueue)
@@ -119,7 +119,7 @@ extension FrameListVM {
         case endNext(Result<FramesWithHasNext, AppError>)
         case shouldShowHUD(Bool)
         case shouldPullToRefresh(Bool)
-        case presentDetailView(CanvasAPI.FrameFragment)
+        case presentDetailView(AssetGeneratorAPI.FrameFragment)
         case isPresentedDetailView(Bool)
         case isPresentedErrorAlert(Bool)
     }
@@ -132,8 +132,8 @@ extension FrameListVM {
         var page = 1
         var hasNext = false
         var isPresentedDetailView = false
-        var frames: [CanvasAPI.FrameFragment] = []
-        var selectFrame: CanvasAPI.FrameFragment? = nil
+        var frames: [AssetGeneratorAPI.FrameFragment] = []
+        var selectFrame: AssetGeneratorAPI.FrameFragment? = nil
         var isPresentedErrorAlert = false
         var error: AppError?
     }
