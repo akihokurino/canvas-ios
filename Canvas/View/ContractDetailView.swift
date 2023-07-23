@@ -58,7 +58,7 @@ struct ContractDetailView: View {
             .refreshable {
                 await viewStore.send(.startRefresh, while: \.shouldPullToRefresh)
             }
-            .navigationBarTitle("Canvas", displayMode: .inline)
+            .navigationBarTitle(viewStore.state.contract.name, displayMode: .inline)
             .onAppear {
                 viewStore.send(.startInitialize)
             }

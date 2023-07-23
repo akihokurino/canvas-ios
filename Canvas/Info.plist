@@ -4,5 +4,9 @@
 <dict>
 	<key>FirebaseAppDelegateProxyEnabled</key>
 	<false/>
+	<key>Wallet Secret</key>
+	<string>$(WALLET_SECRET)</string>
+	<key>Internal Token</key>
+	<string>$(INTERNAL_TOKEN)</string>
 </dict>
 </plist>

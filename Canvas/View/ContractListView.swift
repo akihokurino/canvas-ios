@@ -99,7 +99,7 @@ struct ContractRow: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            Text("Canvas / \(data.network.rawValue)").font(.headline)
+            Text("\(data.name) / \(data.network.rawValue)").font(.headline)
             Text(data.address).font(.subheadline)
                 .padding(.top, 1)
             Text("\(data.schema.rawValue)").font(.caption)

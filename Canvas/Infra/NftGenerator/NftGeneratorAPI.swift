@@ -748,8 +748,8 @@ public enum NftGeneratorAPI {
                 self.resultMap = unsafeResultMap
               }
 
-              public init(id: GraphQLID, address: String, tokenId: String, imageUrl: String, name: String, description: String, priceEth: Double? = nil, createdAt: String) {
-                self.init(unsafeResultMap: ["__typename": "Token", "id": id, "address": address, "tokenId": tokenId, "imageUrl": imageUrl, "name": name, "description": description, "priceEth": priceEth, "createdAt": createdAt])
+              public init(id: GraphQLID, address: String, tokenId: String, imageUrl: String, name: String, description: String, priceEth: Double? = nil, isOwner: Bool, createdAt: String) {
+                self.init(unsafeResultMap: ["__typename": "Token", "id": id, "address": address, "tokenId": tokenId, "imageUrl": imageUrl, "name": name, "description": description, "priceEth": priceEth, "isOwner": isOwner, "createdAt": createdAt])
               }
 
               public var __typename: String {
@@ -967,6 +967,7 @@ public enum NftGeneratorAPI {
       fragment ContractFragment on Contract {
         __typename
         address
+        name
         schema
         network
         createdAt
@@ -989,6 +990,7 @@ public enum NftGeneratorAPI {
       return [
         GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
         GraphQLField("address", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("name", type: .nonNull(.scalar(String.self))),
         GraphQLField("schema", type: .nonNull(.scalar(Schema.self))),
         GraphQLField("network", type: .nonNull(.scalar(Network.self))),
         GraphQLField("createdAt", type: .nonNull(.scalar(String.self))),
@@ -1002,8 +1004,8 @@ public enum NftGeneratorAPI {
       self.resultMap = unsafeResultMap
     }
 
-    public init(address: GraphQLID, schema: Schema, network: Network, createdAt: String, tokens: Token) {
-      self.init(unsafeResultMap: ["__typename": "Contract", "address": address, "schema": schema, "network": network, "createdAt": createdAt, "tokens": tokens.resultMap])
+    public init(address: GraphQLID, name: String, schema: Schema, network: Network, createdAt: String, tokens: Token) {
+      self.init(unsafeResultMap: ["__typename": "Contract", "address": address, "name": name, "schema": schema, "network": network, "createdAt": createdAt, "tokens": tokens.resultMap])
     }
 
     public var __typename: String {
@@ -1021,6 +1023,15 @@ public enum NftGeneratorAPI {
       }
       set {
         resultMap.updateValue(newValue, forKey: "address")
+      }
+    }
+
+    public var name: String {
+      get {
+        return resultMap["name"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "name")
       }
     }
 
@@ -1152,8 +1163,8 @@ public enum NftGeneratorAPI {
             self.resultMap = unsafeResultMap
           }
 
-          public init(id: GraphQLID, address: String, tokenId: String, imageUrl: String, name: String, description: String, priceEth: Double? = nil, createdAt: String) {
-            self.init(unsafeResultMap: ["__typename": "Token", "id": id, "address": address, "tokenId": tokenId, "imageUrl": imageUrl, "name": name, "description": description, "priceEth": priceEth, "createdAt": createdAt])
+          public init(id: GraphQLID, address: String, tokenId: String, imageUrl: String, name: String, description: String, priceEth: Double? = nil, isOwner: Bool, createdAt: String) {
+            self.init(unsafeResultMap: ["__typename": "Token", "id": id, "address": address, "tokenId": tokenId, "imageUrl": imageUrl, "name": name, "description": description, "priceEth": priceEth, "isOwner": isOwner, "createdAt": createdAt])
           }
 
           public var __typename: String {
@@ -1208,6 +1219,7 @@ public enum NftGeneratorAPI {
         name
         description
         priceEth
+        isOwner
         createdAt
       }
       """
@@ -1224,6 +1236,7 @@ public enum NftGeneratorAPI {
         GraphQLField("name", type: .nonNull(.scalar(String.self))),
         GraphQLField("description", type: .nonNull(.scalar(String.self))),
         GraphQLField("priceEth", type: .scalar(Double.self)),
+        GraphQLField("isOwner", type: .nonNull(.scalar(Bool.self))),
         GraphQLField("createdAt", type: .nonNull(.scalar(String.self))),
       ]
     }
@@ -1234,8 +1247,8 @@ public enum NftGeneratorAPI {
       self.resultMap = unsafeResultMap
     }
 
-    public init(id: GraphQLID, address: String, tokenId: String, imageUrl: String, name: String, description: String, priceEth: Double? = nil, createdAt: String) {
-      self.init(unsafeResultMap: ["__typename": "Token", "id": id, "address": address, "tokenId": tokenId, "imageUrl": imageUrl, "name": name, "description": description, "priceEth": priceEth, "createdAt": createdAt])
+    public init(id: GraphQLID, address: String, tokenId: String, imageUrl: String, name: String, description: String, priceEth: Double? = nil, isOwner: Bool, createdAt: String) {
+      self.init(unsafeResultMap: ["__typename": "Token", "id": id, "address": address, "tokenId": tokenId, "imageUrl": imageUrl, "name": name, "description": description, "priceEth": priceEth, "isOwner": isOwner, "createdAt": createdAt])
     }
 
     public var __typename: String {
@@ -1307,6 +1320,15 @@ public enum NftGeneratorAPI {
       }
       set {
         resultMap.updateValue(newValue, forKey: "priceEth")
+      }
+    }
+
+    public var isOwner: Bool {
+      get {
+        return resultMap["isOwner"]! as! Bool
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "isOwner")
       }
     }
 

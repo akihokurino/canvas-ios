@@ -34,7 +34,7 @@ struct NftGeneratorClient {
             let transport = RequestChainNetworkTransport(
                 interceptorProvider: provider,
                 endpointURL: URL(string: "https://canvas-nft-generator.akiho.app/graphql")!,
-                additionalHeaders: ["authorization": "bearer \("TODO")"]
+                additionalHeaders: ["x-sig": "dfc098a0c28eb19095c8857b0110918dff82907507572db21f811cbb34b6720c0a391da40955f48851dd17187e1477ffec520580f453922d1152bf4ff721b9681c"]
             )
 
             let apollo = ApolloClient(networkTransport: transport, store: store)
@@ -159,11 +159,6 @@ struct NftCaller {
                         }
                     }
 
-                    guard let data = graphQLResult.data else {
-                        promise(.failure(AppError.defaultError()))
-                        return
-                    }
-
                     promise(.success(()))
                 case .failure(let error):
                     promise(.failure(.plain(error.localizedDescription)))
@@ -183,11 +178,6 @@ struct NftCaller {
                             promise(.failure(.plain(messages.joined(separator: "\n"))))
                             return
                         }
-                    }
-
-                    guard let data = graphQLResult.data else {
-                        promise(.failure(AppError.defaultError()))
-                        return
                     }
 
                     promise(.success(()))

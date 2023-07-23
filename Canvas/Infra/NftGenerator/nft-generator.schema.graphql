@@ -8,6 +8,7 @@ directive @auth on FIELD
 type Contract {
   address: ID!
   walletAddress: String!
+  name: String!
   schema: Schema!
   network: Network!
   createdAt: DateTime!
@@ -124,6 +125,7 @@ type Token {
   name: String!
   description: String!
   priceEth: Float
+  isOwner: Boolean!
   createdAt: DateTime!
 }
 
