@@ -73,8 +73,8 @@ struct NftCaller {
         }
     }
 
-    func contracts(cursor: String?) -> Future<([NftGeneratorAPI.ContractFragment], String?), AppError> {
-        return Future<([NftGeneratorAPI.ContractFragment], String?), AppError> { promise in
+    func contracts(cursor: String?) -> Future<([NftGeneratorAPI.ContractFragment], String?, Bool), AppError> {
+        return Future<([NftGeneratorAPI.ContractFragment], String?, Bool), AppError> { promise in
             cli.fetch(query: NftGeneratorAPI.GetContractsQuery(cursor: cursor, limit: 10)) { result in
                 switch result {
                 case .success(let graphQLResult):
@@ -91,7 +91,7 @@ struct NftCaller {
                         return
                     }
 
-                    promise(.success((data.wallet.contracts.edges.map { $0.node.fragments.contractFragment }, data.wallet.contracts.edges.last?.cursor)))
+                    promise(.success((data.wallet.contracts.edges.map { $0.node.fragments.contractFragment }, data.wallet.contracts.edges.last?.cursor, data.wallet.contracts.pageInfo.hasNextPage)))
                 case .failure(let error):
                     promise(.failure(.plain(error.localizedDescription)))
                 }
@@ -99,8 +99,8 @@ struct NftCaller {
         }
     }
 
-    func tokens(address: String, cursor: String?) -> Future<([NftGeneratorAPI.TokenFragment], String?), AppError> {
-        return Future<([NftGeneratorAPI.TokenFragment], String?), AppError> { promise in
+    func tokens(address: String, cursor: String?) -> Future<([NftGeneratorAPI.TokenFragment], String?, Bool), AppError> {
+        return Future<([NftGeneratorAPI.TokenFragment], String?, Bool), AppError> { promise in
             cli.fetch(query: NftGeneratorAPI.GetTokensQuery(address: address, cursor: cursor, limit: 18)) { result in
                 switch result {
                 case .success(let graphQLResult):
@@ -117,7 +117,7 @@ struct NftCaller {
                         return
                     }
 
-                    promise(.success((data.contract.tokens.edges.map { $0.node.fragments.tokenFragment }, data.contract.tokens.edges.last?.cursor)))
+                    promise(.success((data.contract.tokens.edges.map { $0.node.fragments.tokenFragment }, data.contract.tokens.edges.last?.cursor, data.contract.tokens.pageInfo.hasNextPage)))
                 case .failure(let error):
                     promise(.failure(.plain(error.localizedDescription)))
                 }

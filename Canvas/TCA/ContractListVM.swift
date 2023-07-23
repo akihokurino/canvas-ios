@@ -12,12 +12,13 @@ enum ContractListVM {
 
             state.shouldShowHUD = true
             state.cursor = nil
+            state.hasNext = false
 
             let cursor = state.cursor
 
             return NftGeneratorClient.shared.caller()
                 .flatMap { caller in caller.contracts(cursor: cursor) }
-                .map { ContractsWithCursor(contracts: $0.0, cursor: $0.1) }
+                .map { ContractsWithCursor(contracts: $0.0, cursor: $0.1, hasNext: $0.2) }
                 .subscribe(on: environment.backgroundQueue)
                 .receive(on: environment.mainQueue)
                 .catchToEffect()
@@ -25,6 +26,7 @@ enum ContractListVM {
         case .endInitialize(.success(let result)):
             state.contracts = result.contracts
             state.cursor = result.cursor
+            state.hasNext = result.hasNext
             state.shouldShowHUD = false
 
             state.initialized = true
@@ -38,12 +40,13 @@ enum ContractListVM {
         case .startRefresh:
             state.shouldPullToRefresh = true
             state.cursor = nil
+            state.hasNext = false
 
             let cursor = state.cursor
 
             return NftGeneratorClient.shared.caller()
                 .flatMap { caller in caller.contracts(cursor: cursor) }
-                .map { ContractsWithCursor(contracts: $0.0, cursor: $0.1) }
+                .map { ContractsWithCursor(contracts: $0.0, cursor: $0.1, hasNext: $0.2) }
                 .subscribe(on: environment.backgroundQueue)
                 .receive(on: environment.mainQueue)
                 .catchToEffect()
@@ -51,6 +54,7 @@ enum ContractListVM {
         case .endRefresh(.success(let result)):
             state.contracts = result.contracts
             state.cursor = result.cursor
+            state.hasNext = result.hasNext
             state.shouldPullToRefresh = false
             return .none
         case .endRefresh(.failure(let error)):
@@ -64,12 +68,13 @@ enum ContractListVM {
             }
 
             state.shouldShowNextLoading = true
+            state.hasNext = false
 
             let cursor = state.cursor
 
             return NftGeneratorClient.shared.caller()
                 .flatMap { caller in caller.contracts(cursor: cursor) }
-                .map { ContractsWithCursor(contracts: $0.0, cursor: $0.1) }
+                .map { ContractsWithCursor(contracts: $0.0, cursor: $0.1, hasNext: $0.2) }
                 .subscribe(on: environment.backgroundQueue)
                 .receive(on: environment.mainQueue)
                 .catchToEffect()
@@ -77,6 +82,7 @@ enum ContractListVM {
         case .endNext(.success(let result)):
             state.contracts.append(contentsOf: result.contracts)
             state.cursor = result.cursor
+            state.hasNext = result.hasNext
             state.shouldShowNextLoading = false
             return .none
         case .endNext(.failure(let error)):
@@ -146,10 +152,7 @@ extension ContractListVM {
         var shouldShowNextLoading = false
         var cursor: String? = nil
         var contracts: [NftGeneratorAPI.ContractFragment] = []
-        var hasNext: Bool {
-            cursor != ""
-        }
-
+        var hasNext: Bool = false
         var isPresentedErrorAlert = false
         var error: AppError?
 

@@ -14,11 +14,13 @@ struct FramesWithHasNext: Equatable {
 struct ContractsWithCursor: Equatable {
     let contracts: [NftGeneratorAPI.ContractFragment]
     let cursor: String?
+    let hasNext: Bool
 }
 
 struct TokensWithCursor: Equatable {
     let tokens: [NftGeneratorAPI.TokenFragment]
     let cursor: String?
+    let hasNext: Bool
 }
 
 struct Wallet: Equatable {
