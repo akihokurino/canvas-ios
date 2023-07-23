@@ -3,158 +3,104 @@ schema {
   mutation: MutationRoot
 }
 
-type Publisher {
-  id: String!
-  walletAddress: String!
-  balance: Float!
-  erc721Balance: Int!
-  erc1155Balance: [Nft1155Balance!]!
-}
+directive @auth on FIELD
 
-input TransferERC1155Input {
-  workId: String!
-  toAddress: String!
-  amount: Int!
+type Contract {
+  address: ID!
+  walletAddress: String!
+  schema: Schema!
+  network: Network!
+  createdAt: DateTime!
+  tokens(after: String, before: String, first: Int, last: Int): TokenConnection!
+  stockTokens(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): TokenConnection!
+  sellOrderTokens(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): TokenConnection!
 }
 
 type ContractConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
   edges: [ContractEdge!]!
-  nextKey: String!
-  totalCount: Int
+
+  # A list of nodes.
+  nodes: [Contract!]!
 }
 
-input SellERC721Input {
-  workId: String!
-  ether: Float!
-}
-
-type FrameConnection {
-  edges: [FrameEdge!]!
-  nextKey: String!
-  totalCount: Int
-}
-
-type TokenConnection {
-  edges: [TokenEdge!]!
-  nextKey: String!
-  totalCount: Int
-}
-
-type MutationRoot {
-  registerPublisher(input: RegisterPublisherInput!): String!
-  syncCsv: Boolean!
-  importWork(input: ImportWorkInput!): Boolean!
-  importFrame(input: ImportFrameInput!): Boolean!
-  preSignUploadWork: PreSignUploadUrl!
-  preSignUploadFrame: PreSignUploadUrl!
-  deleteWork(id: String!): Boolean!
-  registerContract(input: RegisterContractInput!): Contract!
-  mintErc721(input: MintERC721Input!): Boolean!
-  bulkMintErc721(input: BulkMintERC721Input!): Boolean!
-  mintErc1155(input: MintERC1155Input!): Boolean!
-  bulkMintErc1155(input: BulkMintERC1155Input!): Boolean!
-  sellErc721(input: SellERC721Input!): Token!
-  sellErc1155(input: SellERC1155Input!): Token!
-  transferErc721(input: TransferERC721Input!): Token!
-  transferErc1155(input: TransferERC1155Input!): Token!
-  syncAllTokens: Boolean!
-  sellAllTokens(input: SellAllTokenInput!): Boolean!
-}
-
-input RegisterContractInput {
+input ContractCreateInput {
   address: String!
-  schema: Schema!
   abi: String!
 }
 
-type Token {
-  address: String!
-  workId: String!
-  tokenId: String!
-  name: String!
-  description: String!
-  imageUrl: String!
-  priceEth: Float
-  contract: Contract!
-  isOwn: Boolean!
+# An edge in a connection.
+type ContractEdge {
+  # The item at the end of the edge
+  node: Contract!
+
+  # A cursor for use in pagination
+  cursor: String!
 }
 
-input ImportWorkInput {
-  isAsync: Boolean!
-}
+scalar DateTime
 
-input MintERC721Input {
+input MintInput {
   workId: String!
   gsPath: String!
-  useIpfs: Boolean!
   isAsync: Boolean!
 }
 
-input SellAllTokenInput {
+type MutationRoot {
+  contractCreate(input: ContractCreateInput!): Contract!
+  mint(input: MintInput!): Boolean!
+  sell(input: SellInput!): Boolean!
+  transfer(input: TransferInput!): Boolean!
+}
+
+type MyWallet {
   address: String!
-  ether: Float!
+  balance: Float!
+  contracts(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): ContractConnection!
 }
 
-type Frame {
-  id: String!
-  workId: String!
-  imagePath: String!
-  signedImageUrl: String!
-  work: Work!
+enum Network {
+  AVALANCHE
 }
 
-input TransferERC721Input {
-  workId: String!
-  toAddress: String!
+# Information about pagination in a connection
+type PageInfo {
+  # When paginating backwards, are there more items?
+  hasPreviousPage: Boolean!
+
+  # When paginating forwards, are there more items?
+  hasNextPage: Boolean!
+
+  # When paginating backwards, the cursor to continue.
+  startCursor: String
+
+  # When paginating forwards, the cursor to continue.
+  endCursor: String
 }
 
 type QueryRoot {
-  me: Publisher!
-  works(nextKey: String, limit: Int): WorkConnection!
-  worksByIds(ids: [String!]!): [Work!]!
-  work(id: String!): Work!
-  frames(workId: String!, nextKey: String, limit: Int): FrameConnection!
-  contracts(nextKey: String, limit: Int): ContractConnection!
-  contractsByAddresses(addresses: [String!]!): [Contract!]!
-  contract(address: String!): Contract!
-  tokens(address: String!, nextKey: String, limit: Int): TokenConnection!
-  multiTokens(address: String!, nextKey: String, limit: Int): TokenConnection!
-  mintedToken(workId: String!): MintedToken!
-}
-
-type FrameEdge {
-  node: Frame!
-}
-
-type ContractEdge {
-  node: Contract!
-}
-
-input BulkMintERC721Input {
-  workId: String!
-  ether: Float!
-  useIpfs: Boolean!
-}
-
-type WorkConnection {
-  edges: [WorkEdge!]!
-  nextKey: String!
-  totalCount: Int
-}
-
-type Nft1155Balance {
-  tokenName: String!
-  balance: Int!
-}
-
-input ImportFrameInput {
-  isAsync: Boolean!
-}
-
-input SellERC1155Input {
-  workId: String!
-  ether: Float!
-  amount: Int!
+  wallet: MyWallet!
+  contract(address: ID!): Contract!
+  contractMulti(addresses: [ID!]!): [Contract!]!
+  token(address: String!, tokenId: String!): Token!
 }
 
 enum Schema {
@@ -162,62 +108,48 @@ enum Schema {
   ERC1155
 }
 
-type Work {
-  id: String!
-  videoPath: String!
-  signedVideoUrl: String!
-  frames: [Frame!]!
-}
-
-enum Network {
-  RINKEBY
-  GOERLI
-}
-
-type MintedToken {
-  erc721: Token
-  erc1155: Token
-}
-
-input BulkMintERC1155Input {
-  workId: String!
-  ether: Float!
-  amount: Int!
-  useIpfs: Boolean!
-}
-
-type Contract {
+input SellInput {
   address: String!
-  name: String!
-  schema: Schema!
-  network: Network!
-  tokens: [Token!]!
-  multiTokens: [Token!]!
-}
-
-input MintERC1155Input {
-  workId: String!
-  gsPath: String!
-  amount: Int!
-  useIpfs: Boolean!
+  tokenId: String!
+  ether: Float!
   isAsync: Boolean!
 }
 
-type PreSignUploadUrl {
-  url: String!
+type Token {
+  id: ID!
+  address: String!
+  tokenId: String!
+  workId: String!
+  imageUrl: String!
+  name: String!
+  description: String!
+  priceEth: Float
+  createdAt: DateTime!
 }
 
-input RegisterPublisherInput {
-  email: String!
-  password: String!
-  walletAddress: String!
-  walletSecret: String!
+type TokenConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [TokenEdge!]!
+
+  # A list of nodes.
+  nodes: [Token!]!
 }
 
+# An edge in a connection.
 type TokenEdge {
+  # The item at the end of the edge
   node: Token!
+
+  # A cursor for use in pagination
+  cursor: String!
 }
 
-type WorkEdge {
-  node: Work!
+input TransferInput {
+  address: String!
+  tokenId: String!
+  toAddress: String!
+  isAsync: Boolean!
 }

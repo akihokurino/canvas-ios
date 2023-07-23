@@ -19,39 +19,12 @@
       }
     },
     {
-      "identity" : "amplify-ios",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/aws-amplify/amplify-ios",
-      "state" : {
-        "revision" : "993864eeb1542b5794a4358c9aee9654b7c44bcc",
-        "version" : "1.21.0"
-      }
-    },
-    {
       "identity" : "apollo-ios",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apollographql/apollo-ios.git",
       "state" : {
         "revision" : "84c8fc2448d6b7285481bfa25da12668083859eb",
         "version" : "0.49.1"
-      }
-    },
-    {
-      "identity" : "aws-appsync-realtime-client-ios",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/aws-amplify/aws-appsync-realtime-client-ios.git",
-      "state" : {
-        "revision" : "57d5df1590e9ead5a0c3677ffa8d83688bd48608",
-        "version" : "1.9.0"
-      }
-    },
-    {
-      "identity" : "aws-sdk-ios-spm",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/aws-amplify/aws-sdk-ios-spm.git",
-      "state" : {
-        "revision" : "2fbb2199cee0124c584e58c5753c05e10e7d7348",
-        "version" : "2.27.1"
       }
     },
     {
@@ -160,15 +133,6 @@
       "state" : {
         "revision" : "0a9893ec030501a3956bee572d6b4fdd3ae158a1",
         "version" : "0.12.2"
-      }
-    },
-    {
-      "identity" : "starscream",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/daltoniam/Starscream",
-      "state" : {
-        "revision" : "df8d82047f6654d8e4b655d1b1525c64e1059d21",
-        "version" : "4.0.4"
       }
     },
     {

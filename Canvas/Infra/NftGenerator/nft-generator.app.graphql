@@ -1,165 +1,89 @@
-query GetMe {
-    me {
-        id
-        walletAddress
+query GetWallet {
+    wallet {
+        address
         balance
-        erc721Balance
-        erc1155Balance {
-            tokenName
-            balance
-        }
-    }
-}
-
-query GetMintedToken($workId: String!) {
-    mintedToken(workId: $workId) {
-        erc721 {
-            ...TokenFragment
-        }
-        erc1155 {
-            ...TokenFragment
-        }
     }
 }
 
 query GetContracts($cursor: String, $limit: Int!) {
-    contracts(nextKey: $cursor, limit: $limit) {
-        edges {
-            node {
-                ...ContractFragment
+    wallet {
+        contracts(last: $limit, before: $cursor) {
+            pageInfo {
+                hasNextPage
+            }
+            edges {
+                cursor
+                node {
+                    ...ContractFragment
+                }
             }
         }
-        nextKey
     }
 }
 
-query GetTokens($address: String!, $cursor: String, $limit: Int!) {
-    tokens(address: $address, nextKey: $cursor, limit: $limit) {
-        edges {
-            node {
-                ...TokenFragment
+query GetTokens($address: ID!, $cursor: String, $limit: Int!) {
+    contract(address: $address) {
+        tokens(last: $limit, before: $cursor) {
+            pageInfo {
+                hasNextPage
+            }
+            edges {
+                cursor
+                node {
+                    ...TokenFragment
+                }
             }
         }
-        nextKey
-    }
-}
-
-query GetMultiTokens($address: String!, $cursor: String, $limit: Int!) {
-    multiTokens(address: $address, nextKey: $cursor, limit: $limit) {
-        edges {
-            node {
-                ...TokenFragment
-            }
-        }
-        nextKey
     }
 }
 
 fragment ContractFragment on Contract {
     address
-    name
     schema
     network
-    tokens {
-        ...TokenFragment
-    }
-    multiTokens {
-        ...TokenFragment
+    createdAt
+    tokens(last: 3) {
+        edges {
+            node {
+                ...TokenFragment
+            }
+        }
     }
 }
 
 fragment TokenFragment on Token {
+    id
     address
-    workId
     tokenId
+    imageUrl
     name
     description
-    imageUrl
-    isOwn
     priceEth
+    createdAt
 }
 
-mutation MintERC721($workId: String!, $gsPath: String!) {
-    mintErc721(input: {
+mutation Mint($workId: String!, $gsPath: String!) {
+    mint(input: {
         workId: $workId,
         gsPath: $gsPath,
-        useIpfs: true,
         isAsync: true
     })
 }
 
-mutation MintERC1155($workId: String!, $gsPath: String!, $amount: Int!) {
-    mintErc1155(input: {
-        workId: $workId,
-        gsPath: $gsPath,
-        amount: $amount,
-        useIpfs: true,
-        isAsync: true
-    })
-}
-
-mutation SellERC721($workId: String!, $ether: Float!) {
-    sellErc721(input: {
-        workId: $workId,
-        ether: $ether,
-    }) {
-        ...TokenFragment
-    }
-}
-
-mutation SellERC1155($workId: String!, $ether: Float!) {
-    sellErc1155(input: {
-        workId: $workId,
-        ether: $ether,
-        amount: 1,
-    }) {
-        ...TokenFragment
-    }
-}
-
-mutation TransferERC721($workId: String!, $toAddress: String!) {
-    transferErc721(input: {
-        workId: $workId,
-        toAddress: $toAddress,
-    }) {
-        ...TokenFragment
-    }
-}
-
-mutation TransferERC1155($workId: String!, $toAddress: String!) {
-    transferErc1155(input: {
-        workId: $workId,
-        toAddress: $toAddress,
-        amount: 1,
-    }) {
-        ...TokenFragment
-    }
-}
-
-mutation BulkMintERC721($workId: String!, $ether: Float!) {
-    bulkMintErc721(input: {
-        workId: $workId,
-        ether: $ether,
-        useIpfs: true,
-    })
-}
-
-mutation BulkMintERC1155($workId: String!, $amount: Int!, $ether: Float!) {
-    bulkMintErc1155(input: {
-        workId: $workId,
-        amount: $amount,
-        ether: $ether,
-        useIpfs: true,
-    })
-}
-
-mutation SyncAllTokens {
-    syncAllTokens
-}
-
-mutation SellAllToken($address: String!, $ether: Float!) {
-    sellAllTokens(input: {
+mutation Sell($address: String!, $tokenId: String!, $ether: Float!) {
+    sell(input: {
         address: $address,
+        tokenId: $tokenId,
         ether: $ether,
+        isAsync: true
+    })
+}
+
+mutation Transfer($address: String!, $tokenId: String!, $toAddress: String!) {
+    transfer(input: {
+        address: $address,
+        tokenId: $tokenId,
+        toAddress: $toAddress,
+        isAsync: true
     })
 }

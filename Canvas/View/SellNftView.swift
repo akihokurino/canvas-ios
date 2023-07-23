@@ -20,16 +20,16 @@ struct SellNftView: View {
                 Spacer().frame(height: 10)
                 TextFieldView(value: $ether, label: "売買額（Ether）", keyboardType: .decimalPad, isDisable: token.priceEth != nil)
                 Spacer().frame(height: 10)
-                TextFieldView(value: $address, label: "宛先", keyboardType: .emailAddress, isDisable: !token.isOwn)
+                TextFieldView(value: $address, label: "宛先", keyboardType: .emailAddress, isDisable: false)
                 Spacer()
                 HStack {
-                    ActionButton(text: "売り注文", buttonType: !token.isOwn || token.priceEth != nil ? .disable : .primary) {
+                    ActionButton(text: "売り注文", buttonType: .primary) {
                         if !ether.isEmpty {
                             sell(Double(ether)!)
                         }
                     }
                     Spacer()
-                    ActionButton(text: "送付", buttonType: !token.isOwn ? .disable : .primary) {
+                    ActionButton(text: "送付", buttonType: .primary) {
                         if !address.isEmpty {
                             transfer(address)
                         }

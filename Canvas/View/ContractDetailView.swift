@@ -5,8 +5,6 @@ import SwiftUIPager
 struct ContractDetailView: View {
     let store: Store<ContractDetailVM.State, ContractDetailVM.Action>
 
-    @State private var presentMenu = false
-
     private let thumbnailSize = UIScreen.main.bounds.size.width / 3
     private let gridItemLayout = [
         GridItem(.flexible()),
@@ -16,42 +14,36 @@ struct ContractDetailView: View {
 
     var body: some View {
         WithViewStore(store) { viewStore in
-            Picker("", selection: viewStore.binding(
-                get: \.currentSelection,
-                send: ContractDetailVM.Action.changePage
-            )) {
-                Text("通常").tag(0)
-                Text("一括").tag(1)
-            }
-            .pickerStyle(SegmentedPickerStyle())
-            .padding(EdgeInsets(top: 0, leading: 12, bottom: 0, trailing: 12))
-
-            Pager(
-                page: viewStore.currentPage,
-                data: viewStore.pageIndexes,
-                id: \.hashValue,
-                content: { index in
-                    if index == 0 {
-                        IfLetStore(
-                            store.scope(
-                                state: { $0.tokenListView },
-                                action: ContractDetailVM.Action.tokenListView
-                            ),
-                            then: TokenListView.init(store:)
-                        )
-                    } else {
-                        IfLetStore(
-                            store.scope(
-                                state: { $0.multiTokenListView },
-                                action: ContractDetailVM.Action.multiTokenListView
-                            ),
-                            then: MultiTokenListView.init(store:)
-                        )
+            ScrollView {
+                LazyVGrid(columns: gridItemLayout, alignment: HorizontalAlignment.leading, spacing: 3) {
+                    ForEach(viewStore.state.tokens) { data in
+                        Button(action: {
+                            viewStore.send(.presentSellNftView(data))
+                        }) {
+                            RemoteImageView(url: data.imageUrl)
+                                .scaledToFit()
+                                .frame(width: thumbnailSize)
+                        }
                     }
                 }
-            )
-            .onPageChanged { index in
-                viewStore.send(.changePage(index))
+
+                if viewStore.state.initialized {
+                    if viewStore.state.hasNext {
+                        HStack {
+                            Spacer()
+                            ProgressView()
+                            Spacer()
+                        }
+                        .frame(height: 60)
+                        .onTapGesture {
+                            // TODO: onAppearでInfinityScroll実現できない
+                            // ロード時に全てのCellがonAppearしてしまう
+                            viewStore.send(.startNext)
+                        }
+                    } else {
+                        Spacer().frame(height: 60)
+                    }
+                }
             }
             .overlay(
                 Group {
@@ -63,56 +55,23 @@ struct ContractDetailView: View {
                     }
                 }, alignment: .center
             )
-            .navigationBarTitle(viewStore.state.contract.name, displayMode: .inline)
-            .navigationBarItems(trailing: Button(action: {
-                presentMenu = true
-            }) {
-                Image(systemName: "ellipsis")
-            })
-            .actionSheet(isPresented: $presentMenu) {
-                ActionSheet(title: Text("メニュー"), buttons:
-                    [
-                        .default(Text("一括売り注文")) {
-                            viewStore.send(.presentBulkSellNftView)
-                        },
-                        .cancel(),
-                    ])
+            .refreshable {
+                await viewStore.send(.startRefresh, while: \.shouldPullToRefresh)
             }
-            .sheet(isPresented: viewStore.binding(
-                get: \.isPresentedBulkSellNftView,
-                send: ContractDetailVM.Action.isPresentedBulkSellNftView
-            )) {
-                BulkSellNftView { ether in
-                    viewStore.send(.isPresentedBulkSellNftView(false))
-                    viewStore.send(.startSellAllTokens(SellAllTokensInput(ether: ether)))
-                }
+            .navigationBarTitle("Canvas", displayMode: .inline)
+            .onAppear {
+                viewStore.send(.startInitialize)
             }
             .sheet(isPresented: viewStore.binding(
                 get: \.isPresentedSellNftView,
                 send: ContractDetailVM.Action.isPresentedSellNftView
             )) {
                 SellNftView(token: viewStore.state.selectToken!, sell: { ether in
-                    switch viewStore.state.contract.schema {
-                    case .erc721:
-                        viewStore.send(.isPresentedSellNftView(false))
-                        viewStore.send(.sellERC721(SellInput(ether: ether)))
-                    case .erc1155:
-                        viewStore.send(.isPresentedSellNftView(false))
-                        viewStore.send(.sellERC1155(SellInput(ether: ether)))
-                    default:
-                        break
-                    }
+                    viewStore.send(.isPresentedSellNftView(false))
+                    viewStore.send(.sell(SellInput(ether: ether)))
                 }, transfer: { address in
-                    switch viewStore.state.contract.schema {
-                    case .erc721:
-                        viewStore.send(.isPresentedSellNftView(false))
-                        viewStore.send(.transferERC721(TransferInput(toAddress: address)))
-                    case .erc1155:
-                        viewStore.send(.isPresentedSellNftView(false))
-                        viewStore.send(.transferERC1155(TransferInput(toAddress: address)))
-                    default:
-                        break
-                    }
+                    viewStore.send(.isPresentedSellNftView(false))
+                    viewStore.send(.transfer(TransferInput(toAddress: address)))
                 })
             }
             .alert(

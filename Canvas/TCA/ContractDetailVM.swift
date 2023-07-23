@@ -6,114 +6,135 @@ import SwiftUIPager
 enum ContractDetailVM {
     static let reducer = Reducer<State, Action, Environment> { state, action, environment in
         switch action {
-        case .changePage(let index):
-            state.currentPage = .withIndex(index)
-            state.currentSelection = index
+        case .startInitialize:
+            guard !state.initialized else {
+                return .none
+            }
+
+            state.shouldShowHUD = true
+            state.cursor = nil
+
+            let address = state.contract.address
+            let cursor = state.cursor
+
+            return NftGeneratorClient.shared.caller()
+                .flatMap { caller in caller.tokens(address: address, cursor: cursor) }
+                .map { TokensWithCursor(tokens: $0.0, cursor: $0.1) }
+                .subscribe(on: environment.backgroundQueue)
+                .receive(on: environment.mainQueue)
+                .catchToEffect()
+                .map(ContractDetailVM.Action.endInitialize)
+        case .endInitialize(.success(let result)):
+            state.tokens = result.tokens
+            state.cursor = result.cursor
+            state.shouldShowHUD = false
+
+            state.initialized = true
+
+            return .none
+        case .endInitialize(.failure(let error)):
+            state.shouldShowHUD = false
+            state.isPresentedErrorAlert = true
+            state.error = error
+            return .none
+        case .startRefresh:
+            state.shouldPullToRefresh = true
+            state.cursor = nil
+
+            let address = state.contract.address
+            let cursor = state.cursor
+
+            return NftGeneratorClient.shared.caller()
+                .flatMap { caller in caller.tokens(address: address, cursor: cursor) }
+                .map { TokensWithCursor(tokens: $0.0, cursor: $0.1) }
+                .subscribe(on: environment.backgroundQueue)
+                .receive(on: environment.mainQueue)
+                .catchToEffect()
+                .map(ContractDetailVM.Action.endRefresh)
+        case .endRefresh(.success(let result)):
+            state.tokens = result.tokens
+            state.cursor = result.cursor
+            state.shouldPullToRefresh = false
+            return .none
+        case .endRefresh(.failure(let error)):
+            state.shouldPullToRefresh = false
+            state.isPresentedErrorAlert = true
+            state.error = error
+            return .none
+        case .startNext:
+            guard !state.shouldShowNextLoading, state.hasNext else {
+                return .none
+            }
+
+            state.shouldShowNextLoading = true
+
+            let address = state.contract.address
+            let cursor = state.cursor
+
+            return NftGeneratorClient.shared.caller()
+                .flatMap { caller in caller.tokens(address: address, cursor: cursor) }
+                .map { TokensWithCursor(tokens: $0.0, cursor: $0.1) }
+                .subscribe(on: environment.backgroundQueue)
+                .receive(on: environment.mainQueue)
+                .catchToEffect()
+                .map(ContractDetailVM.Action.endNext)
+        case .endNext(.success(let result)):
+            state.tokens.append(contentsOf: result.tokens)
+            state.cursor = result.cursor
+            state.shouldShowNextLoading = false
+            return .none
+        case .endNext(.failure(let error)):
+            state.shouldShowNextLoading = false
+            state.isPresentedErrorAlert = true
+            state.error = error
             return .none
         case .shouldShowHUD(let val):
             state.shouldShowHUD = val
             return .none
+        case .shouldPullToRefresh(let val):
+            state.shouldPullToRefresh = val
+            return .none
         case .isPresentedSellNftView(let val):
             state.isPresentedSellNftView = val
             return .none
-        case .presentBulkSellNftView:
-            state.isPresentedBulkSellNftView = true
-            return .none
-        case .isPresentedBulkSellNftView(let val):
-            state.isPresentedBulkSellNftView = val
-            return .none
-        case .sellERC721(let input):
+        case .sell(let input):
             guard let token = state.selectToken else {
                 return .none
             }
             state.shouldShowHUD = true
 
             return NftGeneratorClient.shared.caller()
-                .flatMap { caller in caller.sellERC721(workId: token.workId, ether: input.ether) }
+                .flatMap { caller in caller.sell(address: token.address, tokenId: token.tokenId, ether: input.ether) }
                 .subscribe(on: environment.backgroundQueue)
+                .map { _ in true }
                 .receive(on: environment.mainQueue)
                 .catchToEffect()
                 .map(ContractDetailVM.Action.selled)
-        case .sellERC1155(let input):
-            guard let token = state.selectToken else {
-                return .none
-            }
-            state.shouldShowHUD = true
-
-            return NftGeneratorClient.shared.caller()
-                .flatMap { caller in caller.sellERC1155(workId: token.workId, ether: input.ether) }
-                .subscribe(on: environment.backgroundQueue)
-                .receive(on: environment.mainQueue)
-                .catchToEffect()
-                .map(ContractDetailVM.Action.selled)
-        case .selled(.success(let token)):
+        case .selled(.success(_)):
             state.shouldShowHUD = false
-            if state.tokenListView != nil {
-                state.tokenListView!.tokens = state.tokenListView!.tokens.map { $0.id == token.id ? token : $0 }
-            }
-            if state.multiTokenListView != nil {
-                state.multiTokenListView!.tokens = state.multiTokenListView!.tokens.map { $0.id == token.id ? token : $0 }
-            }
             return .none
         case .selled(.failure(let error)):
             state.shouldShowHUD = false
             state.isPresentedErrorAlert = true
             state.error = error
             return .none
-        case .transferERC721(let input):
+        case .transfer(let input):
             guard let token = state.selectToken else {
                 return .none
             }
             state.shouldShowHUD = true
 
             return NftGeneratorClient.shared.caller()
-                .flatMap { caller in caller.transferERC721(workId: token.workId, toAddress: input.toAddress) }
+                .flatMap { caller in caller.transfer(address: token.address, tokenId: token.tokenId, toAddress: input.toAddress) }
                 .subscribe(on: environment.backgroundQueue)
+                .map { _ in true }
                 .receive(on: environment.mainQueue)
                 .catchToEffect()
                 .map(ContractDetailVM.Action.transfered)
-        case .transferERC1155(let input):
-            guard let token = state.selectToken else {
-                return .none
-            }
-            state.shouldShowHUD = true
-
-            return NftGeneratorClient.shared.caller()
-                .flatMap { caller in caller.transferERC1155(workId: token.workId, toAddress: input.toAddress) }
-                .subscribe(on: environment.backgroundQueue)
-                .receive(on: environment.mainQueue)
-                .catchToEffect()
-                .map(ContractDetailVM.Action.selled)
-        case .transfered(.success(let token)):
+        case .transfered(.success(_)):
             state.shouldShowHUD = false
-            if state.tokenListView != nil {
-                state.tokenListView!.tokens = state.tokenListView!.tokens.map { $0.id == token.id ? token : $0 }
-            }
-            if state.multiTokenListView != nil {
-                state.multiTokenListView!.tokens = state.multiTokenListView!.tokens.map { $0.id == token.id ? token : $0 }
-            }
             return .none
         case .transfered(.failure(let error)):
-            state.shouldShowHUD = false
-            state.isPresentedErrorAlert = true
-            state.error = error
-            return .none
-        case .startSellAllTokens(let data):
-            state.shouldShowHUD = true
-
-            let address = state.contract.address
-
-            return NftGeneratorClient.shared.caller()
-                .flatMap { caller in caller.sellAllTokens(address: address, ether: data.ether) }
-                .map { true }
-                .subscribe(on: environment.backgroundQueue)
-                .receive(on: environment.mainQueue)
-                .catchToEffect()
-                .map(ContractDetailVM.Action.endSellAllTokens)
-        case .endSellAllTokens(.success(_)):
-            state.shouldShowHUD = false
-            return .none
-        case .endSellAllTokens(.failure(let error)):
             state.shouldShowHUD = false
             state.isPresentedErrorAlert = true
             state.error = error
@@ -124,87 +145,49 @@ enum ContractDetailVM {
                 state.error = nil
             }
             return .none
-
-        case .tokenListView(let action):
-            switch action {
-            case .presentSellNftView(let data):
-                state.selectToken = data
-                state.isPresentedSellNftView = true
-                return .none
-            default:
-                return .none
-            }
-        case .multiTokenListView(let action):
-            switch action {
-            case .presentSellNftView(let data):
-                state.selectToken = data
-                state.isPresentedSellNftView = true
-                return .none
-            default:
-                return .none
-            }
+        case .presentSellNftView(let data):
+            state.selectToken = data
+            state.isPresentedSellNftView = true
+            return .none
         }
     }
-    .connect(
-        TokenListVM.reducer,
-        state: \.tokenListView,
-        action: /ContractDetailVM.Action.tokenListView,
-        environment: { _environment in
-            TokenListVM.Environment(
-                mainQueue: _environment.mainQueue,
-                backgroundQueue: _environment.backgroundQueue
-            )
-        }
-    )
-    .connect(
-        MultiTokenListVM.reducer,
-        state: \.multiTokenListView,
-        action: /ContractDetailVM.Action.multiTokenListView,
-        environment: { _environment in
-            MultiTokenListVM.Environment(
-                mainQueue: _environment.mainQueue,
-                backgroundQueue: _environment.backgroundQueue
-            )
-        }
-    )
 }
 
 extension ContractDetailVM {
     enum Action: Equatable {
-        case changePage(Int)
+        case startInitialize
+        case endInitialize(Result<TokensWithCursor, AppError>)
+        case startRefresh
+        case endRefresh(Result<TokensWithCursor, AppError>)
+        case startNext
+        case endNext(Result<TokensWithCursor, AppError>)
         case shouldShowHUD(Bool)
+        case shouldPullToRefresh(Bool)
+        case presentSellNftView(NftGeneratorAPI.TokenFragment)
         case isPresentedSellNftView(Bool)
-        case presentBulkSellNftView
-        case isPresentedBulkSellNftView(Bool)
-        case sellERC721(SellInput)
-        case sellERC1155(SellInput)
-        case selled(Result<NftGeneratorAPI.TokenFragment, AppError>)
-        case transferERC721(TransferInput)
-        case transferERC1155(TransferInput)
-        case transfered(Result<NftGeneratorAPI.TokenFragment, AppError>)
-        case startSellAllTokens(SellAllTokensInput)
-        case endSellAllTokens(Result<Bool, AppError>)
+        case sell(SellInput)
+        case selled(Result<Bool, AppError>)
+        case transfer(TransferInput)
+        case transfered(Result<Bool, AppError>)
         case isPresentedErrorAlert(Bool)
-
-        case tokenListView(TokenListVM.Action)
-        case multiTokenListView(MultiTokenListVM.Action)
     }
 
     struct State: Equatable {
         let contract: NftGeneratorAPI.ContractFragment
-        let pageIndexes = Array(0 ..< 2)
-        
+
+        var initialized = false
         var shouldShowHUD = false
-        var currentPage: Page = .withIndex(0)
-        var currentSelection: Int = 0
+        var shouldPullToRefresh = false
         var selectToken: NftGeneratorAPI.TokenFragment? = nil
         var isPresentedSellNftView = false
-        var isPresentedBulkSellNftView = false
         var isPresentedErrorAlert = false
         var error: AppError?
-
-        var tokenListView: TokenListVM.State?
-        var multiTokenListView: MultiTokenListVM.State?
+        var shouldShowNextLoading = false
+        var cursor: String? = nil
+        var tokens: [NftGeneratorAPI.TokenFragment] = []
+        var hasNext: Bool {
+            cursor != ""
+        }
     }
 
     struct Environment {
@@ -213,6 +196,10 @@ extension ContractDetailVM {
     }
 }
 
-struct SellAllTokensInput: Equatable {
+struct SellInput: Equatable {
     let ether: Double
+}
+
+struct TransferInput: Equatable {
+    let toAddress: String
 }

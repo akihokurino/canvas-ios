@@ -92,31 +92,11 @@ enum ContractListVM {
             return .none
         case .presentDetailView(let data):
             state.contractDetailView = ContractDetailVM.State(
-                contract: data,
-                tokenListView: TokenListVM.State(contract: data),
-                multiTokenListView: MultiTokenListVM.State(contract: data)
+                contract: data
             )
             return .none
         case .popDetailView:
             state.contractDetailView = nil
-            return .none
-        case .startSyncAllTokens:
-            state.shouldShowHUD = true
-
-            return NftGeneratorClient.shared.caller()
-                .flatMap { caller in caller.syncAllTokens() }
-                .map { true }
-                .subscribe(on: environment.backgroundQueue)
-                .receive(on: environment.mainQueue)
-                .catchToEffect()
-                .map(ContractListVM.Action.endSyncAllTokens)
-        case .endSyncAllTokens(.success(_)):
-            state.shouldShowHUD = false
-            return .none
-        case .endSyncAllTokens(.failure(let error)):
-            state.shouldShowHUD = false
-            state.isPresentedErrorAlert = true
-            state.error = error
             return .none
         case .isPresentedErrorAlert(let val):
             state.isPresentedErrorAlert = val
@@ -154,8 +134,6 @@ extension ContractListVM {
         case shouldPullToRefresh(Bool)
         case presentDetailView(NftGeneratorAPI.ContractFragment)
         case popDetailView
-        case startSyncAllTokens
-        case endSyncAllTokens(Result<Bool, AppError>)
         case isPresentedErrorAlert(Bool)
 
         case contractDetailView(ContractDetailVM.Action)

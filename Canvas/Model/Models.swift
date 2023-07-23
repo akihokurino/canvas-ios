@@ -21,11 +21,6 @@ struct TokensWithCursor: Equatable {
     let cursor: String?
 }
 
-struct TokenBundle: Equatable {
-    let erc721: NftGeneratorAPI.TokenFragment?
-    let erc1155: NftGeneratorAPI.TokenFragment?
-}
-
 struct Wallet: Equatable {
     let address: String
     let balance: Double

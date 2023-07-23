@@ -57,22 +57,8 @@ struct ContractListView: View {
                 await viewStore.send(.startRefresh, while: \.shouldPullToRefresh)
             }
             .navigationBarTitle("", displayMode: .inline)
-            .navigationBarItems(trailing: Button(action: {
-                presentMenu = true
-            }) {
-                Image(systemName: "ellipsis")
-            })
             .onAppear {
                 viewStore.send(.startInitialize)
-            }
-            .actionSheet(isPresented: $presentMenu) {
-                ActionSheet(title: Text("メニュー"), buttons:
-                    [
-                        .default(Text("OpenSeaと同期")) {
-                            viewStore.send(.startSyncAllTokens)
-                        },
-                        .cancel(),
-                    ])
             }
             .alert(
                 viewStore.error?.alert.title ?? "",
@@ -113,14 +99,14 @@ struct ContractRow: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            Text("\(data.name) / \(data.network.rawValue)").font(.headline)
+            Text("Canvas / \(data.network.rawValue)").font(.headline)
             Text(data.address).font(.subheadline)
                 .padding(.top, 1)
             Text("\(data.schema.rawValue)").font(.caption)
                 .padding(.top, 1)
 
             HStack {
-                ForEach((data.tokens.map { $0.fragments.tokenFragment } + data.multiTokens.map { $0.fragments.tokenFragment }).prefix(3)) { token in
+                ForEach((data.tokens.edges.map { $0.node.fragments.tokenFragment }).prefix(3)) { token in
                     RemoteImageView(url: token.imageUrl)
                         .aspectRatio(contentMode: .fit)
                         .frame(maxWidth: .infinity)

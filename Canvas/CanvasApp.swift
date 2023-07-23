@@ -1,5 +1,3 @@
-import Amplify
-import AWSCognitoAuthPlugin
 import Combine
 import ComposableArchitecture
 import Firebase
@@ -29,9 +27,6 @@ struct CanvasApp: App {
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         FirebaseApp.configure()
-
-        try! Amplify.add(plugin: AWSCognitoAuthPlugin())
-        try! Amplify.configure()
 
         Messaging.messaging().delegate = self
         UNUserNotificationCenter.current().delegate = self

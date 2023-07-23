@@ -27,12 +27,7 @@ enum RootVM {
                 }
             }
 
-            let amplifyAuthFlow = { () -> AnyPublisher<Void, AppError> in
-                AmplifyAuthManager.shared.signIn().eraseToAnyPublisher()
-            }
-
             return firebaseAuthFlow()
-                .flatMap { _ in amplifyAuthFlow() }
                 .map { _ in true }
                 .subscribe(on: environment.backgroundQueue)
                 .receive(on: environment.mainQueue)
