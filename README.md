@@ -8,8 +8,7 @@
 - firebase auth
 - firebase cloud storage
 - firebase messaging
-- aws cognito
-- aws amplify
+- web3swift ( https://github.com/web3swift-team/web3swift )
 - opensea
 
 ## Related
@@ -34,14 +33,3 @@ https://testnets.opensea.io/Akiho
 ## Videos
 
 <video witdth="300" src="https://user-images.githubusercontent.com/2268288/143589563-570158a9-ae23-4157-83ad-972104190f21.mp4">
-
-## Amplify Auth
-
-- https://docs.amplify.aws/sdk/auth/getting-started/q/platform/ios/
-- https://docs.amplify.aws/cli/auth/import/
-
-1. amplify init
-   amplify フォルダと各種設定ファイル、実際の amplify プロジェクトが生成される
-2. amplify import auth
-   既存の cognito をインポートする
-3. amplify push
