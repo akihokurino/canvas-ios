@@ -8,35 +8,29 @@ struct ContractDetailView: View {
     var body: some View {
         WithViewStore(store) { viewStore in
             List {
-                VStack {
-                    ForEach(viewStore.state.tokens) { data in
-                        Button(action: {
-                            viewStore.send(.presentSellNftView(data))
-                        }) {
-                            TokenRow(data: data)
-                        }
+                ForEach(viewStore.state.tokens) { data in
+                    Button(action: {
+                        viewStore.send(.presentSellNftView(data))
+                    }) {
+                        TokenRow(data: data)
                     }
+                }
+                .listRowSeparator(.hidden)
+                .buttonStyle(PlainButtonStyle())
+
+                if viewStore.state.hasNext {
+                    HStack {
+                        Spacer()
+                        ProgressView()
+                        Spacer()
+                    }
+                    .frame(height: 60)
                     .listRowSeparator(.hidden)
                     .buttonStyle(PlainButtonStyle())
-
-                    if viewStore.state.hasNext {
-                        HStack {
-                            Spacer()
-                            ProgressView()
-                            Spacer()
-                        }
-                        .frame(height: 60)
-                        .listRowSeparator(.hidden)
-                        .buttonStyle(PlainButtonStyle())
-                        .onTapGesture {
-                            // TODO: onAppearでInfinityScroll実現できない
-                            // ロード時に全てのCellがonAppearしてしまう
-                            viewStore.send(.startFetchNextToken)
-                        }
-                    } else {
-                        Spacer().frame(height: 60)
-                            .listRowSeparator(.hidden)
-                            .buttonStyle(PlainButtonStyle())
+                    .onTapGesture {
+                        // TODO: onAppearでInfinityScroll実現できない
+                        // ロード時に全てのCellがonAppearしてしまう
+                        viewStore.send(.startFetchNextToken)
                     }
                 }
             }

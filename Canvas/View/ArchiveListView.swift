@@ -9,35 +9,29 @@ struct ArchiveListView: View {
         WithViewStore(store) { viewStore in
             List {
                 if viewStore.state.initialized {
-                    VStack {
-                        ForEach(viewStore.state.archives) { item in
-                            Button(action: {
-                                viewStore.send(.presentDetailView(item))
-                            }) {
-                                ArchiveRow(data: item)
-                            }
+                    ForEach(viewStore.state.archives) { item in
+                        Button(action: {
+                            viewStore.send(.presentDetailView(item))
+                        }) {
+                            ArchiveRow(data: item)
                         }
+                    }
+                    .listRowSeparator(.hidden)
+                    .buttonStyle(PlainButtonStyle())
+
+                    if viewStore.state.hasNext {
+                        HStack {
+                            Spacer()
+                            ProgressView()
+                            Spacer()
+                        }
+                        .frame(height: 60)
                         .listRowSeparator(.hidden)
                         .buttonStyle(PlainButtonStyle())
-
-                        if viewStore.state.hasNext {
-                            HStack {
-                                Spacer()
-                                ProgressView()
-                                Spacer()
-                            }
-                            .frame(height: 60)
-                            .listRowSeparator(.hidden)
-                            .buttonStyle(PlainButtonStyle())
-                            .onTapGesture {
-                                // TODO: onAppearでInfinityScroll実現できない
-                                // ロード時に全てのCellがonAppearしてしまう
-                                viewStore.send(.startFetchNextArchive)
-                            }
-                        } else {
-                            Spacer().frame(height: 60)
-                                .listRowSeparator(.hidden)
-                                .buttonStyle(PlainButtonStyle())
+                        .onTapGesture {
+                            // TODO: onAppearでInfinityScroll実現できない
+                            // ロード時に全てのCellがonAppearしてしまう
+                            viewStore.send(.startFetchNextArchive)
                         }
                     }
                 }

@@ -22,7 +22,7 @@ struct RootView: View {
                             Image(systemName: "scribble.variable")
                                 .resizable()
                                 .frame(width: 50, height: 50, alignment: .center)
-                            Text("サンプル")
+                            Text("作品")
                         }
                     }.tag(1)
 
@@ -93,12 +93,6 @@ struct RootView: View {
             )
             .onAppear {
                 viewStore.send(.startInitialize)
-            }
-            .alert(isPresented: viewStore.binding(
-                get: \.isPresentedAlert,
-                send: RootVM.Action.presentAlert
-            )) {
-                Alert(title: Text(viewStore.alertText))
             }
             .alert(
                 viewStore.error?.alert.title ?? "",

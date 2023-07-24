@@ -10,35 +10,29 @@ struct ContractListView: View {
         WithViewStore(store) { viewStore in
             List {
                 if viewStore.state.initialized {
-                    VStack {
-                        ForEach(viewStore.state.contracts) { item in
-                            Button(action: {
-                                viewStore.send(.presentDetailView(item))
-                            }) {
-                                ContractRow(data: item)
-                            }
+                    ForEach(viewStore.state.contracts) { item in
+                        Button(action: {
+                            viewStore.send(.presentDetailView(item))
+                        }) {
+                            ContractRow(data: item)
                         }
+                    }
+                    .listRowSeparator(.hidden)
+                    .buttonStyle(PlainButtonStyle())
+
+                    if viewStore.state.hasNext {
+                        HStack {
+                            Spacer()
+                            ProgressView()
+                            Spacer()
+                        }
+                        .frame(height: 60)
                         .listRowSeparator(.hidden)
                         .buttonStyle(PlainButtonStyle())
-
-                        if viewStore.state.hasNext {
-                            HStack {
-                                Spacer()
-                                ProgressView()
-                                Spacer()
-                            }
-                            .frame(height: 60)
-                            .listRowSeparator(.hidden)
-                            .buttonStyle(PlainButtonStyle())
-                            .onTapGesture {
-                                // TODO: onAppearでInfinityScroll実現できない
-                                // ロード時に全てのCellがonAppearしてしまう
-                                viewStore.send(.startFetchNextContract)
-                            }
-                        } else {
-                            Spacer().frame(height: 60)
-                                .listRowSeparator(.hidden)
-                                .buttonStyle(PlainButtonStyle())
+                        .onTapGesture {
+                            // TODO: onAppearでInfinityScroll実現できない
+                            // ロード時に全てのCellがonAppearしてしまう
+                            viewStore.send(.startFetchNextContract)
                         }
                     }
                 }

@@ -55,9 +55,6 @@ enum RootVM {
         case .shouldShowHUD(let val):
             state.shouldShowHUD = val
             return .none
-        case .presentAlert(let val):
-            state.isPresentedAlert = val
-            return .none
         case .isPresentedErrorAlert(let val):
             state.isPresentedErrorAlert = val
             if !val {
@@ -68,23 +65,6 @@ enum RootVM {
         case .workListView(let action):
             return .none
         case .archivePageView(let action):
-            switch action {
-            case .archiveListView(let action):
-                switch action {
-                case .archiveDetailView(let action):
-                    switch action {
-                    case .endMint(.failure(_)):
-                        state.alertText = "Mintに失敗しました\nWalletの残高とIPFSサーバーの起動を確認してください"
-                        state.isPresentedAlert = true
-                    default:
-                        break
-                    }
-                default:
-                    break
-                }
-            default:
-                break
-            }
             return .none
         case .contractListView(let action):
             return .none
@@ -143,7 +123,6 @@ extension RootVM {
         case startInitialize
         case endInitialize(Result<Bool, AppError>)
         case shouldShowHUD(Bool)
-        case presentAlert(Bool)
         case isPresentedErrorAlert(Bool)
 
         case workListView(WorkListVM.Action)
@@ -155,8 +134,6 @@ extension RootVM {
     struct State: Equatable {
         var initialized = false
         var shouldShowHUD = false
-        var isPresentedAlert = false
-        var alertText = ""
         var isPresentedErrorAlert = false
         var error: AppError?
 
