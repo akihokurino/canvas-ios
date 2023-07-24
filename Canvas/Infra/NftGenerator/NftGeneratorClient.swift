@@ -18,28 +18,42 @@ extension NftGeneratorAPI.TokenFragment: Identifiable, Equatable {
     }
 }
 
-struct NftGeneratorClient {
+class NftGeneratorClient {
     static let shared = NftGeneratorClient()
+
+    var signature: String?
+
+    func getSignature() async -> String {
+        if signature != nil {
+            return signature!
+        } else {
+            signature = await signMessage(message: Env.internalToken, rawPrivateKey: Env.walletSecret)
+            return signature!
+        }
+    }
 
     func caller() -> Future<NftCaller, AppError> {
         return Future<NftCaller, AppError> { promise in
-            let cache = InMemoryNormalizedCache()
-            let store = ApolloStore(cache: cache)
-            let configuration = URLSessionConfiguration.default
-            configuration.timeoutIntervalForRequest = 60.0
-            configuration.timeoutIntervalForResource = 60.0
-            let client = URLSessionClient(sessionConfiguration: configuration)
-            let provider = NetworkInterceptorProvider(store: store, client: client)
+            Task {
+                let sig = await self.getSignature()
+                let cache = InMemoryNormalizedCache()
+                let store = ApolloStore(cache: cache)
+                let configuration = URLSessionConfiguration.default
+                configuration.timeoutIntervalForRequest = 60.0
+                configuration.timeoutIntervalForResource = 60.0
+                let client = URLSessionClient(sessionConfiguration: configuration)
+                let provider = NetworkInterceptorProvider(store: store, client: client)
 
-            let transport = RequestChainNetworkTransport(
-                interceptorProvider: provider,
-                endpointURL: URL(string: "https://canvas-nft-generator.akiho.app/graphql")!,
-                additionalHeaders: ["x-sig": "dfc098a0c28eb19095c8857b0110918dff82907507572db21f811cbb34b6720c0a391da40955f48851dd17187e1477ffec520580f453922d1152bf4ff721b9681c"]
-            )
+                let transport = RequestChainNetworkTransport(
+                    interceptorProvider: provider,
+                    endpointURL: URL(string: "https://canvas-nft-generator.akiho.app/graphql")!,
+                    additionalHeaders: ["x-sig": sig]
+                )
 
-            let apollo = ApolloClient(networkTransport: transport, store: store)
+                let apollo = ApolloClient(networkTransport: transport, store: store)
 
-            promise(.success(NftCaller(cli: apollo)))
+                promise(.success(NftCaller(cli: apollo)))
+            }
         }
     }
 }

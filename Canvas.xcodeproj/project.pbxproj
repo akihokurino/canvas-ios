@@ -17,7 +17,8 @@
 		0211F962288AB59E002A797E /* WorkListVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0211F961288AB59E002A797E /* WorkListVM.swift */; };
 		0219E5DE2A6D708B00516EDD /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 0219E5DD2A6D708A00516EDD /* Config.xcconfig */; };
 		0219E5E02A6D760C00516EDD /* Env.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0219E5DF2A6D760C00516EDD /* Env.swift */; };
-		0219E5E82A6D7B8800516EDD /* web3.swift in Frameworks */ = {isa = PBXBuildFile; productRef = 0219E5E72A6D7B8800516EDD /* web3.swift */; };
+		0219E5EA2A6E530D00516EDD /* Signer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0219E5E92A6E530D00516EDD /* Signer.swift */; };
+		0219E5F02A6E5A3C00516EDD /* web3swift in Frameworks */ = {isa = PBXBuildFile; productRef = 0219E5EF2A6E5A3C00516EDD /* web3swift */; };
 		021B286F270CB08C0093B0C9 /* CanvasApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 021B286E270CB08C0093B0C9 /* CanvasApp.swift */; };
 		021B2871270CB08C0093B0C9 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 021B2870270CB08C0093B0C9 /* RootView.swift */; };
 		021B2873270CB08D0093B0C9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 021B2872270CB08D0093B0C9 /* Assets.xcassets */; };
@@ -97,6 +98,7 @@
 		0211F961288AB59E002A797E /* WorkListVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkListVM.swift; sourceTree = "<group>"; };
 		0219E5DD2A6D708A00516EDD /* Config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		0219E5DF2A6D760C00516EDD /* Env.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Env.swift; sourceTree = "<group>"; };
+		0219E5E92A6E530D00516EDD /* Signer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Signer.swift; sourceTree = "<group>"; };
 		021B286B270CB08C0093B0C9 /* Canvas.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Canvas.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		021B286E270CB08C0093B0C9 /* CanvasApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasApp.swift; sourceTree = "<group>"; };
 		021B2870270CB08C0093B0C9 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
@@ -176,6 +178,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0205F1652823FCF2008B8FF8 /* FirebaseMessaging in Frameworks */,
+				0219E5F02A6E5A3C00516EDD /* web3swift in Frameworks */,
 				02AB3C3327D28470008043A6 /* ActivityIndicatorView in Frameworks */,
 				0231698228D72A470027FAF8 /* SwiftUIPager in Frameworks */,
 				029DDF0A2889BAA800118174 /* ComposableArchitecture in Frameworks */,
@@ -183,7 +186,6 @@
 				0205F1672823FCF2008B8FF8 /* FirebaseStorage in Frameworks */,
 				0205F1632823FCF2008B8FF8 /* FirebaseFunctions in Frameworks */,
 				026C5E702729BB0400995BCB /* Apollo in Frameworks */,
-				0219E5E82A6D7B8800516EDD /* web3.swift in Frameworks */,
 				0205F1612823FCF2008B8FF8 /* FirebaseFirestore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -303,6 +305,7 @@
 				028D3AA32729B1DA000EC82F /* FirebaseMessage.swift */,
 				029B30082722E959008BC3F3 /* FirebaseAuth.swift */,
 				02E20E2227CDFD1700AED50C /* NetworkInterceptor.swift */,
+				0219E5E92A6E530D00516EDD /* Signer.swift */,
 			);
 			path = Infra;
 			sourceTree = "<group>";
@@ -403,7 +406,7 @@
 				0205F1662823FCF2008B8FF8 /* FirebaseStorage */,
 				029DDF092889BAA800118174 /* ComposableArchitecture */,
 				0231698128D72A470027FAF8 /* SwiftUIPager */,
-				0219E5E72A6D7B8800516EDD /* web3.swift */,
+				0219E5EF2A6E5A3C00516EDD /* web3swift */,
 			);
 			productName = Canvas;
 			productReference = 021B286B270CB08C0093B0C9 /* Canvas.app */;
@@ -439,7 +442,7 @@
 				0205F15D2823FCF2008B8FF8 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				029DDF082889BAA800118174 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 				0231698028D72A470027FAF8 /* XCRemoteSwiftPackageReference "SwiftUIPager" */,
-				0219E5E62A6D7B8800516EDD /* XCRemoteSwiftPackageReference "web3" */,
+				0219E5EE2A6E5A3C00516EDD /* XCRemoteSwiftPackageReference "web3swift" */,
 			);
 			productRefGroup = 021B286C270CB08C0093B0C9 /* Products */;
 			projectDirPath = "";
@@ -489,6 +492,7 @@
 				028DC773271EC45200B7AF1B /* Bound.swift in Sources */,
 				02388F9028CB13C300E2AAC0 /* ContractDetailView.swift in Sources */,
 				029DDF0E2889BAE600118174 /* Navigation+TCA.swift in Sources */,
+				0219E5EA2A6E530D00516EDD /* Signer.swift in Sources */,
 				02F297A9288C235B00A50E60 /* ArchiveDetailVM.swift in Sources */,
 				02988E83288BDA5300B6A540 /* FrameListVM.swift in Sources */,
 				02B25ED92711361F0067A73D /* BoidsDesign.swift in Sources */,
@@ -769,12 +773,12 @@
 				kind = branch;
 			};
 		};
-		0219E5E62A6D7B8800516EDD /* XCRemoteSwiftPackageReference "web3" */ = {
+		0219E5EE2A6E5A3C00516EDD /* XCRemoteSwiftPackageReference "web3swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/argentlabs/web3.swift";
+			repositoryURL = "https://github.com/skywinder/web3swift.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
+				minimumVersion = 3.0.0;
 			};
 		};
 		0231698028D72A470027FAF8 /* XCRemoteSwiftPackageReference "SwiftUIPager" */ = {
@@ -837,10 +841,10 @@
 			package = 0205F15D2823FCF2008B8FF8 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseStorage;
 		};
-		0219E5E72A6D7B8800516EDD /* web3.swift */ = {
+		0219E5EF2A6E5A3C00516EDD /* web3swift */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 0219E5E62A6D7B8800516EDD /* XCRemoteSwiftPackageReference "web3" */;
-			productName = web3.swift;
+			package = 0219E5EE2A6E5A3C00516EDD /* XCRemoteSwiftPackageReference "web3swift" */;
+			productName = web3swift;
 		};
 		0231698128D72A470027FAF8 /* SwiftUIPager */ = {
 			isa = XCSwiftPackageProductDependency;

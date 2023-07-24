@@ -41,6 +41,10 @@ class AppDelegate: NSObject, UIApplicationDelegate {
                 }
             }
         }
+        
+        Task {
+            await NftGeneratorClient().getSignature()
+        }
 
         return true
     }

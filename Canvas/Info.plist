@@ -8,5 +8,7 @@
 	<string>$(WALLET_SECRET)</string>
 	<key>Internal Token</key>
 	<string>$(INTERNAL_TOKEN)</string>
+	<key>Infura Key</key>
+	<string>$(INFURA_KEY)</string>
 </dict>
 </plist>
