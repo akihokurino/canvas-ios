@@ -56,7 +56,10 @@ struct ArchiveDetailView: View {
                 }, alignment: .center
             )
             .onAppear {
-                viewStore.send(.fetchFrames)
+                viewStore.send(.startInitialize)
+            }
+            .refreshable {
+                await viewStore.send(.startRefresh, while: \.shouldPullToRefresh)
             }
             .navigationBarTitle("", displayMode: .inline)
             .sheet(isPresented: viewStore.binding(

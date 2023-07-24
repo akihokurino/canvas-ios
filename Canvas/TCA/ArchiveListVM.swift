@@ -60,7 +60,7 @@ enum ArchiveListVM {
             state.isPresentedErrorAlert = true
             state.error = error
             return .none
-        case .startNext:
+        case .startFetchNextArchive:
             guard !state.shouldShowNextLoading, state.hasNext else {
                 return .none
             }
@@ -77,13 +77,13 @@ enum ArchiveListVM {
                 .subscribe(on: environment.backgroundQueue)
                 .receive(on: environment.mainQueue)
                 .catchToEffect()
-                .map(ArchiveListVM.Action.endNext)
-        case .endNext(.success(let result)):
+                .map(ArchiveListVM.Action.endFetchNextArchive)
+        case .endFetchNextArchive(.success(let result)):
             state.archives.append(contentsOf: result.archives)
             state.hasNext = result.hasNext
             state.shouldShowNextLoading = false
             return .none
-        case .endNext(.failure(let error)):
+        case .endFetchNextArchive(.failure(let error)):
             state.shouldShowNextLoading = false
             state.isPresentedErrorAlert = true
             state.error = error
@@ -130,8 +130,8 @@ extension ArchiveListVM {
         case endInitialize(Result<ArchivesWithHasNext, AppError>)
         case startRefresh
         case endRefresh(Result<ArchivesWithHasNext, AppError>)
-        case startNext
-        case endNext(Result<ArchivesWithHasNext, AppError>)
+        case startFetchNextArchive
+        case endFetchNextArchive(Result<ArchivesWithHasNext, AppError>)
         case shouldShowHUD(Bool)
         case shouldPullToRefresh(Bool)
         case presentDetailView(AssetGeneratorAPI.WorkFragment)

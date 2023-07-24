@@ -56,7 +56,7 @@ enum FrameListVM {
         case .endRefresh(.failure(_)):
             state.shouldPullToRefresh = false
             return .none
-        case .startNext:
+        case .startFetchNextFrame:
             guard !state.shouldShowNextLoading, state.hasNext else {
                 return .none
             }
@@ -73,13 +73,13 @@ enum FrameListVM {
                 .subscribe(on: environment.backgroundQueue)
                 .receive(on: environment.mainQueue)
                 .catchToEffect()
-                .map(FrameListVM.Action.endNext)
-        case .endNext(.success(let result)):
+                .map(FrameListVM.Action.endFetchNextFrame)
+        case .endFetchNextFrame(.success(let result)):
             state.frames.append(contentsOf: result.frames)
             state.hasNext = result.hasNext
             state.shouldShowNextLoading = false
             return .none
-        case .endNext(.failure(_)):
+        case .endFetchNextFrame(.failure(_)):
             state.shouldShowNextLoading = false
             return .none
         case .shouldShowHUD(let val):
@@ -115,8 +115,8 @@ extension FrameListVM {
         case endInitialize(Result<FramesWithHasNext, AppError>)
         case startRefresh
         case endRefresh(Result<FramesWithHasNext, AppError>)
-        case startNext
-        case endNext(Result<FramesWithHasNext, AppError>)
+        case startFetchNextFrame
+        case endFetchNextFrame(Result<FramesWithHasNext, AppError>)
         case shouldShowHUD(Bool)
         case shouldPullToRefresh(Bool)
         case presentDetailView(AssetGeneratorAPI.FrameFragment)

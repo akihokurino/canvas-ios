@@ -5,6 +5,40 @@ import Foundation
 enum ArchiveDetailVM {
     static let reducer = Reducer<State, Action, Environment> { state, action, environment in
         switch action {
+        case .startInitialize:
+            let workId = state.archive.id
+            return AssetGeneratorClient.shared.caller()
+                .flatMap { caller in caller.framesByWork(workId: workId) }
+                .subscribe(on: environment.backgroundQueue)
+                .receive(on: environment.mainQueue)
+                .catchToEffect()
+                .map(ArchiveDetailVM.Action.endInitialize)
+        case .endInitialize(.success(let frames)):
+            state.frames = frames
+            return .none
+        case .endInitialize(.failure(let error)):
+            state.isPresentedErrorAlert = true
+            state.error = error
+            return .none
+        case .startRefresh:
+            state.shouldPullToRefresh = true
+
+            let workId = state.archive.id
+            return AssetGeneratorClient.shared.caller()
+                .flatMap { caller in caller.framesByWork(workId: workId) }
+                .subscribe(on: environment.backgroundQueue)
+                .receive(on: environment.mainQueue)
+                .catchToEffect()
+                .map(ArchiveDetailVM.Action.endRefresh)
+        case .endRefresh(.success(let frames)):
+            state.frames = frames
+            state.shouldPullToRefresh = false
+            return .none
+        case .endRefresh(.failure(let error)):
+            state.shouldPullToRefresh = false
+            state.isPresentedErrorAlert = true
+            state.error = error
+            return .none
         case .shouldShowHUD(let val):
             state.shouldShowHUD = val
             return .none
@@ -41,21 +75,6 @@ enum ArchiveDetailVM {
             state.isPresentedErrorAlert = true
             state.error = error
             return .none
-        case .fetchFrames:
-            let workId = state.archive.id
-            return AssetGeneratorClient.shared.caller()
-                .flatMap { caller in caller.framesByWork(workId: workId) }
-                .subscribe(on: environment.backgroundQueue)
-                .receive(on: environment.mainQueue)
-                .catchToEffect()
-                .map(ArchiveDetailVM.Action.frames)
-        case .frames(.success(let frames)):
-            state.frames = frames
-            return .none
-        case .frames(.failure(let error)):
-            state.isPresentedErrorAlert = true
-            state.error = error
-            return .none
         case .isPresentedErrorAlert(let val):
             state.isPresentedErrorAlert = val
             if !val {
@@ -68,14 +87,16 @@ enum ArchiveDetailVM {
 
 extension ArchiveDetailVM {
     enum Action: Equatable {
+        case startInitialize
+        case endInitialize(Result<[AssetGeneratorAPI.FrameFragment], AppError>)
+        case startRefresh
+        case endRefresh(Result<[AssetGeneratorAPI.FrameFragment], AppError>)
         case shouldShowHUD(Bool)
         case shouldPullToRefresh(Bool)
         case presentMintNftView(AssetGeneratorAPI.FrameFragment)
         case isPresentedMintNftView(Bool)
         case mint(MintInput)
         case minted(Result<Bool, AppError>)
-        case fetchFrames
-        case frames(Result<[AssetGeneratorAPI.FrameFragment], AppError>)
         case isPresentedErrorAlert(Bool)
     }
 

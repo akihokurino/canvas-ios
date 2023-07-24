@@ -38,7 +38,7 @@ struct FrameListView: View {
                         .onTapGesture {
                             // TODO: onAppearでInfinityScroll実現できない
                             // ロード時に全てのCellがonAppearしてしまう
-                            viewStore.send(.startNext)
+                            viewStore.send(.startFetchNextFrame)
                         }
                     } else {
                         Spacer().frame(height: 60)
