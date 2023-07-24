@@ -73,7 +73,7 @@ enum RootVM {
                 switch action {
                 case .archiveDetailView(let action):
                     switch action {
-                    case .minted(.failure(_)):
+                    case .endMint(.failure(_)):
                         state.alertText = "Mintに失敗しました\nWalletの残高とIPFSサーバーの起動を確認してください"
                         state.isPresentedAlert = true
                     default:

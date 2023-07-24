@@ -62,7 +62,7 @@ enum ContractListVM {
             state.isPresentedErrorAlert = true
             state.error = error
             return .none
-        case .startNext:
+        case .startFetchNextContract:
             guard !state.shouldShowNextLoading, state.hasNext else {
                 return .none
             }
@@ -78,14 +78,14 @@ enum ContractListVM {
                 .subscribe(on: environment.backgroundQueue)
                 .receive(on: environment.mainQueue)
                 .catchToEffect()
-                .map(ContractListVM.Action.endNext)
-        case .endNext(.success(let result)):
+                .map(ContractListVM.Action.endFetchNextContract)
+        case .endFetchNextContract(.success(let result)):
             state.contracts.append(contentsOf: result.contracts)
             state.cursor = result.cursor
             state.hasNext = result.hasNext
             state.shouldShowNextLoading = false
             return .none
-        case .endNext(.failure(let error)):
+        case .endFetchNextContract(.failure(let error)):
             state.shouldShowNextLoading = false
             state.isPresentedErrorAlert = true
             state.error = error
@@ -134,8 +134,8 @@ extension ContractListVM {
         case endInitialize(Result<ContractsWithCursor, AppError>)
         case startRefresh
         case endRefresh(Result<ContractsWithCursor, AppError>)
-        case startNext
-        case endNext(Result<ContractsWithCursor, AppError>)
+        case startFetchNextContract
+        case endFetchNextContract(Result<ContractsWithCursor, AppError>)
         case shouldShowHUD(Bool)
         case shouldPullToRefresh(Bool)
         case presentDetailView(NftGeneratorAPI.ContractFragment)

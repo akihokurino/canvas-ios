@@ -52,7 +52,7 @@ enum ArchiveDetailVM {
         case .isPresentedMintNftView(let val):
             state.isPresentedMintNftView = val
             return .none
-        case .mint(let input):
+        case .startMint(let input):
             guard let data = state.selectFrame else {
                 return .none
             }
@@ -66,11 +66,11 @@ enum ArchiveDetailVM {
                 .subscribe(on: environment.backgroundQueue)
                 .receive(on: environment.mainQueue)
                 .catchToEffect()
-                .map(ArchiveDetailVM.Action.minted)
-        case .minted(.success(_)):
+                .map(ArchiveDetailVM.Action.endMint)
+        case .endMint(.success(_)):
             state.shouldShowHUD = false
             return .none
-        case .minted(.failure(let error)):
+        case .endMint(.failure(let error)):
             state.shouldShowHUD = false
             state.isPresentedErrorAlert = true
             state.error = error
@@ -95,8 +95,8 @@ extension ArchiveDetailVM {
         case shouldPullToRefresh(Bool)
         case presentMintNftView(AssetGeneratorAPI.FrameFragment)
         case isPresentedMintNftView(Bool)
-        case mint(MintInput)
-        case minted(Result<Bool, AppError>)
+        case startMint(MintInput)
+        case endMint(Result<Bool, AppError>)
         case isPresentedErrorAlert(Bool)
     }
 

@@ -33,7 +33,7 @@ struct ContractListView: View {
                             .onTapGesture {
                                 // TODO: onAppearでInfinityScroll実現できない
                                 // ロード時に全てのCellがonAppearしてしまう
-                                viewStore.send(.startNext)
+                                viewStore.send(.startFetchNextContract)
                             }
                         } else {
                             Spacer().frame(height: 60)

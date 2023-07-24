@@ -68,7 +68,7 @@ struct ArchiveDetailView: View {
             )) {
                 MintNftView(data: viewStore.state.selectFrame!) { schema, amount in
                     viewStore.send(.isPresentedMintNftView(false))
-                    viewStore.send(.mint(MintInput()))
+                    viewStore.send(.startMint(MintInput()))
                 }
             }
             .alert(

@@ -30,7 +30,7 @@ enum ContractDetailVM {
             state.cursor = result.cursor
             state.hasNext = result.hasNext
             state.shouldShowHUD = false
-            
+
             state.initialized = true
 
             return .none
@@ -43,7 +43,10 @@ enum ContractDetailVM {
             state.shouldPullToRefresh = true
             state.cursor = nil
             state.hasNext = false
-
+            
+            // なぜかこうしないと更新がかからない
+            state.tokens = []
+            
             let address = state.contract.address
             let cursor = state.cursor
 
@@ -65,7 +68,7 @@ enum ContractDetailVM {
             state.isPresentedErrorAlert = true
             state.error = error
             return .none
-        case .startNext:
+        case .startFetchNextToken:
             guard !state.shouldShowNextLoading, state.hasNext else {
                 return .none
             }
@@ -82,14 +85,14 @@ enum ContractDetailVM {
                 .subscribe(on: environment.backgroundQueue)
                 .receive(on: environment.mainQueue)
                 .catchToEffect()
-                .map(ContractDetailVM.Action.endNext)
-        case .endNext(.success(let result)):
+                .map(ContractDetailVM.Action.endFetchNextToken)
+        case .endFetchNextToken(.success(let result)):
             state.tokens.append(contentsOf: result.tokens)
             state.cursor = result.cursor
             state.hasNext = result.hasNext
             state.shouldShowNextLoading = false
             return .none
-        case .endNext(.failure(let error)):
+        case .endFetchNextToken(.failure(let error)):
             state.shouldShowNextLoading = false
             state.isPresentedErrorAlert = true
             state.error = error
@@ -103,7 +106,7 @@ enum ContractDetailVM {
         case .isPresentedSellNftView(let val):
             state.isPresentedSellNftView = val
             return .none
-        case .sell(let input):
+        case .startSell(let input):
             guard let token = state.selectToken else {
                 return .none
             }
@@ -115,16 +118,16 @@ enum ContractDetailVM {
                 .map { _ in true }
                 .receive(on: environment.mainQueue)
                 .catchToEffect()
-                .map(ContractDetailVM.Action.selled)
-        case .selled(.success(_)):
+                .map(ContractDetailVM.Action.endSell)
+        case .endSell(.success(_)):
             state.shouldShowHUD = false
             return .none
-        case .selled(.failure(let error)):
+        case .endSell(.failure(let error)):
             state.shouldShowHUD = false
             state.isPresentedErrorAlert = true
             state.error = error
             return .none
-        case .transfer(let input):
+        case .startTransfer(let input):
             guard let token = state.selectToken else {
                 return .none
             }
@@ -136,11 +139,11 @@ enum ContractDetailVM {
                 .map { _ in true }
                 .receive(on: environment.mainQueue)
                 .catchToEffect()
-                .map(ContractDetailVM.Action.transfered)
-        case .transfered(.success(_)):
+                .map(ContractDetailVM.Action.endTransfer)
+        case .endTransfer(.success(_)):
             state.shouldShowHUD = false
             return .none
-        case .transfered(.failure(let error)):
+        case .endTransfer(.failure(let error)):
             state.shouldShowHUD = false
             state.isPresentedErrorAlert = true
             state.error = error
@@ -165,16 +168,16 @@ extension ContractDetailVM {
         case endInitialize(Result<TokensWithCursor, AppError>)
         case startRefresh
         case endRefresh(Result<TokensWithCursor, AppError>)
-        case startNext
-        case endNext(Result<TokensWithCursor, AppError>)
+        case startFetchNextToken
+        case endFetchNextToken(Result<TokensWithCursor, AppError>)
         case shouldShowHUD(Bool)
         case shouldPullToRefresh(Bool)
         case presentSellNftView(NftGeneratorAPI.TokenFragment)
         case isPresentedSellNftView(Bool)
-        case sell(SellInput)
-        case selled(Result<Bool, AppError>)
-        case transfer(TransferInput)
-        case transfered(Result<Bool, AppError>)
+        case startSell(SellInput)
+        case endSell(Result<Bool, AppError>)
+        case startTransfer(TransferInput)
+        case endTransfer(Result<Bool, AppError>)
         case isPresentedErrorAlert(Bool)
     }
 

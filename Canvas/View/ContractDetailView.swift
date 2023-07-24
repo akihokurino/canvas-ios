@@ -5,29 +5,20 @@ import SwiftUIPager
 struct ContractDetailView: View {
     let store: Store<ContractDetailVM.State, ContractDetailVM.Action>
 
-    private let thumbnailSize = UIScreen.main.bounds.size.width / 3
-    private let gridItemLayout = [
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-    ]
-
     var body: some View {
         WithViewStore(store) { viewStore in
-            ScrollView {
-                LazyVGrid(columns: gridItemLayout, alignment: HorizontalAlignment.leading, spacing: 3) {
+            List {
+                VStack {
                     ForEach(viewStore.state.tokens) { data in
                         Button(action: {
                             viewStore.send(.presentSellNftView(data))
                         }) {
-                            RemoteImageView(url: data.imageUrl)
-                                .scaledToFit()
-                                .frame(width: thumbnailSize)
+                            TokenRow(data: data)
                         }
                     }
-                }
+                    .listRowSeparator(.hidden)
+                    .buttonStyle(PlainButtonStyle())
 
-                if viewStore.state.initialized {
                     if viewStore.state.hasNext {
                         HStack {
                             Spacer()
@@ -35,13 +26,17 @@ struct ContractDetailView: View {
                             Spacer()
                         }
                         .frame(height: 60)
+                        .listRowSeparator(.hidden)
+                        .buttonStyle(PlainButtonStyle())
                         .onTapGesture {
                             // TODO: onAppearでInfinityScroll実現できない
                             // ロード時に全てのCellがonAppearしてしまう
-                            viewStore.send(.startNext)
+                            viewStore.send(.startFetchNextToken)
                         }
                     } else {
                         Spacer().frame(height: 60)
+                            .listRowSeparator(.hidden)
+                            .buttonStyle(PlainButtonStyle())
                     }
                 }
             }
@@ -68,10 +63,10 @@ struct ContractDetailView: View {
             )) {
                 SellNftView(token: viewStore.state.selectToken!, sell: { ether in
                     viewStore.send(.isPresentedSellNftView(false))
-                    viewStore.send(.sell(SellInput(ether: ether)))
+                    viewStore.send(.startSell(SellInput(ether: ether)))
                 }, transfer: { address in
                     viewStore.send(.isPresentedSellNftView(false))
-                    viewStore.send(.transfer(TransferInput(toAddress: address)))
+                    viewStore.send(.startTransfer(TransferInput(toAddress: address)))
                 })
             }
             .alert(
@@ -89,5 +84,36 @@ struct ContractDetailView: View {
                 Text(entity.message)
             }
         }
+    }
+}
+
+struct TokenRow: View {
+    let data: NftGeneratorAPI.TokenFragment
+
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text("\(data.address)#\(data.tokenId)").font(.subheadline).foregroundColor(data.isOwner ? Color("Text") : Color.gray)
+            Text("\(data.name) / \(data.description)").font(.subheadline).foregroundColor(data.isOwner ? Color("Text") : Color.gray)
+
+            Spacer().frame(height: 10)
+
+            RemoteImageView(url: data.imageUrl)
+                .aspectRatio(contentMode: .fit)
+                .frame(maxWidth: .infinity)
+                .cornerRadius(4)
+
+            if let priceEth = data.priceEth {
+                Spacer().frame(height: 10)
+                Text("\(priceEth.description) AVAX")
+                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 40, maxHeight: 40, alignment: .center)
+                    .background(Color.green)
+                    .foregroundColor(Color.white)
+                    .cornerRadius(4)
+            }
+
+            Spacer().frame(height: 20)
+        }
+        .padding(.top, 10)
+        .padding(.bottom, 10)
     }
 }
