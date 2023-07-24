@@ -14,8 +14,8 @@
 ## Related
 
 - https://github.com/akihokurino/lambda-opensea
-- https://github.com/akihokurino/canvas-nft-server
-- https://github.com/akihokurino/canvas-server
+- https://github.com/akihokurino/canvas-nft-generator
+- https://github.com/akihokurino/canvas-asset-generator
 - https://github.com/akihokurino/canvas-web
 
 ## OpenSea
